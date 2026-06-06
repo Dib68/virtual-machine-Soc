@@ -1,0 +1,37 @@
+# MISP - Threat Intelligence Platform (condivisione IOC)
+# Avvio: soclab misp up   ->  https://localhost:8443   (admin@admin.test / admin)
+services:
+  misp-db:
+    image: mariadb:10.11
+    container_name: lab-misp-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=misp
+      - MYSQL_DATABASE=misp
+      - MYSQL_USER=misp
+      - MYSQL_PASSWORD=misp
+    volumes:
+      - misp-db:/var/lib/mysql
+    restart: unless-stopped
+
+  misp-redis:
+    image: redis:7
+    container_name: lab-misp-redis
+    restart: unless-stopped
+
+  misp:
+    image: ghcr.io/misp/misp-docker/misp-core:latest
+    container_name: lab-misp
+    depends_on: [misp-db, misp-redis]
+    environment:
+      - BASE_URL=https://localhost:8443
+      - MYSQL_HOST=misp-db
+      - MYSQL_USER=misp
+      - MYSQL_PASSWORD=misp
+      - MYSQL_DATABASE=misp
+      - REDIS_FQDN=misp-redis
+    ports:
+      - "8443:443"
+    restart: unless-stopped
+
+volumes:
+  misp-db:

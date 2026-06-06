@@ -1,0 +1,14 @@
+# Artefatti VM (pesanti, non vanno su GitHub)
+.vagrant/
+*.box
+*.ova
+output-ova/
+packer/output-ova/
+soc-lab/wazuh-docker/
+*.log
+
+# Cartella condivisa: ignora il contenuto runtime ma TIENI i launcher
+condivisa/*
+!condivisa/CLICCA-QUI.sh
+!condivisa/CLICCA QUI - Avvia tutto.desktop
+!condivisa/LEGGIMI.txt

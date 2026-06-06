@@ -1,0 +1,23 @@
+# Bersagli vulnerabili per esercitazioni (SOLO in laboratorio locale!)
+# Avvio:  soclab targets up    |  Stop: soclab targets down
+services:
+  dvwa:
+    image: vulnerables/web-dvwa
+    container_name: lab-dvwa
+    ports:
+      - "8080:80"          # http://localhost:8080  (admin/password)
+    restart: unless-stopped
+
+  juiceshop:
+    image: bkimminich/juice-shop
+    container_name: lab-juiceshop
+    ports:
+      - "3000:3000"        # http://localhost:3000  (OWASP Juice Shop)
+    restart: unless-stopped
+
+  webgoat:
+    image: webgoat/webgoat
+    container_name: lab-webgoat
+    ports:
+      - "8081:8080"        # http://localhost:8081/WebGoat
+    restart: unless-stopped

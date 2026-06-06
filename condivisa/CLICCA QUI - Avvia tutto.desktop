@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=>>> CLICCA QUI - Avvia tutto <<<
+Comment=Installa e apre il menu della CyberSec AI VM
+Exec=bash -lc "xfce4-terminal --title='CyberSec AI VM' -e 'bash /home/vagrant/condivisa/CLICCA-QUI.sh' || x-terminal-emulator -e 'bash /home/vagrant/condivisa/CLICCA-QUI.sh' || qterminal -e 'bash /home/vagrant/condivisa/CLICCA-QUI.sh'"
+Icon=utilities-terminal
+Terminal=false
+Categories=Security;

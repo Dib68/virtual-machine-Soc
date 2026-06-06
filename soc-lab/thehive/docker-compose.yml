@@ -1,0 +1,46 @@
+# TheHive (SIRP) + Cortex (analisi observable) + dipendenze
+# Avvio: soclab thehive up
+#   TheHive -> http://localhost:9000   Cortex -> http://localhost:9001
+services:
+  cassandra:
+    image: cassandra:4
+    container_name: lab-cassandra
+    environment:
+      - CASSANDRA_CLUSTER_NAME=thp
+    volumes:
+      - cassandra-data:/var/lib/cassandra
+    restart: unless-stopped
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.22
+    container_name: lab-thehive-es
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    restart: unless-stopped
+
+  cortex:
+    image: thehiveproject/cortex:latest
+    container_name: lab-cortex
+    depends_on: [elasticsearch]
+    ports:
+      - "9001:9001"
+    restart: unless-stopped
+
+  thehive:
+    image: strangebee/thehive:latest
+    container_name: lab-thehive
+    depends_on: [cassandra, elasticsearch, cortex]
+    ports:
+      - "9000:9000"
+    command:
+      - --no-config
+      - --no-config-secret
+    restart: unless-stopped
+
+volumes:
+  cassandra-data:
+  es-data:

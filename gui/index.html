@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CyberSec AI VM — Control Center</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0b1020;--bg2:#0e1430;--card:#151d38;--card2:#1b2547;--line:#26315a;
+    --txt:#e9edf9;--mut:#94a1c6;--acc:#5b8cff;--acc2:#27e0b0;--danger:#ff5d6c;
+    --rad:12px;
+  }
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,Arial,sans-serif;overflow:hidden}
+  a{color:var(--acc);text-decoration:none}
+  button{font-family:inherit}
+  .app{height:100vh;display:grid;grid-template-columns:248px 1fr}
+  /* sidebar */
+  .side{background:#0a0f20;border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+  .brand{display:flex;align-items:center;gap:10px;padding:16px 16px 12px;flex:none}
+  .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--acc),var(--acc2));
+    display:flex;align-items:center;justify-content:center;font-weight:700;color:#08122b}
+  .brand b{font-size:15px}.brand small{display:block;font-size:11px;color:var(--mut)}
+  .navwrap{flex:1;overflow-y:auto;min-height:0;padding:4px 10px 14px}
+  .navh{font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:#5d6ca0;padding:14px 10px 6px}
+  .nav{display:flex;flex-direction:column;gap:2px}
+  .nv{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:10px;cursor:pointer;
+    color:var(--mut);font-size:13.5px;border:1px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .nv:hover{background:var(--card);color:var(--txt)}
+  .nv.on{background:linear-gradient(135deg,rgba(91,140,255,.22),rgba(39,224,176,.15));color:#fff;border-color:var(--line)}
+  .nv .d{width:9px;height:9px;border-radius:50%;flex:none}
+  .nv .cnt{margin-left:auto;font-size:10.5px;color:var(--mut);background:var(--card2);border-radius:20px;padding:1px 7px}
+  /* main */
+  .main{display:flex;flex-direction:column;min-width:0;min-height:0}
+  .top{flex:none;display:flex;gap:12px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);
+    background:rgba(11,16,32,.85);backdrop-filter:blur(6px)}
+  .mtoggle{display:none;background:var(--card);border:1px solid var(--line);color:var(--txt);border-radius:9px;
+    width:38px;height:38px;font-size:18px;cursor:pointer;flex:none}
+  .ttl{font-size:17px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:34%}
+  .search{flex:1;min-width:120px}
+  .search input{width:100%;height:38px;background:var(--card);border:1px solid var(--line);color:var(--txt);
+    padding:0 14px;border-radius:10px;font-size:13.5px;outline:none}
+  .search input:focus{border-color:var(--acc)}
+  .pills{display:flex;gap:7px;flex:none}
+  .pill{font-size:11.5px;padding:6px 10px;border-radius:20px;background:var(--card);border:1px solid var(--line);
+    color:var(--mut);display:flex;align-items:center;gap:6px;white-space:nowrap}
+  .pdot{width:8px;height:8px;border-radius:50%;background:var(--danger)} .pdot.on{background:var(--acc2)}
+  .content{flex:1;overflow-y:auto;min-height:0;padding:18px 20px 40px}
+  /* grid + cards (altezza uniforme) */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:13px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--rad);padding:14px;
+    display:flex;flex-direction:column;min-width:0;transition:transform .12s,border-color .12s}
+  .card:hover{transform:translateY(-2px);border-color:var(--acc)}
+  .ch{display:flex;align-items:center;gap:10px;margin-bottom:9px;min-width:0}
+  .ic{width:34px;height:34px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;
+    font-weight:700;color:#08122b;font-size:14px}
+  .nm{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .st{font-size:10px;padding:2px 7px;border-radius:20px;flex:none;margin-left:auto}
+  .st.ok{background:rgba(39,224,176,.15);color:var(--acc2)} .st.no{background:rgba(255,93,108,.15);color:var(--danger)}
+  .ds{font-size:12px;color:var(--mut);line-height:1.45;margin-bottom:11px;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:35px}
+  .row{display:flex;gap:6px;margin-top:auto}
+  .btn{flex:1;border:1px solid var(--line);background:var(--card2);color:var(--txt);border-radius:9px;
+    padding:8px 4px;font-size:11.5px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .btn:hover{border-color:var(--acc);background:#22305c}
+  .btn.go{background:linear-gradient(135deg,var(--acc),#3f6fe0);border:none;color:#fff;font-weight:600}
+  .btn.ai{background:linear-gradient(135deg,var(--acc2),#16b894);border:none;color:#06241c;font-weight:600;flex:0 0 46px}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px}
+  .met{background:var(--card);border:1px solid var(--line);border-radius:var(--rad);padding:15px}
+  .met .v{font-size:25px;font-weight:700}.met .l{font-size:11.5px;color:var(--mut);margin-top:2px}
+  .sec{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 10px}
+  .note{font-size:12.5px;color:var(--mut);background:var(--card);border:1px solid var(--line);
+    border-radius:10px;padding:11px 13px;margin-bottom:14px;line-height:1.5}
+  /* chat */
+  .chat{display:flex;flex-direction:column;height:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .msgs{flex:1;overflow-y:auto;min-height:0;padding:16px;display:flex;flex-direction:column;gap:11px}
+  .m{max-width:82%;padding:10px 13px;border-radius:13px;font-size:13.5px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+  .m.u{align-self:flex-end;background:linear-gradient(135deg,var(--acc),#3f6fe0);color:#fff;border-bottom-right-radius:4px}
+  .m.a{align-self:flex-start;background:var(--card2);border:1px solid var(--line);border-bottom-left-radius:4px}
+  .cin{display:flex;gap:8px;padding:11px;border-top:1px solid var(--line);flex:none}
+  .cin input{flex:1;height:40px;background:var(--bg2);border:1px solid var(--line);color:var(--txt);padding:0 12px;border-radius:10px;outline:none}
+  .cin button{background:linear-gradient(135deg,var(--acc2),#16b894);border:none;color:#06241c;font-weight:700;padding:0 18px;border-radius:10px;cursor:pointer}
+  /* modal */
+  .ov{position:fixed;inset:0;background:rgba(4,8,20,.72);display:none;align-items:center;justify-content:center;padding:22px;z-index:60}
+  .ov.show{display:flex}
+  .modal{background:var(--bg2);border:1px solid var(--line);border-radius:16px;max-width:740px;width:100%;max-height:85vh;display:flex;flex-direction:column}
+  .mhd{display:flex;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line);flex:none}
+  .mhd b{font-size:15px}.mhd .x{margin-left:auto;cursor:pointer;color:var(--mut);font-size:24px;background:none;border:none;line-height:1}
+  .mbody{overflow-y:auto;min-height:0;padding:18px}
+  .mbody h1{font-size:19px;margin:12px 0 8px}.mbody h2{font-size:15px;margin:14px 0 6px;color:var(--acc2)}
+  .mbody p{font-size:13.5px;color:#cfd6ee;margin:5px 0;line-height:1.6}
+  .mbody pre{background:#0a1124;border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:12.5px;color:#bdf;white-space:pre-wrap;margin:8px 0}
+  #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--card2);border:1px solid var(--line);
+    color:var(--txt);padding:11px 18px;border-radius:11px;font-size:13px;z-index:80;opacity:0;transition:opacity .2s;pointer-events:none}
+  /* responsive */
+  @media(max-width:860px){
+    .app{grid-template-columns:1fr}
+    .side{position:fixed;left:0;top:0;bottom:0;width:248px;z-index:50;transform:translateX(-100%);transition:transform .2s}
+    .side.open{transform:none;box-shadow:0 0 40px rgba(0,0,0,.5)}
+    .mtoggle{display:block}
+    .pills{display:none}
+    .ttl{max-width:40%}
+  }
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40;display:none}
+  .scrim.show{display:block}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side">
+    <div class="brand"><div class="logo">CS</div><div><b>CyberSec AI</b><small>Control Center</small></div></div>
+    <div class="navwrap"><div class="nav" id="nav"></div></div>
+  </aside>
+  <main class="main">
+    <header class="top">
+      <button class="mtoggle" id="mtoggle" aria-label="Menu">&#9776;</button>
+      <div class="ttl" id="title">Dashboard</div>
+      <div class="search"><input id="q" placeholder="Cerca uno strumento..."></div>
+      <div class="pills">
+        <span class="pill"><span class="pdot" id="aiDot"></span>AI</span>
+        <span class="pill"><span class="pdot" id="dkDot"></span>Docker</span>
+      </div>
+    </header>
+    <section class="content" id="view"></section>
+  </main>
+</div>
+<div class="scrim" id="scrim"></div>
+<div class="ov" id="ov"><div class="modal">
+  <div class="mhd"><b id="ovt">Tutorial</b><button class="x" onclick="closeOv()">&times;</button></div>
+  <div class="mbody" id="ovc"></div>
+</div></div>
+<div id="toast"></div>
+
+<script>
+let DATA={categories:[],soclab:[]},ST={installed:{},ai:false,docker:false},CUR="dash",CHAT=[];
+async function boot(){
+  try{DATA=await (await fetch('tools.json')).json();}catch(e){}
+  try{ST=await (await fetch('/api/status')).json();}catch(e){}
+  buildNav();render();pills();
+}
+function pills(){document.getElementById('aiDot').className='pdot'+(ST.ai?' on':'');
+  document.getElementById('dkDot').className='pdot'+(ST.docker?' on':'');}
+function inst(b){return ST.installed&&ST.installed[b];}
+function go(v){CUR=v;buildNav();render();closeSide();}
+function buildNav(){
+  let h=nv('dash','Dashboard','var(--acc)');
+  h+=nv('all','Tutti gli strumenti','var(--acc2)',totTools());
+  h+='<div class="navh">Categorie</div>';
+  DATA.categories.forEach((c,i)=>h+=nv('cat:'+i,c.name,c.color,c.tools.length));
+  h+='<div class="navh">Laboratorio</div>';
+  h+=nv('soc','SOC Lab (SIEM)','#2aa77a',DATA.soclab.length);
+  h+=nv('ai','Assistente AI','#d4537e');
+  document.getElementById('nav').innerHTML=h;
+}
+function nv(v,label,col,cnt){const on=CUR===v?' on':'';
+  return `<div class="nv${on}" onclick="go('${v}')"><span class="d" style="background:${col}"></span>`+
+    `<span style="overflow:hidden;text-overflow:ellipsis">${label}</span>`+(cnt!=null?`<span class="cnt">${cnt}</span>`:'')+`</div>`;}
+function totTools(){return DATA.categories.reduce((a,c)=>a+c.tools.length,0);}
+function tcard(t,color){const ok=inst(t.bin);
+  return `<div class="card"><div class="ch"><div class="ic" style="background:${color}">${t.name[0]}</div>`+
+    `<div class="nm" title="${t.name}">${t.name}</div><span class="st ${ok?'ok':'no'}">${ok?'ok':'n/d'}</span></div>`+
+    `<div class="ds">${t.desc}</div><div class="row">`+
+    `<button class="btn go" onclick="launch('${t.bin}')">Avvia</button>`+
+    `<button class="btn" onclick="showTut('${t.tut}','${t.name}')">Guida</button>`+
+    `<button class="btn ai" onclick="askTool('${t.name}')">AI</button></div></div>`;}
+function render(){const v=document.getElementById('view'),T=document.getElementById('title');
+  if(CUR==='dash'){T.textContent='Dashboard';
+    const tot=totTools(),ins=Object.values(ST.installed||{}).filter(Boolean).length;
+    v.innerHTML=`<div class="metrics">
+      <div class="met"><div class="v">${tot}</div><div class="l">Strumenti</div></div>
+      <div class="met"><div class="v">${ins}</div><div class="l">Installati</div></div>
+      <div class="met"><div class="v">${DATA.categories.length}</div><div class="l">Categorie</div></div>
+      <div class="met"><div class="v">${DATA.soclab.length}</div><div class="l">Stack SOC</div></div></div>
+      <div class="note">Clicca <b>Avvia</b> per aprire un tool, <b>Guida</b> per il tutorial, <b>AI</b> per una spiegazione. Usa la ricerca in alto per trovare subito uno strumento.</div>
+      <div class="sec">Categorie</div><div class="grid">${DATA.categories.map((c,i)=>
+        `<div class="card" onclick="go('cat:${i}')" style="cursor:pointer"><div class="ch">
+          <div class="ic" style="background:${c.color}">${c.name[0]}</div>
+          <div class="nm">${c.name}</div><span class="st ok">${c.tools.length}</span></div>
+          <div class="ds">${c.tools.slice(0,4).map(t=>t.name).join(', ')}</div>
+          <div class="row"><button class="btn go">Apri categoria</button></div></div>`).join('')}</div>`;
+    return;}
+  if(CUR==='all'){T.textContent='Tutti gli strumenti';
+    v.innerHTML='<div class="grid">'+DATA.categories.flatMap(c=>c.tools.map(t=>tcard(t,c.color))).join('')+'</div>';return;}
+  if(CUR.startsWith('cat:')){const c=DATA.categories[+CUR.split(':')[1]];T.textContent=c.name;
+    v.innerHTML='<div class="grid">'+c.tools.map(t=>tcard(t,c.color)).join('')+'</div>';return;}
+  if(CUR==='soc'){T.textContent='SOC Lab — SIEM & bersagli';
+    v.innerHTML='<div class="note">Avvia/ferma gli stack (serve Docker). Al primo avvio scaricano le immagini: ci vuole tempo.</div><div class="grid">'+
+      DATA.soclab.map(s=>`<div class="card"><div class="ch"><div class="ic" style="background:#2aa77a">${s.name[0]}</div>
+        <div class="nm" title="${s.name}">${s.name}</div></div><div class="ds">${s.desc}</div>
+        <div class="row"><button class="btn go" onclick="soc('${s.id}','up')">Avvia</button>
+        <button class="btn" onclick="soc('${s.id}','down')">Ferma</button>
+        <button class="btn ai" onclick="openLink('${s.url}')">Apri</button></div></div>`).join('')+'</div>';return;}
+  if(CUR==='ai'){T.textContent='Assistente AI';
+    v.innerHTML='<div style="height:100%;display:flex"><div class="chat"><div class="msgs" id="msgs"></div>'+
+      '<div class="cin"><input id="ai" placeholder="Chiedi qualcosa..."><button onclick="sendAI()">Invia</button></div></div></div>';
+    drawChat();const i=document.getElementById('ai');i.addEventListener('keydown',e=>{if(e.key==='Enter')sendAI();});i.focus();return;}
+}
+function drawChat(){const m=document.getElementById('msgs');if(!m)return;
+  m.innerHTML=CHAT.map(x=>`<div class="m ${x.r}">${esc(x.t)}</div>`).join('')||
+    '<div class="m a">Ciao! Sono CyberAI. Chiedimi come usare un tool, o incolla un output da analizzare.</div>';
+  m.scrollTop=m.scrollHeight;}
+async function sendAI(){const i=document.getElementById('ai'),q=i.value.trim();if(!q)return;i.value='';
+  CHAT.push({r:'u',t:q});CHAT.push({r:'a',t:'...'});drawChat();
+  try{const r=await (await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:q})})).json();
+    CHAT[CHAT.length-1].t=r.answer;}catch(e){CHAT[CHAT.length-1].t='AI non raggiungibile.';}
+  drawChat();}
+function askTool(name){go('ai');CHAT.push({r:'u',t:'Come uso '+name+'?'});CHAT.push({r:'a',t:'...'});drawChat();
+  fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({prompt:'Spiega come usare '+name+' in cybersecurity con esempi pratici di comando. In italiano.'})})
+   .then(r=>r.json()).then(r=>{CHAT[CHAT.length-1].t=r.answer;drawChat();}).catch(()=>{CHAT[CHAT.length-1].t='AI non raggiungibile.';drawChat();});}
+async function launch(bin){const r=await (await fetch('/api/launch?bin='+encodeURIComponent(bin))).json();toast(r.ok?'Avviato: '+bin:'Errore: '+r.msg);}
+async function soc(id,act){toast('Eseguo '+id+' '+act+'...');
+  const r=await (await fetch('/api/soclab',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({stack:id,action:act})})).json();toast(r.msg);}
+async function showTut(name,title){document.getElementById('ovt').textContent='Guida: '+(title||name);
+  const t=await (await fetch('/api/tutorial?name='+encodeURIComponent(name))).text();
+  document.getElementById('ovc').innerHTML=md(t);document.getElementById('ov').classList.add('show');}
+function closeOv(){document.getElementById('ov').classList.remove('show');}
+function md(s){const L=s.split('\n');let h='',c=false;
+  for(const l of L){if(l.startsWith('```')){h+=c?'</pre>':'<pre>';c=!c;continue;}
+    if(c){h+=esc(l)+'\n';continue;}
+    if(l.startsWith('## '))h+='<h2>'+esc(l.slice(3))+'</h2>';
+    else if(l.startsWith('# '))h+='<h1>'+esc(l.slice(2))+'</h1>';
+    else if(l.trim())h+='<p>'+esc(l)+'</p>';}
+  if(c)h+='</pre>';return h;}
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function openLink(u){window.open(u,'_blank');}
+let tt;function toast(m){const e=document.getElementById('toast');e.textContent=m;e.style.opacity='1';clearTimeout(tt);tt=setTimeout(()=>e.style.opacity='0',2500);}
+function closeSide(){document.getElementById('side').classList.remove('open');document.getElementById('scrim').classList.remove('show');}
+document.getElementById('mtoggle').onclick=()=>{document.getElementById('side').classList.toggle('open');document.getElementById('scrim').classList.toggle('show');};
+document.getElementById('scrim').onclick=closeSide;
+document.getElementById('q').addEventListener('input',e=>{const term=e.target.value.toLowerCase();
+  if(!term){render();return;}
+  document.getElementById('title').textContent='Risultati: '+term;
+  const all=DATA.categories.flatMap(c=>c.tools.map(t=>({t,color:c.color})));
+  const f=all.filter(x=>(x.t.name+x.t.desc+x.t.bin).toLowerCase().includes(term));
+  document.getElementById('view').innerHTML='<div class="grid">'+(f.map(x=>tcard(x.t,x.color)).join('')||'<p style="color:var(--mut)">Nessun risultato.</p>')+'</div>';});
+setInterval(async()=>{try{ST=await (await fetch('/api/status')).json();pills();}catch(e){}},9000);
+boot();
+</script>
+</body>
+</html>

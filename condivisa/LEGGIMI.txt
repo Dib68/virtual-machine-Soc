@@ -1,0 +1,14 @@
+COME AVVIARE TUTTO (semplice):
+
+1) Sul desktop di Kali apri la cartella "condivisa".
+2) Fai doppio clic sul file:  CLICCA-QUI.sh
+3) Se Kali chiede cosa fare, scegli "Esegui nel terminale"
+   (in inglese: "Run in Terminal" / "Execute").
+4) Se chiede una password scrivi:  vagrant   e premi Invio
+   (la password non si vede mentre la scrivi, va bene cosi').
+
+Il programma installera' gli strumenti e aprira' il MENU da solo.
+Dalla volta successiva il menu si aprira' automaticamente all'avvio.
+
+In alternativa puoi fare doppio clic su:
+   "CLICCA QUI - Avvia tutto.desktop"

@@ -1,0 +1,15 @@
+# Splunk Free in container (per imparare ricerche SPL).
+# Avvio: soclab splunk up   ->  http://localhost:8000  (admin / Changeme123!)
+# Nota: richiede ~2 GB RAM liberi.
+services:
+  splunk:
+    image: splunk/splunk:latest
+    container_name: lab-splunk
+    environment:
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_PASSWORD=Changeme123!
+    ports:
+      - "8000:8000"        # interfaccia web
+      - "8088:8088"        # HTTP Event Collector
+      - "9997:9997"        # forwarding
+    restart: unless-stopped
