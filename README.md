@@ -37,7 +37,7 @@ I tool sono scelti in base a cosa chiedono gli HR negli annunci reali — vedi
 3. (Consigliato) `vagrant plugin install vagrant-disksize`
 
 Risorse host consigliate: **≥ 16 GB RAM** e **≥ 80 GB disco** liberi (la VM usa
-8 GB di RAM; gli stack SIEM come Wazuh sono esigenti).
+10 GB di RAM per far girare l'AI piu' potente; gli stack SIEM come Wazuh sono esigenti).
 
 ---
 

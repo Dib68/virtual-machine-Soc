@@ -1,104 +1,72 @@
 #!/usr/bin/env bash
 # ============================================================================
-#  01-tools.sh  -  Installa tutti gli strumenti di cybersecurity
-#  Eseguito automaticamente da Vagrant (come root).
-#  Pensato per gli strumenti piu' richiesti negli annunci di lavoro:
-#  network scanning, vulnerability assessment, web app testing, forensics,
-#  reverse engineering, OSINT, password cracking, ecc.
+#  01-tools.sh  -  Installa TUTTI gli strumenti di cybersecurity.
+#  Strategia: prima il metapacchetto ufficiale di Kali (centinaia di tool in
+#  un colpo), poi gli strumenti extra non inclusi. Robusto e idempotente.
 # ============================================================================
-set -euo pipefail
+set -uo pipefail
 export DEBIAN_FRONTEND=noninteractive
 
-echo "==> [1/4] Aggiornamento del sistema..."
-apt-get update -y
-apt-get upgrade -y
-
-# ----------------------------------------------------------------------------
-# Funzione di supporto: installa un pacchetto e continua anche se fallisce,
-# registrando i fallimenti (cosi' la VM si costruisce sempre).
-# ----------------------------------------------------------------------------
-FAILED=()
-inst() {
-  for pkg in "$@"; do
-    echo "    -> installo: $pkg"
-    if ! apt-get install -y "$pkg"; then
-      echo "    !! attenzione: $pkg non installato"
-      FAILED+=("$pkg")
-    fi
+apt_retry() {  # apt-get install con piccoli tentativi
+  local i
+  for i in 1 2 3; do
+    apt-get install -y "$@" && return 0
+    echo "   (tentativo $i fallito, riprovo...)"; sleep 5; apt-get update -y || true
   done
+  return 1
 }
 
-echo "==> [2/4] Strumenti core (presenti nella maggior parte degli annunci)..."
+FAILED=()
+inst() { for p in "$@"; do echo "    -> $p"; apt_retry "$p" || { echo "    !! $p"; FAILED+=("$p"); }; done; }
 
-# --- Network scanning & discovery ---
-inst nmap masscan netdiscover arp-scan dnsutils whois netcat-traditional \
-     tcpdump traceroute
-
-# --- Vulnerability assessment / scanning ---
-# OpenVAS/Greenbone e' lo scanner di vulnerabilita' open source di riferimento.
-inst nikto wapiti
-inst openvas || inst gvm    # Greenbone Vulnerability Management (ex OpenVAS)
-
-# --- Analisi del traffico ---
-inst wireshark tshark termshark ettercap-graphical bettercap
-
-# --- Web application testing ---
-inst burpsuite zaproxy sqlmap wfuzz ffuf gobuster dirb dirbuster commix \
-     whatweb wpscan
-
-# --- Exploitation framework ---
-inst metasploit-framework exploitdb
-
-# --- Password cracking / brute force ---
-inst john hashcat hydra medusa crunch hashid wordlists
-
-# --- Wireless ---
-inst aircrack-ng reaver wifite kismet
-
-# --- OSINT / recon ---
-inst theharvester recon-ng maltego dmitry sublist3r amass spiderfoot
-
-# --- Forensics ---
-inst autopsy sleuthkit binwalk foremost testdisk volatility3 ddrescue \
-     exiftool steghide
-
-# --- Reverse engineering ---
-inst radare2 gdb ghidra apktool jadx
-
-# --- Container / cloud / DevSecOps (sempre piu' richiesti) ---
-inst docker.io docker-compose
-inst trivy || true
-
-echo "==> [3/4] Utility di supporto e sviluppo..."
-inst git curl wget vim nano tmux htop tree jq unzip p7zip-full \
-     python3 python3-pip python3-venv build-essential \
-     dialog whiptail figlet lolcat firefox-esr seclists
-
-# Python: alcune utility utili (best effort)
-pip3 install --break-system-packages --quiet \
-     requests rich shodan censys 2>/dev/null || true
-
-echo "==> [4/4] Configurazioni finali..."
-# Abilita docker per l'utente vagrant
-usermod -aG docker vagrant 2>/dev/null || true
-# Permette a wireshark di catturare senza root
-groupadd -f wireshark
-usermod -aG wireshark vagrant 2>/dev/null || true
-
-# Aggiorna il database degli exploit (best effort)
-searchsploit -u 2>/dev/null || true
+echo "==> Aggiornamento del sistema..."
+apt-get update -y
+apt-get upgrade -y || true
 
 # ----------------------------------------------------------------------------
+# 1) METAPACCHETTO KALI: installa in blocco gli strumenti piu' usati
+#    (nmap, metasploit, burpsuite, wireshark, sqlmap, hydra, john, aircrack,
+#     nikto, ecc.). E' il modo piu' affidabile per avere "tutti i tool".
+# ----------------------------------------------------------------------------
+echo "==> [1/3] Installazione metapacchetto Kali (puo' richiedere molto tempo)..."
+if apt_retry kali-linux-default; then
+  echo "    [OK] kali-linux-default installato (centinaia di strumenti)."
+else
+  echo "    !! metapacchetto non installato del tutto: procedo con i singoli tool."
+fi
+
+# ----------------------------------------------------------------------------
+# 2) Strumenti specifici/extra (idempotente: se gia' presenti, salta)
+# ----------------------------------------------------------------------------
+echo "==> [2/3] Strumenti aggiuntivi e di supporto..."
+inst nmap masscan netdiscover dnsutils whois netcat-traditional tcpdump
+inst nikto wapiti
+inst wireshark tshark
+inst burpsuite zaproxy sqlmap wfuzz ffuf gobuster dirb whatweb wpscan
+inst metasploit-framework exploitdb
+inst john hashcat hydra medusa crunch wordlists
+inst aircrack-ng
+inst theharvester recon-ng dmitry
+inst sleuthkit binwalk foremost exiftool steghide
+inst radare2 gdb
+inst git curl wget vim nano tmux htop tree jq unzip p7zip-full \
+     python3 python3-pip python3-venv build-essential \
+     dialog whiptail figlet firefox-esr seclists qterminal
+
+# Threat hunting moderno (ProjectDiscovery)
+inst nuclei httpx-toolkit subfinder naabu feroxbuster || true
+
+pip3 install --break-system-packages --quiet requests rich 2>/dev/null || true
+
+echo "==> [3/3] Configurazioni finali..."
+groupadd -f wireshark; usermod -aG wireshark vagrant 2>/dev/null || true
+searchsploit -u 2>/dev/null || true
+
+mkdir -p /opt/cybersec
+[ ${#FAILED[@]} -gt 0 ] && printf '%s\n' "${FAILED[@]}" > /opt/cybersec/missing_tools.txt || : > /opt/cybersec/missing_tools.txt
+
 echo ""
 echo "============================================================"
 echo " Installazione strumenti completata."
-if [ ${#FAILED[@]} -gt 0 ]; then
-  echo " Pacchetti NON installati (verranno saltati nel menu):"
-  printf '   - %s\n' "${FAILED[@]}"
-  # Salva la lista per il menu, cosi' nasconde i tool mancanti
-  printf '%s\n' "${FAILED[@]}" > /opt/cybersec/missing_tools.txt 2>/dev/null || \
-    { mkdir -p /opt/cybersec && printf '%s\n' "${FAILED[@]}" > /opt/cybersec/missing_tools.txt; }
-else
-  echo " Tutti i pacchetti installati correttamente."
-fi
+echo " Strumenti rilevati: $(for t in nmap msfconsole burpsuite wireshark sqlmap hydra john nuclei; do command -v $t >/dev/null 2>&1 && echo -n "$t "; done)"
 echo "============================================================"

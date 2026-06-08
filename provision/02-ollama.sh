@@ -1,74 +1,83 @@
 #!/usr/bin/env bash
 # ============================================================================
-#  02-ollama.sh  -  Installa l'AI locale (Ollama) dentro la VM
-#  Ollama esegue modelli LLM (es. Llama 3) localmente: gratis, offline,
-#  nessuna API key richiesta. E' il "cervello" dell'assistente AI integrato.
+#  02-ollama.sh  -  Installa l'AI locale (Ollama) e crea il modello "cyberai".
+#  Sceglie un modello PIU' POTENTE se la RAM lo permette, con fallback leggero.
 # ============================================================================
-set -euo pipefail
+set -uo pipefail
 export DEBIAN_FRONTEND=noninteractive
 
 echo "==> Installazione di Ollama (AI locale)..."
-
-# Installazione ufficiale di Ollama
 if ! command -v ollama >/dev/null 2>&1; then
   curl -fsSL https://ollama.com/install.sh | sh
-else
-  echo "    Ollama gia' presente."
 fi
-
-# Abilita e avvia il servizio Ollama
 systemctl enable ollama 2>/dev/null || true
 systemctl start  ollama 2>/dev/null || true
-
-# Attendi che il servizio risponda
-echo "==> Attendo l'avvio del servizio Ollama..."
-for i in $(seq 1 30); do
-  if curl -s http://localhost:11434/api/tags >/dev/null 2>&1; then
-    echo "    Servizio attivo."
-    break
-  fi
-  sleep 2
-done
+# Avvio manuale di scorta se non c'e' systemd attivo
+if ! curl -s http://localhost:11434/api/tags >/dev/null 2>&1; then
+  setsid ollama serve >/var/log/ollama.log 2>&1 < /dev/null &
+fi
+echo "==> Attendo il servizio Ollama..."
+for i in $(seq 1 40); do curl -s http://localhost:11434/api/tags >/dev/null 2>&1 && break; sleep 2; done
 
 # ----------------------------------------------------------------------------
-# Scarica un modello di default.
-# llama3.2 (3B) e' leggero e gira bene anche con 6 GB di RAM.
-# Per macchine piu' potenti si possono aggiungere modelli piu' grandi.
+# Scelta del modello in base alla RAM disponibile:
+#   >= 7 GB  -> qwen2.5:7b  (molto piu' capace su tecnica/comandi)
+#   altrimenti -> llama3.2 (3B, leggero)
 # ----------------------------------------------------------------------------
-echo "==> Scarico il modello AI di default (llama3.2)..."
-ollama pull llama3.2 || echo "    !! Download modello non riuscito (riprovare con: ollama pull llama3.2)"
+RAM_GB=$(free -g 2>/dev/null | awk '/Mem:/{print $2}'); RAM_GB=${RAM_GB:-4}
+if [ "$RAM_GB" -ge 7 ]; then BASE="qwen2.5:7b"; else BASE="llama3.2"; fi
+echo "==> RAM ${RAM_GB}GB -> modello base scelto: $BASE"
 
-# Modello opzionale piu' piccolo come fallback
-ollama pull qwen2.5:1.5b 2>/dev/null || true
+echo "==> Scarico il modello (puo' richiedere parecchio: alcuni GB)..."
+if ! ollama pull "$BASE"; then
+  echo "   !! '$BASE' non scaricato, passo a llama3.2"; BASE="llama3.2"; ollama pull "$BASE" || true
+fi
+# Modello leggero sempre presente come riserva
+ollama pull llama3.2 2>/dev/null || true
 
 # ----------------------------------------------------------------------------
-# Crea un "Modelfile" specializzato in cybersecurity: l'assistente AI
-# risponde come un tutor esperto di sicurezza informatica, in italiano.
+# Modello specializzato "cyberai": tutor esperto di cybersecurity.
 # ----------------------------------------------------------------------------
 mkdir -p /opt/cybersec
-cat > /opt/cybersec/Modelfile <<'EOF'
-FROM llama3.2
+cat > /opt/cybersec/Modelfile <<EOF
+FROM $BASE
+
+PARAMETER temperature 0.35
+PARAMETER top_p 0.9
+PARAMETER num_ctx 4096
 
 SYSTEM """
-Sei "CyberAI", un assistente esperto di cybersecurity integrato in una
-macchina virtuale di laboratorio basata su Kali Linux. Aiuti l'utente a:
-- capire e usare i tool di sicurezza (nmap, Metasploit, Burp, Wireshark, ecc.)
-- spiegare comandi, opzioni ed esempi pratici
-- ragionare su pentest, vulnerability assessment, OSINT e forensics
-Rispondi in italiano, in modo chiaro e pratico, con esempi di comando quando utile.
-Ricorda sempre all'utente di operare SOLO su sistemi propri o autorizzati,
-perche' usare questi strumenti senza permesso e' illegale.
-"""
+Sei "CyberAI", un assistente esperto di cybersecurity integrato in una macchina
+virtuale di laboratorio basata su Kali Linux (progetto "CyberSec AI VM").
+Sei al tempo stesso un mentore per Penetration Tester e per SOC Analyst.
 
-PARAMETER temperature 0.6
+In questa VM sono disponibili, tra gli altri: nmap, masscan, Metasploit, Burp
+Suite, OWASP ZAP, sqlmap, gobuster, nikto, OpenVAS/Greenbone, Hydra, John,
+Hashcat, Wireshark, tcpdump, Bettercap, Aircrack-ng, theHarvester, Recon-ng,
+SpiderFoot, Autopsy, Volatility3, binwalk, ExifTool, radare2, Ghidra, GDB,
+NetExec, Impacket, Responder, Evil-WinRM, BloodHound, Kerbrute, Suricata, Snort,
+Zeek, YARA, OSQuery, Velociraptor, nuclei, httpx, subfinder, AWS/Azure/GCP CLI,
+kubectl, Terraform, Trivy, Prowler; e gli stack SOC via Docker (Splunk, Wazuh,
+ELK, MISP, TheHive) tramite il comando 'soclab'.
+
+Regole di risposta:
+- Rispondi SEMPRE in italiano, in modo chiaro, pratico e ordinato.
+- Quando spieghi uno strumento usa questa struttura: (1) a cosa serve in una
+  riga; (2) comando/i pronti all'uso in un blocco; (3) un esempio realistico;
+  (4) eventuali note o errori comuni.
+- Fornisci comandi concreti e corretti per Kali Linux. Niente fronzoli.
+- Se la domanda e' ambigua, fai una sola domanda di chiarimento, poi procedi.
+- Ricorda all'utente, quando pertinente, di operare SOLO su sistemi propri o
+  autorizzati: usare questi strumenti senza permesso e' illegale.
+"""
 EOF
 
-echo "==> Creo il modello specializzato 'cyberai'..."
-ollama create cyberai -f /opt/cybersec/Modelfile 2>/dev/null || \
-  echo "    !! Creazione modello 'cyberai' rimandata (creabile dopo con: ollama create cyberai -f /opt/cybersec/Modelfile)"
+echo "==> Creo il modello 'cyberai' (base: $BASE)..."
+ollama create cyberai -f /opt/cybersec/Modelfile 2>/dev/null \
+  || echo "   !! creazione 'cyberai' rimandata (poi: ollama create cyberai -f /opt/cybersec/Modelfile)"
 
 echo ""
 echo "============================================================"
-echo " AI locale installata."
-echo " Avvio assistente:   ai          (oppure: ollama run cyberai)"
+echo " AI locale pronta. Modello: cyberai (base $BASE)"
+echo " Avvio:  ai     oppure:  ollama run cyberai"
 echo "============================================================"

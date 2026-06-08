@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
     vb.name   = "CyberSec-AI-VM"
     vb.gui    = true
-    vb.memory = 8192
+    vb.memory = 10240
     vb.cpus   = 4
     vb.customize ["modifyvm", :id, "--vram", "128"]
     vb.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
