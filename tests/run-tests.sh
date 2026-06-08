@@ -82,6 +82,15 @@ while IFS= read -r d; do
   grep -q '^Exec=' "$d" && grep -q '^Name=' "$d" || { echo "  .desktop incompleto: $d"; dmiss=1; }
 done < <(find condivisa -name '*.desktop' 2>/dev/null)
 [ "$dmiss" = 0 ] && pass "tutti i launcher .desktop sono validi" || err ".desktop incompleti"
+# 10d: ogni scheda della GUI ha il suo tutorial
+python3 - <<'PYEOF' && pass "ogni tool della GUI ha il tutorial" || err "tutorial GUI mancanti"
+import json,os,sys
+d=json.load(open("gui/tools.json"))
+tuts=set(os.path.splitext(f)[0] for f in os.listdir("menu/tutorials"))
+miss=[t["tut"] for c in d["categories"] for t in c["tools"] if t["tut"] not in tuts]
+[print("  manca tutorial GUI:",m) for m in miss]
+sys.exit(1 if miss else 0)
+PYEOF
 
 echo ""
 if [ "$FAIL" = 0 ]; then echo ">>> TUTTI I TEST SUPERATI <<<"; exit 0

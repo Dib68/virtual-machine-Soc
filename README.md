@@ -1,5 +1,9 @@
 # CyberSec AI VM — Macchina virtuale per VirtualBox
 
+![CyberSec AI VM](assets/linkedin-cover.png)
+
+![Il Control Center dentro Kali](assets/dentro-kali.png)
+
 VM **Kali Linux** automatizzata con **Vagrant**: un laboratorio completo di
 cybersecurity, **Red Team** e **Blue Team / SOC**, con **AI locale integrata**
 e **menu interattivo con tutorial** per ogni strumento.
