@@ -48,6 +48,19 @@ ck("tool non installato gestito", (not ok2) and "non installato" in msg2)
 # soclab validazione
 ok3,_ = srv.soclab("targets","up"); ck("soclab valido accettato", ok3)
 ok4,m4 = srv.soclab("hacker","boom"); ck("soclab non valido rifiutato", (not ok4))
+# install on-demand
+srv.TOOLS["needinst"] = {"bin":"needinst","name":"X","desc":"y","cmd":"needinst","tut":"nmap","term":True,"pkg":"needinst-pkg"}
+oi,mi = srv.install("needinst")
+import glob as _g, time as _t; _t.sleep(0.5)
+scr2 = sorted(_g.glob("/tmp/install_*.sh"))
+ck("install: ritorna ok", oi)
+ck("install: crea script apt", bool(scr2) and "apt-get install" in open(scr2[-1]).read())
+srv.TOOLS["nopkg"] = {"bin":"nopkg","name":"Z","desc":"y","cmd":"nopkg","tut":"nmap","term":True,"pkg":""}
+on,mn = srv.install("nopkg")
+ck("install senza pkg gestito", (not on) and "COMPLETA" in mn)
+ok_ai,_ = srv.install("faketool")  # gia' installato
+ck("install gia' installato gestito", not ok_ai)
+
 # AI: senza servizio -> messaggio gestito
 ck("AI senza servizio gestita", "non disponibile" in srv.ai_ask("ciao").lower())
 # AI: con finto Ollama

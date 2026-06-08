@@ -70,6 +70,23 @@ def soclab(stack, action):
     except Exception as ex:
         return False, str(ex)
 
+def install(binname):
+    t = TOOLS.get(binname)
+    if not t:
+        return False, "tool sconosciuto"
+    if installed(binname):
+        return False, "gia' installato"
+    pkg = t.get("pkg", "")
+    if not pkg:
+        return False, "questo strumento si installa con COMPLETA-INSTALLAZIONE"
+    try:
+        cmd = ("echo 'Installazione di %s ...'; sudo apt-get update; "
+               "sudo apt-get install -y %s; echo; echo 'Fatto.'") % (pkg, pkg)
+        _run_in_terminal(cmd, tag="install")
+        return True, "installazione avviata: " + pkg
+    except Exception as ex:
+        return False, str(ex)
+
 def ai_ask(prompt):
     body = json.dumps({"model": "cyberai", "prompt": prompt, "stream": False}).encode()
     try:
@@ -129,6 +146,9 @@ class H(http.server.BaseHTTPRequestHandler):
             return self._send(200, "application/json", json.dumps(status()).encode())
         if u.path == "/api/launch":
             ok, msg = launch(q.get("bin", [""])[0])
+            return self._send(200, "application/json", json.dumps({"ok": ok, "msg": msg}).encode())
+        if u.path == "/api/install":
+            ok, msg = install(q.get("bin", [""])[0])
             return self._send(200, "application/json", json.dumps({"ok": ok, "msg": msg}).encode())
         if u.path == "/api/tutorial":
             return self._send(200, "text/plain; charset=utf-8",

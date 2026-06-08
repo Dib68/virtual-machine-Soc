@@ -1,89 +1,589 @@
 {
   "categories": [
-    {"name": "Network Scanning", "icon": "radar", "color": "#37a", "tools": [
-      {"bin":"nmap","name":"Nmap","desc":"Scanner di rete e porte","cmd":"sudo nmap","tut":"nmap","term":true},
-      {"bin":"masscan","name":"Masscan","desc":"Scanner ultra-veloce","cmd":"sudo masscan","tut":"masscan","term":true},
-      {"bin":"netdiscover","name":"Netdiscover","desc":"Host discovery ARP","cmd":"sudo netdiscover","tut":"netdiscover","term":true}
-    ]},
-    {"name": "Web App Testing", "icon": "world", "color": "#3a8", "tools": [
-      {"bin":"burpsuite","name":"Burp Suite","desc":"Proxy / web pentest","cmd":"burpsuite","tut":"burpsuite","term":false},
-      {"bin":"zaproxy","name":"OWASP ZAP","desc":"Proxy / web pentest","cmd":"zaproxy","tut":"zaproxy","term":false},
-      {"bin":"sqlmap","name":"SQLmap","desc":"SQL injection","cmd":"sqlmap --wizard","tut":"sqlmap","term":true},
-      {"bin":"gobuster","name":"Gobuster","desc":"Brute force dir/DNS","cmd":"gobuster","tut":"gobuster","term":true}
-    ]},
-    {"name": "Vulnerability", "icon": "bug", "color": "#a83", "tools": [
-      {"bin":"nikto","name":"Nikto","desc":"Scanner web server","cmd":"nikto -h","tut":"nikto","term":true},
-      {"bin":"gvm","name":"OpenVAS/Greenbone","desc":"Vuln scanner","cmd":"sudo gvm-start","tut":"openvas","term":true},
-      {"bin":"wapiti","name":"Wapiti","desc":"Vuln scanner web","cmd":"wapiti -u","tut":"wapiti","term":true}
-    ]},
-    {"name": "Exploitation", "icon": "bomb", "color": "#a44", "tools": [
-      {"bin":"msfconsole","name":"Metasploit","desc":"Framework di exploit","cmd":"msfconsole","tut":"metasploit","term":true},
-      {"bin":"searchsploit","name":"SearchSploit","desc":"Database exploit","cmd":"searchsploit","tut":"searchsploit","term":true}
-    ]},
-    {"name": "Password", "icon": "key", "color": "#a38", "tools": [
-      {"bin":"john","name":"John the Ripper","desc":"Cracking password","cmd":"john","tut":"john","term":true},
-      {"bin":"hashcat","name":"Hashcat","desc":"Cracking GPU/CPU","cmd":"hashcat","tut":"hashcat","term":true},
-      {"bin":"hydra","name":"Hydra","desc":"Brute force login","cmd":"hydra","tut":"hydra","term":true}
-    ]},
-    {"name": "Traffico & MITM", "icon": "wifi", "color": "#368", "tools": [
-      {"bin":"wireshark","name":"Wireshark","desc":"Analisi pacchetti","cmd":"wireshark","tut":"wireshark","term":false},
-      {"bin":"tcpdump","name":"tcpdump","desc":"Sniffer terminale","cmd":"sudo tcpdump","tut":"tcpdump","term":true},
-      {"bin":"bettercap","name":"Bettercap","desc":"Attacchi MITM","cmd":"sudo bettercap","tut":"bettercap","term":true}
-    ]},
-    {"name": "Active Directory", "icon": "building", "color": "#759", "tools": [
-      {"bin":"netexec","name":"NetExec","desc":"Pentest AD/SMB","cmd":"netexec","tut":"netexec","term":true},
-      {"bin":"responder","name":"Responder","desc":"LLMNR/NBT-NS","cmd":"sudo responder -I eth0","tut":"responder","term":true},
-      {"bin":"evil-winrm","name":"Evil-WinRM","desc":"Shell WinRM","cmd":"evil-winrm","tut":"evil-winrm","term":true},
-      {"bin":"bloodhound","name":"BloodHound","desc":"Percorsi attacco AD","cmd":"bloodhound","tut":"bloodhound","term":false},
-      {"bin":"kerbrute","name":"Kerbrute","desc":"Brute Kerberos","cmd":"kerbrute","tut":"kerbrute","term":true}
-    ]},
-    {"name": "OSINT & Recon", "icon": "search", "color": "#396", "tools": [
-      {"bin":"theHarvester","name":"theHarvester","desc":"Email/domini","cmd":"theHarvester","tut":"theharvester","term":true},
-      {"bin":"recon-ng","name":"Recon-ng","desc":"Framework OSINT","cmd":"recon-ng","tut":"recon-ng","term":true},
-      {"bin":"spiderfoot","name":"SpiderFoot","desc":"OSINT automatico","cmd":"spiderfoot -l 127.0.0.1:5001","tut":"spiderfoot","term":true}
-    ]},
-    {"name": "Forensics / DFIR", "icon": "fingerprint", "color": "#586", "tools": [
-      {"bin":"autopsy","name":"Autopsy","desc":"Forensics GUI","cmd":"autopsy","tut":"autopsy","term":true},
-      {"bin":"binwalk","name":"Binwalk","desc":"Analisi firmware","cmd":"binwalk","tut":"binwalk","term":true},
-      {"bin":"exiftool","name":"ExifTool","desc":"Metadati file","cmd":"exiftool","tut":"exiftool","term":true},
-      {"bin":"vol","name":"Volatility3","desc":"Analisi memoria","cmd":"vol","tut":"volatility","term":true}
-    ]},
-    {"name": "Reverse Eng / CTF", "icon": "binary", "color": "#647", "tools": [
-      {"bin":"radare2","name":"Radare2","desc":"RE da terminale","cmd":"r2","tut":"radare2","term":true},
-      {"bin":"ghidra","name":"Ghidra","desc":"RE GUI (NSA)","cmd":"ghidra","tut":"ghidra","term":false},
-      {"bin":"gdb","name":"GDB + GEF","desc":"Debugger","cmd":"gdb","tut":"gdb","term":true},
-      {"bin":"ROPgadget","name":"ROPgadget","desc":"Gadget ROP","cmd":"ROPgadget","tut":"ropgadget","term":true}
-    ]},
-    {"name": "Blue Team / SOC", "icon": "shield", "color": "#2a7", "tools": [
-      {"bin":"suricata","name":"Suricata","desc":"IDS/IPS","cmd":"sudo suricata --build-info","tut":"suricata","term":true},
-      {"bin":"zeek","name":"Zeek","desc":"Network monitoring","cmd":"zeek","tut":"zeek","term":true},
-      {"bin":"yara","name":"YARA","desc":"Regole anti-malware","cmd":"yara","tut":"yara","term":true},
-      {"bin":"osqueryi","name":"OSQuery","desc":"SQL endpoint","cmd":"osqueryi","tut":"osquery","term":true},
-      {"bin":"velociraptor","name":"Velociraptor","desc":"DFIR endpoint","cmd":"velociraptor","tut":"velociraptor","term":true},
-      {"bin":"lynis","name":"Lynis","desc":"Audit hardening","cmd":"sudo lynis audit system","tut":"lynis","term":true}
-    ]},
-    {"name": "Threat Hunting", "icon": "crosshair", "color": "#293", "tools": [
-      {"bin":"nuclei","name":"Nuclei","desc":"Scanner template","cmd":"nuclei","tut":"nuclei","term":true},
-      {"bin":"httpx","name":"httpx","desc":"Probe HTTP","cmd":"httpx","tut":"httpx","term":true},
-      {"bin":"subfinder","name":"Subfinder","desc":"Sottodomini","cmd":"subfinder","tut":"subfinder","term":true},
-      {"bin":"feroxbuster","name":"Feroxbuster","desc":"Content discovery","cmd":"feroxbuster","tut":"feroxbuster","term":true}
-    ]},
-    {"name": "Cloud & DevSecOps", "icon": "cloud", "color": "#39a", "tools": [
-      {"bin":"aws","name":"AWS CLI","desc":"Amazon Web Services","cmd":"aws","tut":"awscli","term":true},
-      {"bin":"az","name":"Azure CLI","desc":"Microsoft Azure","cmd":"az","tut":"azurecli","term":true},
-      {"bin":"kubectl","name":"kubectl","desc":"Kubernetes","cmd":"kubectl","tut":"kubectl","term":true},
-      {"bin":"terraform","name":"Terraform","desc":"Infra as Code","cmd":"terraform","tut":"terraform","term":true},
-      {"bin":"trivy","name":"Trivy","desc":"Scanner container/IaC","cmd":"trivy","tut":"trivy","term":true},
-      {"bin":"prowler","name":"Prowler","desc":"Audit cloud","cmd":"prowler","tut":"prowler","term":true}
-    ]}
+    {
+      "name": "Network Scanning",
+      "icon": "radar",
+      "color": "#37a",
+      "tools": [
+        {
+          "bin": "nmap",
+          "name": "Nmap",
+          "desc": "Scanner di rete e porte",
+          "cmd": "sudo nmap",
+          "tut": "nmap",
+          "term": true,
+          "pkg": "nmap"
+        },
+        {
+          "bin": "masscan",
+          "name": "Masscan",
+          "desc": "Scanner ultra-veloce",
+          "cmd": "sudo masscan",
+          "tut": "masscan",
+          "term": true,
+          "pkg": "masscan"
+        },
+        {
+          "bin": "netdiscover",
+          "name": "Netdiscover",
+          "desc": "Host discovery ARP",
+          "cmd": "sudo netdiscover",
+          "tut": "netdiscover",
+          "term": true,
+          "pkg": "netdiscover"
+        }
+      ]
+    },
+    {
+      "name": "Web App Testing",
+      "icon": "world",
+      "color": "#3a8",
+      "tools": [
+        {
+          "bin": "burpsuite",
+          "name": "Burp Suite",
+          "desc": "Proxy / web pentest",
+          "cmd": "burpsuite",
+          "tut": "burpsuite",
+          "term": false,
+          "pkg": "burpsuite"
+        },
+        {
+          "bin": "zaproxy",
+          "name": "OWASP ZAP",
+          "desc": "Proxy / web pentest",
+          "cmd": "zaproxy",
+          "tut": "zaproxy",
+          "term": false,
+          "pkg": "zaproxy"
+        },
+        {
+          "bin": "sqlmap",
+          "name": "SQLmap",
+          "desc": "SQL injection",
+          "cmd": "sqlmap --wizard",
+          "tut": "sqlmap",
+          "term": true,
+          "pkg": "sqlmap"
+        },
+        {
+          "bin": "gobuster",
+          "name": "Gobuster",
+          "desc": "Brute force dir/DNS",
+          "cmd": "gobuster",
+          "tut": "gobuster",
+          "term": true,
+          "pkg": "gobuster"
+        }
+      ]
+    },
+    {
+      "name": "Vulnerability",
+      "icon": "bug",
+      "color": "#a83",
+      "tools": [
+        {
+          "bin": "nikto",
+          "name": "Nikto",
+          "desc": "Scanner web server",
+          "cmd": "nikto -h",
+          "tut": "nikto",
+          "term": true,
+          "pkg": "nikto"
+        },
+        {
+          "bin": "gvm",
+          "name": "OpenVAS/Greenbone",
+          "desc": "Vuln scanner",
+          "cmd": "sudo gvm-start",
+          "tut": "openvas",
+          "term": true,
+          "pkg": "gvm"
+        },
+        {
+          "bin": "wapiti",
+          "name": "Wapiti",
+          "desc": "Vuln scanner web",
+          "cmd": "wapiti -u",
+          "tut": "wapiti",
+          "term": true,
+          "pkg": "wapiti"
+        }
+      ]
+    },
+    {
+      "name": "Exploitation",
+      "icon": "bomb",
+      "color": "#a44",
+      "tools": [
+        {
+          "bin": "msfconsole",
+          "name": "Metasploit",
+          "desc": "Framework di exploit",
+          "cmd": "msfconsole",
+          "tut": "metasploit",
+          "term": true,
+          "pkg": "metasploit-framework"
+        },
+        {
+          "bin": "searchsploit",
+          "name": "SearchSploit",
+          "desc": "Database exploit",
+          "cmd": "searchsploit",
+          "tut": "searchsploit",
+          "term": true,
+          "pkg": "searchsploit"
+        }
+      ]
+    },
+    {
+      "name": "Password",
+      "icon": "key",
+      "color": "#a38",
+      "tools": [
+        {
+          "bin": "john",
+          "name": "John the Ripper",
+          "desc": "Cracking password",
+          "cmd": "john",
+          "tut": "john",
+          "term": true,
+          "pkg": "john"
+        },
+        {
+          "bin": "hashcat",
+          "name": "Hashcat",
+          "desc": "Cracking GPU/CPU",
+          "cmd": "hashcat",
+          "tut": "hashcat",
+          "term": true,
+          "pkg": "hashcat"
+        },
+        {
+          "bin": "hydra",
+          "name": "Hydra",
+          "desc": "Brute force login",
+          "cmd": "hydra",
+          "tut": "hydra",
+          "term": true,
+          "pkg": "hydra"
+        }
+      ]
+    },
+    {
+      "name": "Traffico & MITM",
+      "icon": "wifi",
+      "color": "#368",
+      "tools": [
+        {
+          "bin": "wireshark",
+          "name": "Wireshark",
+          "desc": "Analisi pacchetti",
+          "cmd": "wireshark",
+          "tut": "wireshark",
+          "term": false,
+          "pkg": "wireshark"
+        },
+        {
+          "bin": "tcpdump",
+          "name": "tcpdump",
+          "desc": "Sniffer terminale",
+          "cmd": "sudo tcpdump",
+          "tut": "tcpdump",
+          "term": true,
+          "pkg": "tcpdump"
+        },
+        {
+          "bin": "bettercap",
+          "name": "Bettercap",
+          "desc": "Attacchi MITM",
+          "cmd": "sudo bettercap",
+          "tut": "bettercap",
+          "term": true,
+          "pkg": "bettercap"
+        }
+      ]
+    },
+    {
+      "name": "Active Directory",
+      "icon": "building",
+      "color": "#759",
+      "tools": [
+        {
+          "bin": "netexec",
+          "name": "NetExec",
+          "desc": "Pentest AD/SMB",
+          "cmd": "netexec",
+          "tut": "netexec",
+          "term": true,
+          "pkg": "netexec"
+        },
+        {
+          "bin": "responder",
+          "name": "Responder",
+          "desc": "LLMNR/NBT-NS",
+          "cmd": "sudo responder -I eth0",
+          "tut": "responder",
+          "term": true,
+          "pkg": "responder"
+        },
+        {
+          "bin": "evil-winrm",
+          "name": "Evil-WinRM",
+          "desc": "Shell WinRM",
+          "cmd": "evil-winrm",
+          "tut": "evil-winrm",
+          "term": true,
+          "pkg": "evil-winrm"
+        },
+        {
+          "bin": "bloodhound",
+          "name": "BloodHound",
+          "desc": "Percorsi attacco AD",
+          "cmd": "bloodhound",
+          "tut": "bloodhound",
+          "term": false,
+          "pkg": "bloodhound"
+        },
+        {
+          "bin": "kerbrute",
+          "name": "Kerbrute",
+          "desc": "Brute Kerberos",
+          "cmd": "kerbrute",
+          "tut": "kerbrute",
+          "term": true,
+          "pkg": "kerbrute"
+        }
+      ]
+    },
+    {
+      "name": "OSINT & Recon",
+      "icon": "search",
+      "color": "#396",
+      "tools": [
+        {
+          "bin": "theHarvester",
+          "name": "theHarvester",
+          "desc": "Email/domini",
+          "cmd": "theHarvester",
+          "tut": "theharvester",
+          "term": true,
+          "pkg": "theharvester"
+        },
+        {
+          "bin": "recon-ng",
+          "name": "Recon-ng",
+          "desc": "Framework OSINT",
+          "cmd": "recon-ng",
+          "tut": "recon-ng",
+          "term": true,
+          "pkg": "recon-ng"
+        },
+        {
+          "bin": "spiderfoot",
+          "name": "SpiderFoot",
+          "desc": "OSINT automatico",
+          "cmd": "spiderfoot -l 127.0.0.1:5001",
+          "tut": "spiderfoot",
+          "term": true,
+          "pkg": "spiderfoot"
+        }
+      ]
+    },
+    {
+      "name": "Forensics / DFIR",
+      "icon": "fingerprint",
+      "color": "#586",
+      "tools": [
+        {
+          "bin": "autopsy",
+          "name": "Autopsy",
+          "desc": "Forensics GUI",
+          "cmd": "autopsy",
+          "tut": "autopsy",
+          "term": true,
+          "pkg": "autopsy"
+        },
+        {
+          "bin": "binwalk",
+          "name": "Binwalk",
+          "desc": "Analisi firmware",
+          "cmd": "binwalk",
+          "tut": "binwalk",
+          "term": true,
+          "pkg": "binwalk"
+        },
+        {
+          "bin": "exiftool",
+          "name": "ExifTool",
+          "desc": "Metadati file",
+          "cmd": "exiftool",
+          "tut": "exiftool",
+          "term": true,
+          "pkg": "exiftool"
+        },
+        {
+          "bin": "vol",
+          "name": "Volatility3",
+          "desc": "Analisi memoria",
+          "cmd": "vol",
+          "tut": "volatility",
+          "term": true,
+          "pkg": "volatility3"
+        }
+      ]
+    },
+    {
+      "name": "Reverse Eng / CTF",
+      "icon": "binary",
+      "color": "#647",
+      "tools": [
+        {
+          "bin": "radare2",
+          "name": "Radare2",
+          "desc": "RE da terminale",
+          "cmd": "r2",
+          "tut": "radare2",
+          "term": true,
+          "pkg": "radare2"
+        },
+        {
+          "bin": "ghidra",
+          "name": "Ghidra",
+          "desc": "RE GUI (NSA)",
+          "cmd": "ghidra",
+          "tut": "ghidra",
+          "term": false,
+          "pkg": "ghidra"
+        },
+        {
+          "bin": "gdb",
+          "name": "GDB + GEF",
+          "desc": "Debugger",
+          "cmd": "gdb",
+          "tut": "gdb",
+          "term": true,
+          "pkg": "gdb"
+        },
+        {
+          "bin": "ROPgadget",
+          "name": "ROPgadget",
+          "desc": "Gadget ROP",
+          "cmd": "ROPgadget",
+          "tut": "ropgadget",
+          "term": true,
+          "pkg": "ropgadget"
+        }
+      ]
+    },
+    {
+      "name": "Blue Team / SOC",
+      "icon": "shield",
+      "color": "#2a7",
+      "tools": [
+        {
+          "bin": "suricata",
+          "name": "Suricata",
+          "desc": "IDS/IPS",
+          "cmd": "sudo suricata --build-info",
+          "tut": "suricata",
+          "term": true,
+          "pkg": "suricata"
+        },
+        {
+          "bin": "zeek",
+          "name": "Zeek",
+          "desc": "Network monitoring",
+          "cmd": "zeek",
+          "tut": "zeek",
+          "term": true,
+          "pkg": "zeek"
+        },
+        {
+          "bin": "yara",
+          "name": "YARA",
+          "desc": "Regole anti-malware",
+          "cmd": "yara",
+          "tut": "yara",
+          "term": true,
+          "pkg": "yara"
+        },
+        {
+          "bin": "osqueryi",
+          "name": "OSQuery",
+          "desc": "SQL endpoint",
+          "cmd": "osqueryi",
+          "tut": "osquery",
+          "term": true,
+          "pkg": "osquery"
+        },
+        {
+          "bin": "velociraptor",
+          "name": "Velociraptor",
+          "desc": "DFIR endpoint",
+          "cmd": "velociraptor",
+          "tut": "velociraptor",
+          "term": true,
+          "pkg": ""
+        },
+        {
+          "bin": "lynis",
+          "name": "Lynis",
+          "desc": "Audit hardening",
+          "cmd": "sudo lynis audit system",
+          "tut": "lynis",
+          "term": true,
+          "pkg": "lynis"
+        }
+      ]
+    },
+    {
+      "name": "Threat Hunting",
+      "icon": "crosshair",
+      "color": "#293",
+      "tools": [
+        {
+          "bin": "nuclei",
+          "name": "Nuclei",
+          "desc": "Scanner template",
+          "cmd": "nuclei",
+          "tut": "nuclei",
+          "term": true,
+          "pkg": "nuclei"
+        },
+        {
+          "bin": "httpx",
+          "name": "httpx",
+          "desc": "Probe HTTP",
+          "cmd": "httpx",
+          "tut": "httpx",
+          "term": true,
+          "pkg": "httpx-toolkit"
+        },
+        {
+          "bin": "subfinder",
+          "name": "Subfinder",
+          "desc": "Sottodomini",
+          "cmd": "subfinder",
+          "tut": "subfinder",
+          "term": true,
+          "pkg": "subfinder"
+        },
+        {
+          "bin": "feroxbuster",
+          "name": "Feroxbuster",
+          "desc": "Content discovery",
+          "cmd": "feroxbuster",
+          "tut": "feroxbuster",
+          "term": true,
+          "pkg": "feroxbuster"
+        }
+      ]
+    },
+    {
+      "name": "Cloud & DevSecOps",
+      "icon": "cloud",
+      "color": "#39a",
+      "tools": [
+        {
+          "bin": "aws",
+          "name": "AWS CLI",
+          "desc": "Amazon Web Services",
+          "cmd": "aws",
+          "tut": "awscli",
+          "term": true,
+          "pkg": ""
+        },
+        {
+          "bin": "az",
+          "name": "Azure CLI",
+          "desc": "Microsoft Azure",
+          "cmd": "az",
+          "tut": "azurecli",
+          "term": true,
+          "pkg": ""
+        },
+        {
+          "bin": "kubectl",
+          "name": "kubectl",
+          "desc": "Kubernetes",
+          "cmd": "kubectl",
+          "tut": "kubectl",
+          "term": true,
+          "pkg": ""
+        },
+        {
+          "bin": "terraform",
+          "name": "Terraform",
+          "desc": "Infra as Code",
+          "cmd": "terraform",
+          "tut": "terraform",
+          "term": true,
+          "pkg": ""
+        },
+        {
+          "bin": "trivy",
+          "name": "Trivy",
+          "desc": "Scanner container/IaC",
+          "cmd": "trivy",
+          "tut": "trivy",
+          "term": true,
+          "pkg": ""
+        },
+        {
+          "bin": "prowler",
+          "name": "Prowler",
+          "desc": "Audit cloud",
+          "cmd": "prowler",
+          "tut": "prowler",
+          "term": true,
+          "pkg": ""
+        }
+      ]
+    }
   ],
   "soclab": [
-    {"id":"targets","name":"Bersagli vulnerabili","desc":"DVWA, Juice Shop, WebGoat","url":"http://localhost:3000"},
-    {"id":"splunk","name":"Splunk","desc":"SIEM #1 negli annunci","url":"http://localhost:8000"},
-    {"id":"elk","name":"ELK / Kibana","desc":"SIEM / analisi log","url":"http://localhost:5601"},
-    {"id":"wazuh","name":"Wazuh","desc":"SIEM + EDR (8+ GB)","url":"https://localhost:443"},
-    {"id":"misp","name":"MISP","desc":"Threat intelligence","url":"https://localhost:8443"},
-    {"id":"thehive","name":"TheHive + Cortex","desc":"Incident response","url":"http://localhost:9000"},
-    {"id":"webui","name":"OpenWebUI","desc":"AI nel browser","url":"http://localhost:3001"}
+    {
+      "id": "targets",
+      "name": "Bersagli vulnerabili",
+      "desc": "DVWA, Juice Shop, WebGoat",
+      "url": "http://localhost:3000"
+    },
+    {
+      "id": "splunk",
+      "name": "Splunk",
+      "desc": "SIEM #1 negli annunci",
+      "url": "http://localhost:8000"
+    },
+    {
+      "id": "elk",
+      "name": "ELK / Kibana",
+      "desc": "SIEM / analisi log",
+      "url": "http://localhost:5601"
+    },
+    {
+      "id": "wazuh",
+      "name": "Wazuh",
+      "desc": "SIEM + EDR (8+ GB)",
+      "url": "https://localhost:443"
+    },
+    {
+      "id": "misp",
+      "name": "MISP",
+      "desc": "Threat intelligence",
+      "url": "https://localhost:8443"
+    },
+    {
+      "id": "thehive",
+      "name": "TheHive + Cortex",
+      "desc": "Incident response",
+      "url": "http://localhost:9000"
+    },
+    {
+      "id": "webui",
+      "name": "OpenWebUI",
+      "desc": "AI nel browser",
+      "url": "http://localhost:3001"
+    }
   ]
 }

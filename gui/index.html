@@ -158,10 +158,14 @@ function nv(v,label,col,cnt){const on=CUR===v?' on':'';
     `<span style="overflow:hidden;text-overflow:ellipsis">${label}</span>`+(cnt!=null?`<span class="cnt">${cnt}</span>`:'')+`</div>`;}
 function totTools(){return DATA.categories.reduce((a,c)=>a+c.tools.length,0);}
 function tcard(t,color){const ok=inst(t.bin);
+  const first = ok
+    ? `<button class="btn go" onclick="launch('${t.bin}')">Avvia</button>`
+    : (t.pkg ? `<button class="btn go" onclick="installTool('${t.bin}')">Installa</button>`
+             : `<button class="btn go" onclick="launch('${t.bin}')">Avvia</button>`);
   return `<div class="card"><div class="ch"><div class="ic" style="background:${color}">${t.name[0]}</div>`+
     `<div class="nm" title="${t.name}">${t.name}</div><span class="st ${ok?'ok':'no'}">${ok?'ok':'n/d'}</span></div>`+
     `<div class="ds">${t.desc}</div><div class="row">`+
-    `<button class="btn go" onclick="launch('${t.bin}')">Avvia</button>`+
+    first+
     `<button class="btn" onclick="showTut('${t.tut}','${t.name}')">Guida</button>`+
     `<button class="btn ai" onclick="askTool('${t.name}')">AI</button></div></div>`;}
 function render(){const v=document.getElementById('view'),T=document.getElementById('title');
@@ -210,6 +214,10 @@ function askTool(name){go('ai');CHAT.push({r:'u',t:'Come uso '+name+'?'});CHAT.p
     body:JSON.stringify({prompt:'Spiega come usare '+name+' in cybersecurity con esempi pratici di comando. In italiano.'})})
    .then(r=>r.json()).then(r=>{CHAT[CHAT.length-1].t=r.answer;drawChat();}).catch(()=>{CHAT[CHAT.length-1].t='AI non raggiungibile.';drawChat();});}
 async function launch(bin){const r=await (await fetch('/api/launch?bin='+encodeURIComponent(bin))).json();toast(r.ok?'Avviato: '+bin:'Errore: '+r.msg);}
+async function installTool(bin){toast('Installazione di '+bin+'... (apri il terminale e inserisci la password se richiesto)');
+  const r=await (await fetch('/api/install?bin='+encodeURIComponent(bin))).json();
+  toast(r.ok?('Installazione avviata: '+bin):('Errore: '+r.msg));
+  setTimeout(async()=>{try{ST=await (await fetch('/api/status')).json();render();pills();}catch(e){}},20000);}
 async function soc(id,act){toast('Eseguo '+id+' '+act+'...');
   const r=await (await fetch('/api/soclab',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({stack:id,action:act})})).json();toast(r.msg);}
 async function showTut(name,title){document.getElementById('ovt').textContent='Guida: '+(title||name);
