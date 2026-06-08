@@ -25,6 +25,7 @@ for i in $(seq 1 40); do curl -s http://localhost:11434/api/tags >/dev/null 2>&1
 #   altrimenti -> llama3.2 (3B, leggero)
 # ----------------------------------------------------------------------------
 RAM_GB=$(free -g 2>/dev/null | awk '/Mem:/{print $2}'); RAM_GB=${RAM_GB:-4}
+[[ "$RAM_GB" =~ ^[0-9]+$ ]] || RAM_GB=4
 if [ "$RAM_GB" -ge 7 ]; then BASE="qwen2.5:7b"; else BASE="llama3.2"; fi
 echo "==> RAM ${RAM_GB}GB -> modello base scelto: $BASE"
 

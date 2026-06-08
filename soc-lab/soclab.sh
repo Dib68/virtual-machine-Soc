@@ -44,7 +44,7 @@ wazuh() {
       dc -f generate-indexer-certs.yml run --rm generator || true
       dc up -d
       echo "Wazuh -> https://localhost:443  (admin / SecretPassword)"
-      echo "ATTENZIONE: richiede molta RAM (8+ GB alla VM)." ;;
+      echo "ATTENZIONE: richiede molta RAM (consigliati 10+ GB alla VM)." ;;
     down) dc down ;;
     *) echo "uso: soclab wazuh up|down" ;;
   esac

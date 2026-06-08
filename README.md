@@ -108,7 +108,7 @@ virtual machine Soc/
 ├── CHANGELOG.md / VERSION   # storico versioni
 ├── Makefile                 # scorciatoie (make up, make ova, ...)
 ├── build-ova.sh             # genera un .ova distribuibile (via Vagrant)
-├── provision/               # 01..08: script di installazione automatica
+├── provision/               # 01..09: script di installazione automatica
 ├── menu/
 │   ├── cybermenu.sh  ai.sh  # comandi `cybermenu` e `ai`
 │   └── tutorials/           # ~70 tutorial, uno per strumento
@@ -116,6 +116,7 @@ virtual machine Soc/
 ├── soc-lab/                 # stack Docker (comando `soclab`)
 │   ├── soclab.sh
 │   └── targets/ splunk/ elk/ misp/ thehive/ webui/
+├── tests/                   # suite di test automatici (run-tests.sh)
 ├── packer/                  # build avanzata dell'.ova da ISO
 └── condivisa/               # cartella condivisa host <-> VM (auto)
 ```

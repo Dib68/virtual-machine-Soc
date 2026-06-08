@@ -63,6 +63,26 @@ done
 echo "== 9. Test funzionali della GUI =="
 python3 tests/test_gui.py || err "test funzionali GUI"
 
+echo "== 10. Integrita' del progetto =="
+# 10a: ogni script citato nel Vagrantfile esiste
+vmiss=0
+for sp in $(grep -oE 'provision/[0-9a-z-]+\.sh' Vagrantfile | sort -u); do
+  [ -f "$sp" ] || { echo "  manca: $sp (citato nel Vagrantfile)"; vmiss=1; }
+done
+[ "$vmiss" = 0 ] && pass "tutti gli script del Vagrantfile esistono" || err "script Vagrantfile mancanti"
+# 10b: ogni stack soclab di tools.json ha la cartella compose (tranne wazuh, scaricato a runtime)
+smiss=0
+for d in targets splunk elk misp thehive webui; do
+  [ -f "soc-lab/$d/docker-compose.yml" ] || { echo "  manca: soc-lab/$d/docker-compose.yml"; smiss=1; }
+done
+[ "$smiss" = 0 ] && pass "tutti gli stack SOC hanno il compose" || err "compose SOC mancanti"
+# 10c: i file .desktop hanno Exec= e Name=
+dmiss=0
+while IFS= read -r d; do
+  grep -q '^Exec=' "$d" && grep -q '^Name=' "$d" || { echo "  .desktop incompleto: $d"; dmiss=1; }
+done < <(find condivisa -name '*.desktop' 2>/dev/null)
+[ "$dmiss" = 0 ] && pass "tutti i launcher .desktop sono validi" || err ".desktop incompleti"
+
 echo ""
 if [ "$FAIL" = 0 ]; then echo ">>> TUTTI I TEST SUPERATI <<<"; exit 0
 else echo ">>> ALCUNI TEST FALLITI <<<"; exit 1; fi
