@@ -1,0 +1,92 @@
+<svg viewBox="0 0 1200 675" xmlns="http://www.w3.org/2000/svg" width="1200" height="675">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#0a0f20"/><stop offset="0.6" stop-color="#0e1733"/><stop offset="1" stop-color="#0a0f20"/>
+  </linearGradient>
+  <linearGradient id="acc" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#5b8cff"/><stop offset="1" stop-color="#27e0b0"/>
+  </linearGradient>
+</defs>
+<rect width="1200" height="675" fill="url(#bg)"/>
+<rect x="0" y="0" width="1200" height="6" fill="url(#acc)"/>
+<rect x="56" y="50" width="58" height="58" rx="14" fill="url(#acc)"/>
+<text x="85" y="89" font-family="Segoe UI, Arial" font-size="26" font-weight="700" fill="#08122b" text-anchor="middle">CS</text>
+<text x="130" y="80" font-family="Segoe UI, Arial" font-size="34" font-weight="700" fill="#ffffff">CyberSec AI VM</text>
+<text x="131" y="108" font-family="Segoe UI, Arial" font-size="17" fill="#93a1c6">Laboratorio di cybersecurity con AI integrata - Red Team + Blue Team / SOC</text>
+<g font-family="Segoe UI, Arial">
+  <rect x="56" y="150" width="330" height="150" rx="16" fill="#141d3a" stroke="#26315a"/>
+  <circle cx="92" cy="186" r="16" fill="#5b8cff"/>
+  <text x="92" y="192" font-size="17" font-weight="700" fill="#08122b" text-anchor="middle">1</text>
+  <text x="120" y="192" font-size="20" font-weight="600" fill="#ffffff">Installazione a un clic</text>
+  <text x="76" y="228" font-size="15" fill="#aab4d4">Doppio clic su INSTALLA:</text>
+  <text x="76" y="252" font-size="15" fill="#aab4d4">scarica e configura tutto da</text>
+  <text x="76" y="276" font-size="15" fill="#aab4d4">solo (VirtualBox + Vagrant).</text>
+  <rect x="435" y="150" width="330" height="150" rx="16" fill="#141d3a" stroke="#26315a"/>
+  <circle cx="471" cy="186" r="16" fill="#27e0b0"/>
+  <text x="471" y="192" font-size="17" font-weight="700" fill="#08122b" text-anchor="middle">2</text>
+  <text x="499" y="192" font-size="20" font-weight="600" fill="#ffffff">VM Kali Linux pronta</text>
+  <text x="455" y="228" font-size="15" fill="#aab4d4">Ambiente isolato e sicuro</text>
+  <text x="455" y="252" font-size="15" fill="#aab4d4">con oltre 50 strumenti gia'</text>
+  <text x="455" y="276" font-size="15" fill="#aab4d4">installati e configurati.</text>
+  <rect x="814" y="150" width="330" height="150" rx="16" fill="#141d3a" stroke="#26315a"/>
+  <circle cx="850" cy="186" r="16" fill="#9b7be0"/>
+  <text x="850" y="192" font-size="17" font-weight="700" fill="#08122b" text-anchor="middle">3</text>
+  <text x="878" y="192" font-size="20" font-weight="600" fill="#ffffff">GUI + AI + SOC</text>
+  <text x="834" y="228" font-size="15" fill="#aab4d4">Interfaccia moderna, tutorial</text>
+  <text x="834" y="252" font-size="15" fill="#aab4d4">per ogni tool e assistente AI</text>
+  <text x="834" y="276" font-size="15" fill="#aab4d4">locale (offline, gratuito).</text>
+  <text x="404" y="232" font-size="30" fill="#5b8cff" text-anchor="middle">&#8594;</text>
+  <text x="783" y="232" font-size="30" fill="#27e0b0" text-anchor="middle">&#8594;</text>
+</g>
+<g font-family="Segoe UI, Arial">
+  <rect x="56" y="330" width="700" height="300" rx="16" fill="#0c1430" stroke="#26315a"/>
+  <rect x="56" y="330" width="700" height="38" rx="16" fill="#161f3d"/>
+  <rect x="56" y="350" width="700" height="18" fill="#161f3d"/>
+  <circle cx="78" cy="349" r="6" fill="#ff5f56"/><circle cx="98" cy="349" r="6" fill="#ffbd2e"/><circle cx="118" cy="349" r="6" fill="#27c93f"/>
+  <text x="150" y="354" font-size="13" fill="#aab4d4">CyberSec AI - Control Center</text>
+  <rect x="56" y="368" width="150" height="262" fill="#0a0f20"/>
+  <rect x="70" y="386" width="122" height="26" rx="7" fill="#1b2547"/>
+  <text x="84" y="403" font-size="12.5" fill="#dfe6ff">Dashboard</text>
+  <text x="84" y="436" font-size="12.5" fill="#93a1c6">Network Scanning</text>
+  <text x="84" y="462" font-size="12.5" fill="#93a1c6">Web App Testing</text>
+  <text x="84" y="488" font-size="12.5" fill="#93a1c6">Active Directory</text>
+  <text x="84" y="514" font-size="12.5" fill="#93a1c6">Blue Team / SOC</text>
+  <text x="84" y="540" font-size="12.5" fill="#93a1c6">Cloud &amp; DevSecOps</text>
+  <text x="84" y="566" font-size="12.5" fill="#93a1c6">Assistente AI</text>
+  <rect x="222" y="386" width="160" height="104" rx="11" fill="#151d38" stroke="#26315a"/>
+  <rect x="236" y="400" width="30" height="30" rx="8" fill="#3a7af0"/><text x="251" y="421" font-size="14" font-weight="700" fill="#08122b" text-anchor="middle">N</text>
+  <text x="276" y="418" font-size="13.5" font-weight="600" fill="#fff">Nmap</text>
+  <text x="236" y="452" font-size="11.5" fill="#93a1c6">Scanner di rete</text>
+  <rect x="236" y="462" width="60" height="18" rx="6" fill="#5b8cff"/><text x="266" y="475" font-size="10.5" fill="#fff" text-anchor="middle">Avvia</text>
+  <rect x="302" y="462" width="34" height="18" rx="6" fill="#27e0b0"/><text x="319" y="475" font-size="10.5" fill="#06241c" text-anchor="middle">AI</text>
+  <rect x="394" y="386" width="160" height="104" rx="11" fill="#151d38" stroke="#26315a"/>
+  <rect x="408" y="400" width="30" height="30" rx="8" fill="#27e0b0"/><text x="423" y="421" font-size="14" font-weight="700" fill="#08122b" text-anchor="middle">B</text>
+  <text x="448" y="418" font-size="13.5" font-weight="600" fill="#fff">Burp Suite</text>
+  <text x="408" y="452" font-size="11.5" fill="#93a1c6">Web pentest</text>
+  <rect x="408" y="462" width="60" height="18" rx="6" fill="#5b8cff"/><text x="438" y="475" font-size="10.5" fill="#fff" text-anchor="middle">Avvia</text>
+  <rect x="474" y="462" width="34" height="18" rx="6" fill="#27e0b0"/><text x="491" y="475" font-size="10.5" fill="#06241c" text-anchor="middle">AI</text>
+  <rect x="566" y="386" width="160" height="104" rx="11" fill="#151d38" stroke="#26315a"/>
+  <rect x="580" y="400" width="30" height="30" rx="8" fill="#9b7be0"/><text x="595" y="421" font-size="14" font-weight="700" fill="#08122b" text-anchor="middle">W</text>
+  <text x="620" y="418" font-size="13.5" font-weight="600" fill="#fff">Wazuh</text>
+  <text x="580" y="452" font-size="11.5" fill="#93a1c6">SIEM + EDR</text>
+  <rect x="580" y="462" width="60" height="18" rx="6" fill="#5b8cff"/><text x="610" y="475" font-size="10.5" fill="#fff" text-anchor="middle">Avvia</text>
+  <rect x="646" y="462" width="34" height="18" rx="6" fill="#27e0b0"/><text x="663" y="475" font-size="10.5" fill="#06241c" text-anchor="middle">AI</text>
+  <rect x="222" y="502" width="504" height="112" rx="11" fill="#101935" stroke="#26315a"/>
+  <text x="238" y="528" font-size="12.5" font-weight="600" fill="#27e0b0">Assistente AI (locale, offline)</text>
+  <rect x="238" y="540" width="360" height="26" rx="9" fill="#1b2547"/>
+  <text x="250" y="557" font-size="12" fill="#cfd6ee">Come uso nmap per scansionare una rete?</text>
+  <text x="238" y="592" font-size="12" fill="#aab4d4">CyberAI: usa  nmap -sV 192.168.1.0/24  per rilevare host e servizi...</text>
+</g>
+<g font-family="Segoe UI, Arial">
+  <text x="790" y="356" font-size="16" font-weight="600" fill="#ffffff">Cosa include</text>
+  <g font-size="14" fill="#dfe6ff">
+    <rect x="790" y="372" width="354" height="36" rx="10" fill="#141d3a" stroke="#26315a"/><text x="808" y="395">50+ strumenti professionali pronti all'uso</text>
+    <rect x="790" y="416" width="354" height="36" rx="10" fill="#141d3a" stroke="#26315a"/><text x="808" y="439">AI locale integrata - offline, senza API key</text>
+    <rect x="790" y="460" width="354" height="36" rx="10" fill="#141d3a" stroke="#26315a"/><text x="808" y="483">SIEM con un comando: Splunk, Wazuh, ELK</text>
+    <rect x="790" y="504" width="354" height="36" rx="10" fill="#141d3a" stroke="#26315a"/><text x="808" y="527">Red Team + Blue Team + Cloud / DevSecOps</text>
+    <rect x="790" y="548" width="354" height="36" rx="10" fill="#141d3a" stroke="#26315a"/><text x="808" y="571">GUI moderna + ~70 tutorial integrati</text>
+  </g>
+  <text x="790" y="612" font-size="14" fill="#27e0b0">Open source su GitHub</text>
+  <text x="1144" y="612" font-size="13" fill="#6b78a6" text-anchor="end">Uso didattico / test autorizzati</text>
+</g>
+</svg>

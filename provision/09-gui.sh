@@ -4,6 +4,14 @@
 # ============================================================================
 set -uo pipefail
 echo "==> Installazione GUI Control Center..."
+
+# Dipendenze necessarie: python3, curl e almeno un terminale grafico
+export DEBIAN_FRONTEND=noninteractive
+apt-get install -y python3 curl xterm >/dev/null 2>&1 || true
+# almeno un emulatore di terminale (Kali XFCE ha qterminal/xfce4-terminal)
+command -v qterminal >/dev/null 2>&1 || command -v xfce4-terminal >/dev/null 2>&1 \
+  || apt-get install -y xterm >/dev/null 2>&1 || true
+
 mkdir -p /opt/cybersec/gui
 cp -f /vagrant/gui/index.html /vagrant/gui/server.py /vagrant/gui/tools.json /opt/cybersec/gui/
 install -m 0755 /vagrant/gui/cybergui.sh /usr/local/bin/cybergui

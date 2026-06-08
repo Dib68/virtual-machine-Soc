@@ -1,14 +1,19 @@
-COME AVVIARE TUTTO (semplice):
+GUIDA RAPIDA (dentro la cartella condivisa di Kali)
 
-1) Sul desktop di Kali apri la cartella "condivisa".
-2) Fai doppio clic sul file:  CLICCA-QUI.sh
-3) Se Kali chiede cosa fare, scegli "Esegui nel terminale"
-   (in inglese: "Run in Terminal" / "Execute").
-4) Se chiede una password scrivi:  vagrant   e premi Invio
-   (la password non si vede mentre la scrivi, va bene cosi').
+--- PRIMA VOLTA: installa tutto ---
+1) Apri la cartella "condivisa" sul desktop di Kali.
+2) Doppio clic su:  COMPLETA-INSTALLAZIONE.sh
+   (se chiede, scegli "Esegui nel terminale" / "Run in Terminal")
+3) Se chiede la password scrivi:  vagrant
+   Installa TUTTI gli strumenti e l'AI. Ci vuole tempo (anche 30+ minuti)
+   e serve internet. Alla fine si apre la GUI da sola.
 
-Il programma installera' gli strumenti e aprira' il MENU da solo.
-Dalla volta successiva il menu si aprira' automaticamente all'avvio.
+--- USO QUOTIDIANO ---
+- GUI moderna:   comando  cybergui   (o icona "CyberSec Control Center")
+- Menu testuale: comando  cybermenu
+- Assistente AI: comando  ai
 
-In alternativa puoi fare doppio clic su:
-   "CLICCA QUI - Avvia tutto.desktop"
+--- SOLO menu/GUI senza reinstallare i tool ---
+Doppio clic su:  CLICCA-QUI.sh
+
+Nota: gli strumenti vanno usati solo su sistemi propri o autorizzati.

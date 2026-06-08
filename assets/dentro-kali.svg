@@ -1,0 +1,105 @@
+<svg viewBox="0 0 1280 800" xmlns="http://www.w3.org/2000/svg" width="1280" height="800">
+<defs>
+ <linearGradient id="kbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b6ea8"/><stop offset="1" stop-color="#073b63"/></linearGradient>
+ <linearGradient id="acc" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5b8cff"/><stop offset="1" stop-color="#27e0b0"/></linearGradient>
+</defs>
+<!-- VirtualBox window -->
+<rect width="1280" height="800" rx="6" fill="#2b2b2b"/>
+<text x="20" y="26" font-family="Segoe UI, Arial" font-size="15" fill="#e6e6e6">CyberSec-AI-VM [In esecuzione] - Oracle VirtualBox</text>
+<g fill="#cfcfcf" font-family="Arial" font-size="14"><rect x="1208" y="10" width="20" height="18" rx="3" fill="#3a3a3a"/><rect x="1234" y="10" width="20" height="18" rx="3" fill="#3a3a3a"/></g>
+<!-- VB menu bar -->
+<rect x="0" y="38" width="1280" height="26" fill="#1f1f1f"/>
+<g font-family="Segoe UI, Arial" font-size="13" fill="#b8b8b8"><text x="16" y="56">File</text><text x="66" y="56">Macchina</text><text x="150" y="56">Visualizza</text><text x="240" y="56">Inserimento</text><text x="340" y="56">Dispositivi</text><text x="430" y="56">Aiuto</text></g>
+
+<!-- Kali desktop -->
+<rect x="0" y="64" width="1280" height="700" fill="url(#kbg)"/>
+<!-- Kali top panel -->
+<rect x="0" y="64" width="1280" height="34" fill="#0c1a26"/>
+<rect x="10" y="70" width="22" height="22" rx="4" fill="#1793d1"/>
+<rect x="40" y="70" width="22" height="22" rx="4" fill="#2b3a45"/><rect x="70" y="70" width="22" height="22" rx="4" fill="#2b3a45"/>
+<circle cx="104" cy="81" r="9" fill="#ff7043"/>
+<rect x="124" y="70" width="22" height="22" rx="4" fill="#101a20"/><text x="135" y="86" font-family="monospace" font-size="13" fill="#27e0b0" text-anchor="middle">&gt;_</text>
+<text x="1180" y="86" font-family="Segoe UI, Arial" font-size="13" fill="#cfe3f0">14:32</text>
+
+<!-- Firefox window with the GUI -->
+<rect x="120" y="130" width="1040" height="600" rx="10" fill="#0b1020" stroke="#0a3050" stroke-width="2"/>
+<!-- firefox tab bar -->
+<rect x="120" y="130" width="1040" height="40" rx="10" fill="#23222b"/>
+<rect x="120" y="150" width="1040" height="20" fill="#23222b"/>
+<rect x="138" y="140" width="240" height="24" rx="7" fill="#0b1020"/>
+<text x="156" y="157" font-family="Segoe UI, Arial" font-size="12.5" fill="#dfe6ff">CyberSec AI - Control Center</text>
+<rect x="138" y="172" width="1004" height="26" fill="#1a1922"/>
+<text x="150" y="190" font-family="monospace" font-size="12" fill="#9fb4d0">127.0.0.1:8910</text>
+
+<!-- GUI body -->
+<!-- sidebar -->
+<rect x="120" y="198" width="210" height="532" fill="#0a0f20"/>
+<rect x="138" y="214" width="40" height="40" rx="10" fill="url(#acc)"/><text x="158" y="240" font-family="Segoe UI, Arial" font-size="17" font-weight="700" fill="#08122b" text-anchor="middle">CS</text>
+<text x="188" y="232" font-family="Segoe UI, Arial" font-size="15" font-weight="700" fill="#fff">CyberSec AI</text>
+<text x="188" y="249" font-family="Segoe UI, Arial" font-size="11" fill="#93a1c6">Control Center</text>
+<g font-family="Segoe UI, Arial" font-size="13">
+ <rect x="134" y="272" width="182" height="30" rx="8" fill="#1b2547"/><circle cx="150" cy="287" r="5" fill="#5b8cff"/><text x="166" y="291" fill="#dfe6ff">Dashboard</text>
+ <circle cx="150" cy="321" r="5" fill="#27e0b0"/><text x="166" y="325" fill="#93a1c6">Tutti gli strumenti</text>
+ <text x="148" y="356" font-size="10.5" fill="#5d6ca0">CATEGORIE</text>
+ <circle cx="150" cy="380" r="5" fill="#3a7af0"/><text x="166" y="384" fill="#93a1c6">Network Scanning</text>
+ <circle cx="150" cy="408" r="5" fill="#27e0b0"/><text x="166" y="412" fill="#93a1c6">Web App Testing</text>
+ <circle cx="150" cy="436" r="5" fill="#9b7be0"/><text x="166" y="440" fill="#93a1c6">Active Directory</text>
+ <circle cx="150" cy="464" r="5" fill="#27c98a"/><text x="166" y="468" fill="#93a1c6">Blue Team / SOC</text>
+ <circle cx="150" cy="492" r="5" fill="#39a8d8"/><text x="166" y="496" fill="#93a1c6">Cloud &amp; DevSecOps</text>
+ <text x="148" y="528" font-size="10.5" fill="#5d6ca0">LABORATORIO</text>
+ <circle cx="150" cy="552" r="5" fill="#2aa77a"/><text x="166" y="556" fill="#93a1c6">SOC Lab (SIEM)</text>
+ <circle cx="150" cy="580" r="5" fill="#d4537e"/><text x="166" y="584" fill="#93a1c6">Assistente AI</text>
+</g>
+
+<!-- header -->
+<text x="350" y="226" font-family="Segoe UI, Arial" font-size="18" font-weight="600" fill="#fff">Dashboard</text>
+<rect x="470" y="208" width="500" height="30" rx="9" fill="#151d38" stroke="#26315a"/><text x="486" y="228" font-family="Segoe UI, Arial" font-size="12.5" fill="#7c89ad">Cerca uno strumento...</text>
+<rect x="986" y="208" width="56" height="30" rx="15" fill="#151d38" stroke="#26315a"/><circle cx="1002" cy="223" r="5" fill="#27e0b0"/><text x="1014" y="227" font-family="Segoe UI, Arial" font-size="12" fill="#93a1c6">AI</text>
+<rect x="1052" y="208" width="86" height="30" rx="15" fill="#151d38" stroke="#26315a"/><circle cx="1068" cy="223" r="5" fill="#27e0b0"/><text x="1080" y="227" font-family="Segoe UI, Arial" font-size="12" fill="#93a1c6">Docker</text>
+
+<!-- metrics -->
+<g font-family="Segoe UI, Arial">
+ <rect x="350" y="252" width="180" height="70" rx="11" fill="#151d38" stroke="#26315a"/><text x="366" y="292" font-size="26" font-weight="700" fill="#fff">52</text><text x="366" y="310" font-size="12" fill="#93a1c6">Strumenti</text>
+ <rect x="544" y="252" width="180" height="70" rx="11" fill="#151d38" stroke="#26315a"/><text x="560" y="292" font-size="26" font-weight="700" fill="#fff">52</text><text x="560" y="310" font-size="12" fill="#93a1c6">Installati</text>
+ <rect x="738" y="252" width="180" height="70" rx="11" fill="#151d38" stroke="#26315a"/><text x="754" y="292" font-size="26" font-weight="700" fill="#fff">15</text><text x="754" y="310" font-size="12" fill="#93a1c6">Categorie</text>
+ <rect x="932" y="252" width="206" height="70" rx="11" fill="#151d38" stroke="#26315a"/><text x="948" y="292" font-size="26" font-weight="700" fill="#fff">7</text><text x="948" y="310" font-size="12" fill="#93a1c6">Stack SOC</text>
+</g>
+<text x="350" y="352" font-family="Segoe UI, Arial" font-size="12" fill="#93a1c6">CATEGORIE</text>
+
+<!-- tool cards row -->
+<g font-family="Segoe UI, Arial">
+ <rect x="350" y="364" width="250" height="120" rx="12" fill="#151d38" stroke="#26315a"/>
+ <rect x="366" y="380" width="34" height="34" rx="9" fill="#3a7af0"/><text x="383" y="403" font-size="15" font-weight="700" fill="#08122b" text-anchor="middle">N</text>
+ <text x="410" y="398" font-size="14" font-weight="600" fill="#fff">Nmap</text><rect x="540" y="384" width="44" height="18" rx="9" fill="#27e0b022"/><text x="562" y="397" font-size="10" fill="#27e0b0" text-anchor="middle">ok</text>
+ <text x="366" y="432" font-size="12" fill="#93a1c6">Scanner di rete e porte</text>
+ <rect x="366" y="446" width="120" height="24" rx="7" fill="#5b8cff"/><text x="426" y="462" font-size="11.5" fill="#fff" text-anchor="middle">Avvia</text>
+ <rect x="492" y="446" width="50" height="24" rx="7" fill="#1b2547"/><text x="517" y="462" font-size="11.5" fill="#dfe6ff" text-anchor="middle">Guida</text>
+ <rect x="548" y="446" width="36" height="24" rx="7" fill="#27e0b0"/><text x="566" y="462" font-size="11.5" fill="#06241c" text-anchor="middle">AI</text>
+
+ <rect x="614" y="364" width="250" height="120" rx="12" fill="#151d38" stroke="#26315a"/>
+ <rect x="630" y="380" width="34" height="34" rx="9" fill="#27e0b0"/><text x="647" y="403" font-size="15" font-weight="700" fill="#08122b" text-anchor="middle">B</text>
+ <text x="674" y="398" font-size="14" font-weight="600" fill="#fff">Burp Suite</text><rect x="804" y="384" width="44" height="18" rx="9" fill="#27e0b022"/><text x="826" y="397" font-size="10" fill="#27e0b0" text-anchor="middle">ok</text>
+ <text x="630" y="432" font-size="12" fill="#93a1c6">Proxy / web pentest</text>
+ <rect x="630" y="446" width="120" height="24" rx="7" fill="#5b8cff"/><text x="690" y="462" font-size="11.5" fill="#fff" text-anchor="middle">Avvia</text>
+ <rect x="756" y="446" width="50" height="24" rx="7" fill="#1b2547"/><text x="781" y="462" font-size="11.5" fill="#dfe6ff" text-anchor="middle">Guida</text>
+ <rect x="812" y="446" width="36" height="24" rx="7" fill="#27e0b0"/><text x="830" y="462" font-size="11.5" fill="#06241c" text-anchor="middle">AI</text>
+
+ <rect x="878" y="364" width="260" height="120" rx="12" fill="#151d38" stroke="#26315a"/>
+ <rect x="894" y="380" width="34" height="34" rx="9" fill="#9b7be0"/><text x="911" y="403" font-size="15" font-weight="700" fill="#08122b" text-anchor="middle">W</text>
+ <text x="938" y="398" font-size="14" font-weight="600" fill="#fff">Wazuh</text><rect x="1082" y="384" width="44" height="18" rx="9" fill="#27e0b022"/><text x="1104" y="397" font-size="10" fill="#27e0b0" text-anchor="middle">ok</text>
+ <text x="894" y="432" font-size="12" fill="#93a1c6">SIEM + EDR</text>
+ <rect x="894" y="446" width="120" height="24" rx="7" fill="#5b8cff"/><text x="954" y="462" font-size="11.5" fill="#fff" text-anchor="middle">Avvia</text>
+ <rect x="1020" y="446" width="50" height="24" rx="7" fill="#1b2547"/><text x="1045" y="462" font-size="11.5" fill="#dfe6ff" text-anchor="middle">Guida</text>
+ <rect x="1076" y="446" width="36" height="24" rx="7" fill="#27e0b0"/><text x="1094" y="462" font-size="11.5" fill="#06241c" text-anchor="middle">AI</text>
+</g>
+
+<!-- AI panel -->
+<rect x="350" y="500" width="788" height="210" rx="12" fill="#101935" stroke="#26315a"/>
+<text x="368" y="528" font-family="Segoe UI, Arial" font-size="13" font-weight="600" fill="#27e0b0">Assistente AI - CyberAI (locale, offline)</text>
+<rect x="600" y="544" width="520" height="34" rx="12" fill="#3f6fe0"/><text x="1104" y="566" font-family="Segoe UI, Arial" font-size="12.5" fill="#fff" text-anchor="end">Come uso nmap per scansionare una rete?</text>
+<rect x="368" y="590" width="650" height="56" rx="12" fill="#1b2547"/>
+<text x="384" y="612" font-family="Segoe UI, Arial" font-size="12.5" fill="#cfd6ee">Usa  nmap -sV 192.168.1.0/24  per rilevare host, porte e versioni dei</text>
+<text x="384" y="630" font-family="Segoe UI, Arial" font-size="12.5" fill="#cfd6ee">servizi. Aggiungi  -A  per OS detection e script NSE.</text>
+<rect x="368" y="664" width="630" height="30" rx="9" fill="#0e1430" stroke="#26315a"/><text x="384" y="684" font-family="Segoe UI, Arial" font-size="12" fill="#7c89ad">Scrivi una domanda...</text>
+<rect x="1006" y="664" width="120" height="30" rx="9" fill="#27e0b0"/><text x="1066" y="684" font-family="Segoe UI, Arial" font-size="12.5" font-weight="700" fill="#06241c" text-anchor="middle">Invia</text>
+</svg>

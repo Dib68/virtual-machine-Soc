@@ -25,6 +25,18 @@ def env_gui():
     e.setdefault("DISPLAY", ":0")
     return e
 
+def _run_in_terminal(inner_cmd, tag="cyberrun"):
+    import tempfile
+    fd, path = tempfile.mkstemp(prefix=tag + "_", suffix=".sh", dir="/tmp")
+    with os.fdopen(fd, "w") as f:
+        f.write("#!/usr/bin/env bash\n" + inner_cmd +
+                "\necho; echo '[Premi Invio per chiudere questa finestra]'; read\n")
+    os.chmod(path, 0o755)
+    term = ("qterminal -e {p} || xfce4-terminal -e {p} || x-terminal-emulator -e {p} "
+            "|| gnome-terminal -- {p} || xterm -e {p} || konsole -e {p}").format(p=path)
+    subprocess.Popen(["setsid", "bash", "-lc", term], env=env_gui(),
+                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
 def launch(binname):
     t = TOOLS.get(binname)
     if not t:
@@ -34,11 +46,10 @@ def launch(binname):
     cmd = t["cmd"]
     try:
         if t.get("term"):
-            full = f'x-terminal-emulator -e bash -c "{cmd}; echo; echo [Premi Invio per chiudere]; read"'
+            _run_in_terminal(cmd)
         else:
-            full = cmd
-        subprocess.Popen(["setsid", "bash", "-lc", full + " &"], env=env_gui(),
-                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.Popen(["setsid", "bash", "-lc", cmd], env=env_gui(),
+                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         return True, "avviato"
     except Exception as ex:
         return False, str(ex)
@@ -47,10 +58,8 @@ def soclab(stack, action):
     if stack not in SOCK or action not in ("up", "down"):
         return False, "richiesta non valida"
     try:
-        subprocess.Popen(["setsid", "bash", "-lc",
-                          f'x-terminal-emulator -e bash -c "soclab {stack} {action}; echo; read"'],
-                         env=env_gui(), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        return True, f"soclab {stack} {action}"
+        _run_in_terminal("soclab %s %s" % (stack, action), tag="soclab")
+        return True, "soclab %s %s avviato" % (stack, action)
     except Exception as ex:
         return False, str(ex)
 
