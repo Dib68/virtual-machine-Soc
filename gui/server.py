@@ -26,7 +26,14 @@ def env_gui():
     return e
 
 def _run_in_terminal(inner_cmd, tag="cyberrun"):
-    import tempfile
+    import tempfile, glob, time
+    # pulizia script temporanei vecchi (>1h)
+    for old in glob.glob("/tmp/cyberrun_*.sh") + glob.glob("/tmp/soclab_*.sh"):
+        try:
+            if time.time() - os.path.getmtime(old) > 3600:
+                os.remove(old)
+        except Exception:
+            pass
     fd, path = tempfile.mkstemp(prefix=tag + "_", suffix=".sh", dir="/tmp")
     with os.fdopen(fd, "w") as f:
         f.write("#!/usr/bin/env bash\n" + inner_cmd +

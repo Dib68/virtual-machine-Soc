@@ -159,6 +159,20 @@ in locale, sulla rete isolata, mai esposti a Internet. Dettagli in `DISCLAIMER.m
 
 ---
 
+## Test e qualita'
+
+Il progetto include una suite di test automatici (sintassi di tutti gli script,
+validita' di JSON/YAML/HCL, coerenza menu-tutorial e test funzionali della GUI):
+
+```
+bash tests/run-tests.sh
+```
+
+Gli stessi test girano in automatico su ogni push tramite GitHub Actions
+(`.github/workflows/ci.yml`).
+
+---
+
 ## Fonti / riferimenti
 
 - [Kali Linux — Vagrant (`kalilinux/rolling`)](https://www.kali.org/docs/virtualization/install-vagrant-guest-vm/)

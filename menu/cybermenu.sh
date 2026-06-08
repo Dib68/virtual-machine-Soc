@@ -142,7 +142,16 @@ launch_tool() {
   echo "============================================================"
   echo " Avvio: $name"; echo " Comando: $cmd"
   echo "============================================================"; echo ""
-  eval "$cmd"
+  # rileva il binario (ignorando un eventuale 'sudo')
+  local b; b=$(echo "$cmd" | awk '{ if ($1=="sudo") print $2; else print $1 }')
+  b="${b##*/}"
+  local GUI="burpsuite|zaproxy|wireshark|autopsy|ghidra|bloodhound|firefox|firefox-esr"
+  if echo "$b" | grep -qE "^($GUI)$"; then
+    setsid bash -lc "$cmd" >/dev/null 2>&1 &
+    echo " Applicazione grafica avviata in una nuova finestra."
+  else
+    eval "$cmd"
+  fi
   echo ""; read -rp "Premi Invio per tornare al menu..."
 }
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.2.0
+- Launcher GUI robusto (prova qterminal/xfce4-terminal/x-terminal-emulator/gnome-terminal/xterm/konsole).
+- Avvio app grafiche in background anche dal menu testuale.
+- Suite di test automatici (tests/run-tests.sh + test_gui.py) e CI GitHub Actions.
+- Script 'COMPLETA-INSTALLAZIONE' one-click per installare tutto dentro la VM.
+- Hardening: dipendenze GUI garantite (python3, curl, terminale); pulizia file temporanei.
+
 ## 2.1.0
 - Aggiunta GUI moderna "Control Center" (cybergui): dashboard nel browser,
   schede dei tool con Avvia/Guida/AI, ricerca, AI in chat, controllo SOC lab.
