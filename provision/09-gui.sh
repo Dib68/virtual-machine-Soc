@@ -14,6 +14,7 @@ command -v qterminal >/dev/null 2>&1 || command -v xfce4-terminal >/dev/null 2>&
 
 mkdir -p /opt/cybersec/gui
 cp -f /vagrant/gui/index.html /vagrant/gui/server.py /vagrant/gui/tools.json /opt/cybersec/gui/
+ cp -f /vagrant/gui/favicon.png /opt/cybersec/gui/ 2>/dev/null || true
 install -m 0755 /vagrant/gui/cybergui.sh /usr/local/bin/cybergui
 
 # Icona sul desktop

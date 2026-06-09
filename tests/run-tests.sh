@@ -146,6 +146,14 @@ for f in kali-iso/config/cybergui-kiosk.sh kali-iso/config/branding/wallpaper.pn
 done
 bash -n kali-iso/config/cybergui-kiosk.sh 2>/dev/null || { echo "  cybergui-kiosk: sintassi"; imiss=1; }
 grep -q "CyberSec AI OS" kali-iso/config/hooks/0100-cybersec.hook.chroot || { echo "  hook senza branding"; imiss=1; }
+for f in kali-iso/config/branding/logo.png kali-iso/config/branding/logo.ico \
+         kali-iso/config/branding/plymouth/cybersec/cybersec.plymouth \
+         kali-iso/config/branding/plymouth/cybersec/cybersec.script \
+         kali-iso/config/branding/plymouth/cybersec/logo.png gui/favicon.png; do
+  [ -f "$f" ] || { echo "  manca (logo/splash): $f"; imiss=1; }
+done
+grep -q "plymouth" kali-iso/config/hooks/0100-cybersec.hook.chroot || { echo "  hook senza plymouth"; imiss=1; }
+grep -q "favicon" gui/index.html || { echo "  GUI senza favicon"; imiss=1; }
 [ "$imiss" = 0 ] && pass "remaster Kali: configurazione ISO completa e valida" || err "config ISO incompleta"
 
 echo ""

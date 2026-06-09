@@ -42,6 +42,10 @@ Per renderla l'avvio predefinito a schermo intero, copia il file
 `config/autostart/cybergui-kiosk.desktop` in `/etc/skel/.config/autostart/`
 al posto di `cybergui.desktop` (oppure aggiungilo).
 
+## Logo e splash di avvio
+- Logo del progetto (`config/branding/logo.png` e `logo.ico`), usato come icona e favicon della GUI.
+- **Splash di avvio Plymouth** (`config/branding/plymouth/cybersec/`): mostra il logo "CyberSec AI OS" durante l'accensione. L'hook lo installa e lo imposta come tema di default (con `update-initramfs`).
+
 ## Struttura
 ```
 kali-iso/

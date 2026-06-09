@@ -139,6 +139,11 @@ class H(http.server.BaseHTTPRequestHandler):
         if u.path in ("/", "/index.html"):
             return self._send(200, "text/html; charset=utf-8",
                               open(os.path.join(HERE, "index.html"), "rb").read())
+        if u.path == "/favicon.png":
+            fp = os.path.join(HERE, "favicon.png")
+            if os.path.isfile(fp):
+                return self._send(200, "image/png", open(fp, "rb").read())
+            return self._send(404, "text/plain", b"")
         if u.path == "/tools.json":
             return self._send(200, "application/json",
                               json.dumps(DATA).encode())

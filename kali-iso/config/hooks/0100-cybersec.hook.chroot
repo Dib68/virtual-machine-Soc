@@ -53,4 +53,20 @@ if [ -f "$SRC/cybergui-kiosk.sh" ]; then
   install -m 0755 "$SRC/cybergui-kiosk.sh" /usr/local/bin/cybergui-kiosk
 fi
 
+
+# ---- Logo del progetto + splash di avvio (Plymouth) ----
+if [ -d "$BR" ]; then
+  mkdir -p /usr/share/pixmaps /usr/share/icons/hicolor/512x512/apps
+  [ -f "$BR/logo.png" ] && cp -f "$BR/logo.png" /usr/share/pixmaps/cybersec.png &&     cp -f "$BR/logo.png" /usr/share/icons/hicolor/512x512/apps/cybersec.png || true
+  # favicon per la GUI
+  [ -f "$BR/logo.png" ] && cp -f "$BR/logo.png" /opt/cybersec/gui/favicon.png || true
+  # tema Plymouth
+  if [ -d "$BR/plymouth/cybersec" ]; then
+    mkdir -p /usr/share/plymouth/themes/cybersec
+    cp -f "$BR"/plymouth/cybersec/* /usr/share/plymouth/themes/cybersec/ || true
+    plymouth-set-default-theme cybersec 2>/dev/null ||       update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth         /usr/share/plymouth/themes/cybersec/cybersec.plymouth 100 2>/dev/null || true
+    update-initramfs -u 2>/dev/null || true
+  fi
+fi
+
 echo "[cybersec] integrazione completata."

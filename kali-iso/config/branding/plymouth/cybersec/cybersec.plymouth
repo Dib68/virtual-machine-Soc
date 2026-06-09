@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=CyberSec AI OS
+Description=Boot splash di CyberSec AI OS
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/cybersec
+ScriptFile=/usr/share/plymouth/themes/cybersec/cybersec.script
