@@ -126,6 +126,13 @@ for sc in scenario-primo-pentest scenario-soc-analyst scenario-analisi-pcap scen
 done
 [ "$gmiss" = 0 ] && pass "scenari pratici presenti e collegati (menu + GUI)" || err "scenari pratici incompleti"
 
+# 10h: GUI con tema chiaro/scuro
+tmiss=0
+for k in "toggleTheme" "body.light" "localStorage" 'id="theme"'; do
+  grep -q "$k" gui/index.html || { echo "  tema: manca $k"; tmiss=1; }
+done
+[ "$tmiss" = 0 ] && pass "GUI: tema chiaro/scuro presente e persistente" || err "tema GUI incompleto"
+
 echo ""
 if [ "$FAIL" = 0 ]; then echo ">>> TUTTI I TEST SUPERATI <<<"; exit 0
 else echo ">>> ALCUNI TEST FALLITI <<<"; exit 1; fi

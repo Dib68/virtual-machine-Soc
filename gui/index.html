@@ -104,6 +104,15 @@
   }
   .scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40;display:none}
   .scrim.show{display:block}
+  /* ---- Tema chiaro ---- */
+  body.light{--bg:#eef1f7;--bg2:#ffffff;--card:#ffffff;--card2:#eef2fb;--line:#d7deea;--txt:#162033;--mut:#5d6880;
+    background:linear-gradient(160deg,#eef1f7,#e7ecf5 60%,#eef1f7)}
+  body.light .side{background:#f7f9fd}
+  body.light .top{background:rgba(255,255,255,.85)}
+  body.light .nv.on{color:#0b1020}
+  body.light .modal pre{background:#0e1430;color:#bdf}
+  body.light .m.u{color:#fff}
+  #theme{cursor:pointer}
 </style>
 </head>
 <body>
@@ -117,6 +126,7 @@
       <button class="mtoggle" id="mtoggle" aria-label="Menu">&#9776;</button>
       <div class="ttl" id="title">Dashboard</div>
       <div class="search"><input id="q" placeholder="Cerca uno strumento..."></div>
+      <button id="theme" class="pill" onclick="toggleTheme()" aria-label="Cambia tema">Tema</button>
       <div class="pills">
         <span class="pill"><span class="pdot" id="aiDot"></span>AI</span>
         <span class="pill"><span class="pdot" id="dkDot"></span>Docker</span>
@@ -262,6 +272,11 @@ document.getElementById('q').addEventListener('input',e=>{const term=e.target.va
   const f=all.filter(x=>(x.t.name+x.t.desc+x.t.bin).toLowerCase().includes(term));
   document.getElementById('view').innerHTML='<div class="grid">'+(f.map(x=>tcard(x.t,x.color)).join('')||'<p style="color:var(--mut)">Nessun risultato.</p>')+'</div>';});
 setInterval(async()=>{try{ST=await (await fetch('/api/status')).json();pills();}catch(e){}},9000);
+function applyTheme(t){document.body.classList.toggle('light', t==='light');
+  try{localStorage.setItem('cybertheme',t);}catch(e){}
+  var b=document.getElementById('theme'); if(b) b.textContent = (t==='light'?'Tema scuro':'Tema chiaro');}
+function toggleTheme(){applyTheme(document.body.classList.contains('light')?'dark':'light');}
+try{applyTheme(localStorage.getItem('cybertheme')||'dark');}catch(e){applyTheme('dark');}
 boot();
 </script>
 </body>
