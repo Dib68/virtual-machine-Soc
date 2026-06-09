@@ -17,3 +17,8 @@ GUIDA RAPIDA (dentro la cartella condivisa di Kali)
 Doppio clic su:  CLICCA-QUI.sh
 
 Nota: gli strumenti vanno usati solo su sistemi propri o autorizzati.
+
+--- COME FARMI VEDERE GLI ERRORI ---
+Dopo aver lanciato AUTOTEST.sh, nella cartella condivisa compare il file
+'referto-autotest.txt'. Quel file e' sul tuo PC e Claude puo' leggerlo:
+basta dirgli "leggi il referto". Cosi' vede i problemi reali e li corregge.
