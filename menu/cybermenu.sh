@@ -263,6 +263,25 @@ utility_menu() {
   done
 }
 
+scenari_menu() {
+  while true; do
+    SEL=$(whiptail --backtitle "$BACKTITLE" --title "Scenari pratici (passo-passo)" \
+      --menu "Mini-laboratori guidati:" 18 74 8 \
+      "1" "Il tuo primo penetration test (web)" \
+      "2" "Il tuo primo turno da SOC Analyst" \
+      "3" "Analisi di una cattura di rete (pcap)" \
+      "4" "Introduzione all'attacco Active Directory" \
+      "B" "Indietro" 3>&1 1>&2 2>&3) || return
+    case "$SEL" in
+      1) show_tutorial "scenario-primo-pentest" ;;
+      2) show_tutorial "scenario-soc-analyst" ;;
+      3) show_tutorial "scenario-analisi-pcap" ;;
+      4) show_tutorial "scenario-active-directory" ;;
+      B|"") return ;;
+    esac
+  done
+}
+
 main_menu() {
   while true; do
     local args=() i=0
@@ -270,6 +289,7 @@ main_menu() {
     args+=("A" "Assistente AI (CyberAI)")
     args+=("L" "Laboratorio SOC (Docker: SIEM + bersagli)")
     args+=("T" "Utility (diagnostica, report, update)")
+    args+=("S" "Scenari pratici (passo-passo)")
     args+=("J" "Tool richiesti dagli annunci di lavoro")
     args+=("G" "Guida introduttiva alla VM")
     args+=("Q" "Esci")
@@ -281,6 +301,7 @@ main_menu() {
       A) clear; ai ;;
       L) soclab_menu ;;
       T) utility_menu ;;
+      S) scenari_menu ;;
       J) show_tutorial "00-tool-richiesti-lavoro" ;;
       G) show_tutorial "00-introduzione" ;;
       *) idx=$((SEL-1)); category_menu "${CAT_ORDER[$idx]}" ;;

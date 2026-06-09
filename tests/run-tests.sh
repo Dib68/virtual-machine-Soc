@@ -117,6 +117,15 @@ bad=[(b,fb(c)) for b,n,c,t in rows if fb(c)!=b]
 sys.exit(1 if bad else 0)
 PYEOF
 
+# 10g: scenari pratici presenti e referenziati in menu e GUI
+gmiss=0
+for sc in scenario-primo-pentest scenario-soc-analyst scenario-analisi-pcap scenario-active-directory; do
+  [ -f "menu/tutorials/$sc.md" ] || { echo "  manca scenario: $sc"; gmiss=1; }
+  grep -q "$sc" menu/cybermenu.sh || { echo "  scenario non in cybermenu: $sc"; gmiss=1; }
+  grep -q "$sc" gui/index.html || { echo "  scenario non in GUI: $sc"; gmiss=1; }
+done
+[ "$gmiss" = 0 ] && pass "scenari pratici presenti e collegati (menu + GUI)" || err "scenari pratici incompleti"
+
 echo ""
 if [ "$FAIL" = 0 ]; then echo ">>> TUTTI I TEST SUPERATI <<<"; exit 0
 else echo ">>> ALCUNI TEST FALLITI <<<"; exit 1; fi

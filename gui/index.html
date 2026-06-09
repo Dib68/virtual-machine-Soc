@@ -150,6 +150,7 @@ function buildNav(){
   DATA.categories.forEach((c,i)=>h+=nv('cat:'+i,c.name,c.color,c.tools.length));
   h+='<div class="navh">Laboratorio</div>';
   h+=nv('soc','SOC Lab (SIEM)','#2aa77a',DATA.soclab.length);
+  h+=nv('guide','Guide pratiche','#e0a13a',SCEN.length);
   h+=nv('ai','Assistente AI','#d4537e');
   document.getElementById('nav').innerHTML=h;
 }
@@ -168,6 +169,18 @@ function tcard(t,color){const ok=inst(t.bin);
     first+
     `<button class="btn" onclick="showTut('${t.tut}','${t.name}')">Guida</button>`+
     `<button class="btn ai" onclick="askTool('${t.name}')">AI</button></div></div>`;}
+const SCEN=[
+  {t:'scenario-primo-pentest',n:'Primo penetration test (web)',d:'Recon, Burp e SQLi su Juice Shop, passo-passo.'},
+  {t:'scenario-soc-analyst',n:'Primo turno da SOC Analyst',d:'SIEM, IDS, OSQuery e gestione di un caso.'},
+  {t:'scenario-analisi-pcap',n:'Analisi di una cattura (pcap)',d:'tcpdump, Wireshark e Zeek su un pcap.'},
+  {t:'scenario-active-directory',n:'Attacco Active Directory',d:'Enumerazione SMB, Responder e BloodHound.'}
+];
+function renderGuide(v){
+  v.innerHTML='<div class="note">Mini-laboratori guidati: clicca per aprire la guida passo-passo.</div><div class="grid">'+
+    SCEN.map(x=>`<div class="card"><div class="ch"><div class="ic" style="background:#e0a13a">${x.n[0]}</div>`+
+      `<div class="nm" title="${x.n}">${x.n}</div></div><div class="ds">${x.d}</div>`+
+      `<div class="row"><button class="btn go" onclick="showTut('${x.t}','${x.n}')">Apri la guida</button></div></div>`).join('')+'</div>';
+}
 function render(){const v=document.getElementById('view'),T=document.getElementById('title');
   if(CUR==='dash'){T.textContent='Dashboard';
     const tot=totTools(),ins=Object.values(ST.installed||{}).filter(Boolean).length;
@@ -188,6 +201,7 @@ function render(){const v=document.getElementById('view'),T=document.getElementB
     v.innerHTML='<div class="grid">'+DATA.categories.flatMap(c=>c.tools.map(t=>tcard(t,c.color))).join('')+'</div>';return;}
   if(CUR.startsWith('cat:')){const c=DATA.categories[+CUR.split(':')[1]];T.textContent=c.name;
     v.innerHTML='<div class="grid">'+c.tools.map(t=>tcard(t,c.color)).join('')+'</div>';return;}
+  if(CUR==='guide'){T.textContent='Guide pratiche — scenari passo-passo';renderGuide(v);return;}
   if(CUR==='soc'){T.textContent='SOC Lab — SIEM & bersagli';
     v.innerHTML='<div class="note">Avvia/ferma gli stack (serve Docker). Al primo avvio scaricano le immagini: ci vuole tempo.</div><div class="grid">'+
       DATA.soclab.map(s=>`<div class="card"><div class="ch"><div class="ic" style="background:#2aa77a">${s.name[0]}</div>

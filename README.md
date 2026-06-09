@@ -29,7 +29,7 @@ I tool sono scelti in base a cosa chiedono gli HR negli annunci reali — vedi
 - **AI locale** (Ollama + modello `cyberai`): gratuita, offline, nessuna API key.
 - **GUI moderna** (`cybergui`): Control Center grafico nel browser con ricerca,
   schede dei tool, AI in chat e controllo degli stack SOC.
-- **Menu interattivo** (`cybermenu`) con ~70 tutorial.
+- **Menu interattivo** (`cybermenu`) con ~74 tutorial (inclusi gli scenari pratici).
 - **Utility**: cyberdoctor, ai-explain, cyberreport, cyberupdate.
 
 ---
@@ -115,7 +115,7 @@ virtual machine Soc/
 ├── provision/               # 01..09: script di installazione automatica
 ├── menu/
 │   ├── cybermenu.sh  ai.sh  # comandi `cybermenu` e `ai`
-│   └── tutorials/           # ~70 tutorial, uno per strumento
+│   └── tutorials/           # ~74 tutorial (inclusi gli scenari pratici), uno per strumento
 ├── tools/                   # utility (cyberdoctor, ai-explain, ...)
 ├── soc-lab/                 # stack Docker (comando `soclab`)
 │   ├── soclab.sh
