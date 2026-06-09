@@ -28,6 +28,20 @@ Al termine la trovi in `~/cybersec-iso-build/live-build-config/images/`.
 2. Avvia: parte Kali e, dopo il login, si apre da sola la GUI del progetto.
 3. Al primo avvio l'assistente AI si configura (serve internet una volta).
 
+
+## Branding e modalita' kiosk
+La ISO include il branding del progetto:
+- Nome sistema: "CyberSec AI OS (based on Kali Linux)" (in /etc/os-release).
+- Hostname: `cybersec-ai-os`.
+- Sfondo del desktop personalizzato (`/usr/share/backgrounds/cybersec.png`).
+- MOTD (messaggio al login da terminale).
+
+**Modalita' kiosk** (GUI a tutto schermo): e' disponibile il comando
+`cybergui-kiosk` e una voce di menu "CyberSec Control Center (kiosk)".
+Per renderla l'avvio predefinito a schermo intero, copia il file
+`config/autostart/cybergui-kiosk.desktop` in `/etc/skel/.config/autostart/`
+al posto di `cybergui.desktop` (oppure aggiungilo).
+
 ## Struttura
 ```
 kali-iso/

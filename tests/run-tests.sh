@@ -141,6 +141,11 @@ done
 bash -n kali-iso/build-iso.sh 2>/dev/null || { echo "  build-iso.sh: sintassi"; imiss=1; }
 bash -n kali-iso/config/hooks/0100-cybersec.hook.chroot 2>/dev/null || { echo "  hook: sintassi"; imiss=1; }
 grep -q kali-linux-default kali-iso/config/package-lists/cybersec.list.chroot || { echo "  package-list senza metapacchetto"; imiss=1; }
+for f in kali-iso/config/cybergui-kiosk.sh kali-iso/config/branding/wallpaper.png kali-iso/config/branding/motd kali-iso/config/branding/xfce/xfce4-desktop.xml; do
+  [ -f "$f" ] || { echo "  manca (branding/kiosk): $f"; imiss=1; }
+done
+bash -n kali-iso/config/cybergui-kiosk.sh 2>/dev/null || { echo "  cybergui-kiosk: sintassi"; imiss=1; }
+grep -q "CyberSec AI OS" kali-iso/config/hooks/0100-cybersec.hook.chroot || { echo "  hook senza branding"; imiss=1; }
 [ "$imiss" = 0 ] && pass "remaster Kali: configurazione ISO completa e valida" || err "config ISO incompleta"
 
 echo ""

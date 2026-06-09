@@ -28,4 +28,29 @@ chmod +x /usr/local/bin/cybersec-firstboot 2>/dev/null || true
 
 # Branding
 echo "CyberSec AI OS - based on Kali Linux" > /etc/cybersec-release
+
+# ---- Branding: nome sistema, hostname, sfondo, motd ----
+BR="$SRC/branding"
+if [ -d "$BR" ]; then
+  # nome host
+  echo "cybersec-ai-os" > /etc/hostname
+  sed -i 's/127.0.1.1.*/127.0.1.1\tcybersec-ai-os/' /etc/hosts 2>/dev/null ||     echo "127.0.1.1\tcybersec-ai-os" >> /etc/hosts
+  # nome del sistema
+  if [ -f /etc/os-release ]; then
+    sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="CyberSec AI OS (based on Kali Linux)"/' /etc/os-release || true
+  fi
+  # sfondo del desktop
+  mkdir -p /usr/share/backgrounds
+  [ -f "$BR/wallpaper.png" ] && cp -f "$BR/wallpaper.png" /usr/share/backgrounds/cybersec.png || true
+  mkdir -p /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml
+  [ -f "$BR/xfce/xfce4-desktop.xml" ] && cp -f "$BR/xfce/xfce4-desktop.xml" /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/ || true
+  # messaggio al login da terminale
+  [ -f "$BR/motd" ] && cp -f "$BR/motd" /etc/motd || true
+fi
+
+# ---- Modalita' kiosk (GUI a tutto schermo) come comando disponibile ----
+if [ -f "$SRC/cybergui-kiosk.sh" ]; then
+  install -m 0755 "$SRC/cybergui-kiosk.sh" /usr/local/bin/cybergui-kiosk
+fi
+
 echo "[cybersec] integrazione completata."

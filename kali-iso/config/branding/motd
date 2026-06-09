@@ -1,0 +1,12 @@
+
+  ____      _               ____            _    ___    ___  ____
+ / ___|   _| |__   ___ _ __/ ___|  ___  ___| |  / _ \  / _ \/ ___|
+| |  | | | | '_ \ / _ \ '__\___ \ / _ \/ __| | | | | || | | \___ \
+| |__| |_| | |_) |  __/ |   ___) |  __/ (__| | | |_| || |_| |___) |
+ \____\__, |_.__/ \___|_|  |____/ \___|\___|_|  \___/  \___/|____/
+      |___/   CyberSec AI OS - based on Kali Linux
+
+  cybergui  -> GUI Control Center     ai -> assistente AI
+  cybermenu -> menu testuale          soclab -> SIEM e bersagli
+  cyberdoctor -> diagnostica          (uso didattico/autorizzato)
+

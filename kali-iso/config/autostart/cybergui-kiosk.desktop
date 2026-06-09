@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=CyberSec Control Center (kiosk a schermo intero)
+Comment=Apre la GUI a tutto schermo
+Exec=cybergui-kiosk
+Icon=security-high
+Terminal=false
+Categories=Security;

@@ -30,6 +30,12 @@ cp "$HERE/config/hooks/0100-cybersec.hook.chroot"     "$C/hooks/live/"
 echo "==> [4/5] Copio i file del progetto dentro la ISO..."
 cp -r "$PROJ"/provision "$PROJ"/menu "$PROJ"/tools "$PROJ"/soc-lab "$PROJ"/gui \
       "$C/includes.chroot/opt/cybersec-src/"
+# branding + launcher kiosk dentro la sorgente usata dall'hook
+cp -r "$HERE/config/branding" "$C/includes.chroot/opt/cybersec-src/branding"
+cp "$HERE/config/cybergui-kiosk.sh" "$C/includes.chroot/opt/cybersec-src/cybergui-kiosk.sh"
+# voce di menu per la modalita' kiosk
+mkdir -p "$C/includes.chroot/usr/share/applications"
+cp "$HERE/config/autostart/cybergui-kiosk.desktop" "$C/includes.chroot/usr/share/applications/"
 install -m 0755 "$HERE/config/firstboot/cybersec-firstboot.sh" \
       "$C/includes.chroot/usr/local/bin/cybersec-firstboot" 2>/dev/null || \
       { mkdir -p "$C/includes.chroot/usr/local/bin"; cp "$HERE/config/firstboot/cybersec-firstboot.sh" "$C/includes.chroot/usr/local/bin/cybersec-firstboot"; }
