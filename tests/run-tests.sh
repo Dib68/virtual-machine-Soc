@@ -91,6 +91,18 @@ miss=[t["tut"] for c in d["categories"] for t in c["tools"] if t["tut"] not in t
 [print("  manca tutorial GUI:",m) for m in miss]
 sys.exit(1 if miss else 0)
 PYEOF
+# 10e: il binario controllato (bin) coincide col comando lanciato (cmd)
+python3 - <<'PYEOF' && pass "bin e comando allineati in tutte le schede GUI" || err "bin/cmd disallineati"
+import json,sys
+d=json.load(open("gui/tools.json"))
+def fb(c):
+    p=c.split()
+    if p and p[0]=="sudo": p=p[1:]
+    return p[0] if p else ""
+bad=[(t["bin"],fb(t["cmd"])) for c in d["categories"] for t in c["tools"] if fb(t["cmd"])!=t["bin"]]
+[print("  disallineato:",b) for b in bad]
+sys.exit(1 if bad else 0)
+PYEOF
 
 echo ""
 if [ "$FAIL" = 0 ]; then echo ">>> TUTTI I TEST SUPERATI <<<"; exit 0

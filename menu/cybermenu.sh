@@ -20,7 +20,7 @@ netdiscover|Netdiscover (host discovery ARP)|sudo netdiscover|netdiscover
 "
 CATS["Vulnerability Assessment"]="
 nikto|Nikto (scanner web server)|nikto -h|nikto
-gvm|OpenVAS / Greenbone (vuln scanner)|sudo gvm-start|openvas
+gvm-start|OpenVAS / Greenbone (vuln scanner)|sudo gvm-start|openvas
 wapiti|Wapiti (vuln scanner web)|wapiti -u|wapiti
 "
 CATS["Web App Testing"]="

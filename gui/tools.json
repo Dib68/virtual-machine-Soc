@@ -92,7 +92,7 @@
           "pkg": "nikto"
         },
         {
-          "bin": "gvm",
+          "bin": "gvm-start",
           "name": "OpenVAS/Greenbone",
           "desc": "Vuln scanner",
           "cmd": "sudo gvm-start",
@@ -342,7 +342,7 @@
           "bin": "radare2",
           "name": "Radare2",
           "desc": "RE da terminale",
-          "cmd": "r2",
+          "cmd": "radare2",
           "tut": "radare2",
           "term": true,
           "pkg": "radare2"
