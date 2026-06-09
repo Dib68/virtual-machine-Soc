@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=CyberSec Control Center
+Comment=Avvia la GUI del progetto all'accesso
+Exec=cybergui
+Terminal=false
+X-GNOME-Autostart-enabled=true

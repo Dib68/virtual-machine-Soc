@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=CyberSec primo avvio
+Comment=Configura l'AI al primo accesso
+Exec=cybersec-firstboot
+Terminal=false
+X-GNOME-Autostart-enabled=true
+NoDisplay=true

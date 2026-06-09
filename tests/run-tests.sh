@@ -133,6 +133,16 @@ for k in "toggleTheme" "body.light" "localStorage" 'id="theme"'; do
 done
 [ "$tmiss" = 0 ] && pass "GUI: tema chiaro/scuro presente e persistente" || err "tema GUI incompleto"
 
+# 10i: configurazione remaster Kali (ISO personalizzata)
+imiss=0
+for f in kali-iso/build-iso.sh kali-iso/config/package-lists/cybersec.list.chroot          kali-iso/config/hooks/0100-cybersec.hook.chroot          kali-iso/config/autostart/cybergui.desktop          kali-iso/config/firstboot/cybersec-firstboot.sh kali-iso/README.md; do
+  [ -f "$f" ] || { echo "  manca: $f"; imiss=1; }
+done
+bash -n kali-iso/build-iso.sh 2>/dev/null || { echo "  build-iso.sh: sintassi"; imiss=1; }
+bash -n kali-iso/config/hooks/0100-cybersec.hook.chroot 2>/dev/null || { echo "  hook: sintassi"; imiss=1; }
+grep -q kali-linux-default kali-iso/config/package-lists/cybersec.list.chroot || { echo "  package-list senza metapacchetto"; imiss=1; }
+[ "$imiss" = 0 ] && pass "remaster Kali: configurazione ISO completa e valida" || err "config ISO incompleta"
+
 echo ""
 if [ "$FAIL" = 0 ]; then echo ">>> TUTTI I TEST SUPERATI <<<"; exit 0
 else echo ">>> ALCUNI TEST FALLITI <<<"; exit 1; fi

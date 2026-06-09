@@ -1,0 +1,31 @@
+#!/bin/sh
+# Hook live-build: integra il progetto CyberSec AI nella ISO.
+set -e
+SRC=/opt/cybersec-src
+echo "[cybersec] integrazione del progetto nella ISO..."
+
+mkdir -p /opt/cybersec/tutorials /opt/cybersec/gui /opt/cybersec/soc-lab
+
+# Tutorial e comandi
+[ -d "$SRC/menu/tutorials" ] && cp -f "$SRC"/menu/tutorials/*.md /opt/cybersec/tutorials/ || true
+install -m 0755 "$SRC/menu/cybermenu.sh" /usr/local/bin/cybermenu
+install -m 0755 "$SRC/menu/ai.sh"        /usr/local/bin/ai
+install -m 0755 "$SRC/soc-lab/soclab.sh" /usr/local/bin/soclab
+cp -rf "$SRC"/soc-lab/* /opt/cybersec/soc-lab/ 2>/dev/null || true
+cp -f "$SRC"/gui/index.html "$SRC"/gui/server.py "$SRC"/gui/tools.json /opt/cybersec/gui/
+install -m 0755 "$SRC/gui/cybergui.sh" /usr/local/bin/cybergui
+for u in cyberdoctor ai-explain cyberreport cyberupdate; do
+  [ -f "$SRC/tools/$u.sh" ] && install -m 0755 "$SRC/tools/$u.sh" "/usr/local/bin/$u" || true
+done
+
+# AI locale: installa Ollama (il modello viene scaricato al primo avvio)
+curl -fsSL https://ollama.com/install.sh | sh || true
+
+# Strumenti per il primo avvio
+install -m 0755 "$SRC/../kali-iso/firstboot/cybersec-firstboot.sh" /usr/local/bin/cybersec-firstboot 2>/dev/null || \
+  cp -f /opt/cybersec-src/firstboot-cybersec.sh /usr/local/bin/cybersec-firstboot 2>/dev/null || true
+chmod +x /usr/local/bin/cybersec-firstboot 2>/dev/null || true
+
+# Branding
+echo "CyberSec AI OS - based on Kali Linux" > /etc/cybersec-release
+echo "[cybersec] integrazione completata."

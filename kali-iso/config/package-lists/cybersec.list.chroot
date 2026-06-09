@@ -1,0 +1,16 @@
+# Pacchetti inclusi nella ISO personalizzata (CyberSec AI OS)
+kali-linux-default
+xfce4
+qterminal
+firefox-esr
+python3
+python3-pip
+curl
+git
+docker.io
+whiptail
+dialog
+figlet
+suricata
+zeek
+yara

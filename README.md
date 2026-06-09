@@ -122,7 +122,8 @@ virtual machine Soc/
 │   └── targets/ splunk/ elk/ misp/ thehive/ webui/
 ├── tests/                   # suite di test automatici (run-tests.sh)
 ├── packer/                  # build avanzata dell'.ova da ISO
-└── condivisa/               # cartella condivisa host <-> VM (auto)
+├── condivisa/               # cartella condivisa host <-> VM (auto)
+└── kali-iso/                 # build di una Kali personalizzata (ISO) attorno al progetto
 ```
 
 ---
@@ -153,6 +154,17 @@ cd packer && packer init . && packer build cybersec-ai.pkr.hcl
 (aggiorna prima `iso_url`/`iso_checksum` all'ultima Kali).
 
 Chi riceve l'`.ova` lo importa con *File > Importa applicazione virtuale*.
+
+---
+
+## 8. (Avanzato) Kali personalizzata su misura (ISO)
+
+Vuoi una vera distro che gira attorno a questo progetto, con la GUI che parte
+da sola? Vedi `kali-iso/`: costruisce una **ISO di Kali personalizzata**
+("CyberSec AI OS") con tutto preinstallato.
+```
+sudo bash kali-iso/build-iso.sh   # su un host Debian/Kali
+```
 
 ---
 
