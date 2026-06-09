@@ -48,7 +48,7 @@ aircrack-ng|Aircrack-ng (Wi-Fi)|sudo aircrack-ng|aircrack-ng
 wifite|Wifite (Wi-Fi automatico)|sudo wifite|wifite
 "
 CATS["OSINT & Recon"]="
-theharvester|theHarvester (email/domini)|theHarvester|theharvester
+theHarvester|theHarvester (email/domini)|theHarvester|theharvester
 recon-ng|Recon-ng (framework OSINT)|recon-ng|recon-ng
 spiderfoot|SpiderFoot (OSINT automatico)|spiderfoot -l 127.0.0.1:5001|spiderfoot
 "
@@ -56,10 +56,10 @@ CATS["Forensics"]="
 autopsy|Autopsy (forensics GUI)|autopsy|autopsy
 binwalk|Binwalk (analisi firmware/file)|binwalk|binwalk
 exiftool|ExifTool (metadati)|exiftool|exiftool
-volatility3|Volatility3 (analisi memoria)|vol|volatility
+vol|Volatility3 (analisi memoria)|vol|volatility
 "
 CATS["Reverse Engineering"]="
-radare2|Radare2 (RE da terminale)|r2|radare2
+radare2|Radare2 (RE da terminale)|radare2|radare2
 ghidra|Ghidra (RE GUI - NSA)|ghidra|ghidra
 gdb|GDB (debugger)|gdb|gdb
 "
@@ -73,10 +73,10 @@ bloodhound|BloodHound (percorsi attacco AD)|bloodhound|bloodhound
 kerbrute|Kerbrute (brute Kerberos)|kerbrute|kerbrute
 "
 CATS["CTF / Exploit Dev"]="
-pwntools|pwntools (exploit dev Python)|python3 -c 'import pwn;print(pwn.__version__)'|pwntools
+pwn|pwntools (exploit dev Python)|pwn|pwntools
 ROPgadget|ROPgadget (ricerca gadget ROP)|ROPgadget|ropgadget
 gdb|GDB + GEF (debugger)|gdb|gdb
-radare2|Radare2|r2|radare2
+radare2|Radare2|radare2|radare2
 "
 CATS["Blue Team / SOC"]="
 suricata|Suricata (IDS/IPS)|sudo suricata|suricata

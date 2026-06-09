@@ -103,6 +103,19 @@ bad=[(t["bin"],fb(t["cmd"])) for c in d["categories"] for t in c["tools"] if fb(
 [print("  disallineato:",b) for b in bad]
 sys.exit(1 if bad else 0)
 PYEOF
+# 10f: nel menu testuale, il bin coincide col comando
+python3 - <<'PYEOF' && pass "bin e comando allineati nel menu testuale" || err "bin/cmd disallineati nel menu"
+import re,sys
+s=open("menu/cybermenu.sh").read()
+rows=re.findall(r'^([a-zA-Z0-9_.-]+)\|([^|]+)\|([^|]+)\|([a-z0-9-]+)$', s, re.M)
+def fb(c):
+    p=c.split()
+    if p and p[0]=="sudo": p=p[1:]
+    return p[0] if p else ""
+bad=[(b,fb(c)) for b,n,c,t in rows if fb(c)!=b]
+[print("  disallineato:",x) for x in bad]
+sys.exit(1 if bad else 0)
+PYEOF
 
 echo ""
 if [ "$FAIL" = 0 ]; then echo ">>> TUTTI I TEST SUPERATI <<<"; exit 0
