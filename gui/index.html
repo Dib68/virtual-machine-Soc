@@ -173,7 +173,11 @@ const SCEN=[
   {t:'scenario-primo-pentest',n:'Primo penetration test (web)',d:'Recon, Burp e SQLi su Juice Shop, passo-passo.'},
   {t:'scenario-soc-analyst',n:'Primo turno da SOC Analyst',d:'SIEM, IDS, OSQuery e gestione di un caso.'},
   {t:'scenario-analisi-pcap',n:'Analisi di una cattura (pcap)',d:'tcpdump, Wireshark e Zeek su un pcap.'},
-  {t:'scenario-active-directory',n:'Attacco Active Directory',d:'Enumerazione SMB, Responder e BloodHound.'}
+  {t:'scenario-active-directory',n:'Attacco Active Directory',d:'Enumerazione SMB, Responder e BloodHound.'},
+  {t:'scenario-wireless',n:'Audit Wi-Fi (la tua rete)',d:'airmon-ng, handshake e aircrack-ng.'},
+  {t:'scenario-forensics-memoria',n:'Forensics della memoria (RAM)',d:'Analisi di un dump con Volatility 3.'},
+  {t:'scenario-osint',n:'Indagine OSINT su un dominio',d:'theHarvester, subfinder, httpx, SpiderFoot.'},
+  {t:'scenario-vuln-assessment',n:'Vulnerability assessment',d:'Nuclei, Nikto e OpenVAS su un bersaglio.'}
 ];
 function renderGuide(v){
   v.innerHTML='<div class="note">Mini-laboratori guidati: clicca per aprire la guida passo-passo.</div><div class="grid">'+
