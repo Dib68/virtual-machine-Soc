@@ -143,7 +143,7 @@ if [ -d /etc/lightdm ]; then
 background = $WPG
 default-user-image = $LOGO
 hide-user-image = false
-position = 50%,center 55%,center
+position = 50%,center 50%,center
 EOF
 fi
 

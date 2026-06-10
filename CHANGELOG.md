@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.31.0
+- **Branding centrato**: il blocco "CyberSec AI OS" del wallpaper (visibile anche
+  nella schermata di login) ora e' perfettamente centrato. Il testo prima partiva
+  da meta' schermo, spostando il blocco a destra; ridisegnato come stack verticale
+  centrato e PNG rigenerato. Riquadro di login anch'esso centrato (50%).
+
 ## 2.30.0
 - **Schermata di login personalizzata**: il greeter di lightdm usa il tuo sfondo e
   il tuo logo come avatar; niente piu' branding Kali alla richiesta di

@@ -11,9 +11,10 @@
 <g opacity="0.06" stroke="#5b8cff" stroke-width="1">
   <path d="M0 270 H1920 M0 540 H1920 M0 810 H1920 M480 0 V1080 M960 0 V1080 M1440 0 V1080"/>
 </g>
-<rect x="820" y="392" width="120" height="120" rx="28" fill="url(#acc)"/>
-<text x="880" y="470" font-family="Segoe UI, Arial" font-size="52" font-weight="700" fill="#08122b" text-anchor="middle">CS</text>
-<text x="965" y="470" font-family="Segoe UI, Arial" font-size="74" font-weight="700" fill="#ffffff">CyberSec AI OS</text>
-<text x="965" y="520" font-family="Segoe UI, Arial" font-size="26" fill="#93a1c6">based on Kali Linux  ·  Red Team + Blue Team + AI</text>
+<!-- Logo + testo: stack verticale CENTRATO (tutto su x=960) -->
+<rect x="900" y="296" width="120" height="120" rx="28" fill="url(#acc)"/>
+<text x="960" y="376" font-family="Segoe UI, Arial" font-size="54" font-weight="700" fill="#08122b" text-anchor="middle">CS</text>
+<text x="960" y="512" font-family="Segoe UI, Arial" font-size="74" font-weight="700" fill="#ffffff" text-anchor="middle">CyberSec AI OS</text>
+<text x="960" y="560" font-family="Segoe UI, Arial" font-size="26" fill="#93a1c6" text-anchor="middle">based on Kali Linux  ·  Red Team + Blue Team + AI</text>
 <text x="960" y="1030" font-family="Segoe UI, Arial" font-size="18" fill="#5d6ca0" text-anchor="middle">Uso didattico e test autorizzati</text>
 </svg>
