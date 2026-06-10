@@ -52,20 +52,32 @@ if [ -f "$BR/wallpaper.png" ]; then
 XML
 fi
 
-echo "==> [5/5] Avvio automatico della GUI al login..."
-ASDIR="$HOME_DIR/.config/autostart"; mkdir -p "$ASDIR"
+echo "==> [5/5] Avvio automatico della GUI..."
 PY="$(command -v python3 || echo /usr/bin/python3)"
-# 1) Server della GUI sempre pronto (affidabile, parte presto, nessuna finestra)
-cat > "$ASDIR/cybergui-server.desktop" <<EOF
-[Desktop Entry]
-Type=Application
-Name=CyberSec GUI server
-Exec=$PY /opt/cybersec/gui/server.py
-X-GNOME-Autostart-enabled=true
-NoDisplay=true
+# 1) Server della GUI come servizio systemd: parte al boot, indipendente dal
+#    login, si riavvia da solo. (L'autostart del desktop verrebbe ucciso.)
+if command -v systemctl >/dev/null 2>&1; then
+  cat > /etc/systemd/system/cybergui.service <<EOF
+[Unit]
+Description=CyberSec AI - GUI Control Center server
+After=network.target
+
+[Service]
+Type=simple
+User=$USER_NAME
+ExecStart=$PY /opt/cybersec/gui/server.py
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
 EOF
-# 2) Finestra app dedicata (attende il server e poi apre Chromium --app)
-rm -f "$ASDIR/cybergui.desktop" 2>/dev/null || true
+  systemctl daemon-reload 2>/dev/null || true
+  systemctl enable --now cybergui.service 2>/dev/null || true
+fi
+# 2) Finestra app dedicata al login (attende il server e apre Chromium --app)
+ASDIR="$HOME_DIR/.config/autostart"; mkdir -p "$ASDIR"
+rm -f "$ASDIR/cybergui.desktop" "$ASDIR/cybergui-server.desktop" 2>/dev/null || true
 cat > "$ASDIR/cybergui-app.desktop" <<EOF
 [Desktop Entry]
 Type=Application

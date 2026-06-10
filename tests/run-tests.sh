@@ -281,6 +281,7 @@ grep -q "chromium" gui/cybergui-app.sh              || { echo "  cybergui-app se
 [ -f provision/10-branding-kiosk.sh ]               || { echo "  manca lo script di branding/kiosk"; kmiss=1; }
 grep -q "CyberSec AI OS" provision/10-branding-kiosk.sh || { echo "  branding senza nome OS"; kmiss=1; }
 grep -q "cybergui-app" provision/10-branding-kiosk.sh && grep -q "autostart" provision/10-branding-kiosk.sh || { echo "  manca l'autostart della GUI"; kmiss=1; }
+grep -q "cybergui.service" provision/10-branding-kiosk.sh && grep -q "systemctl enable" provision/10-branding-kiosk.sh || { echo "  server GUI non gestito da systemd"; kmiss=1; }
 grep -q "10-branding-kiosk.sh" Vagrantfile          || { echo "  branding non nel Vagrantfile"; kmiss=1; }
 grep -q "cybergui-app" setup-inside-vm.sh           || { echo "  cybergui-app non installato da setup-inside-vm"; kmiss=1; }
 bash -n gui/cybergui-app.sh 2>/dev/null             || { echo "  cybergui-app: sintassi"; kmiss=1; }

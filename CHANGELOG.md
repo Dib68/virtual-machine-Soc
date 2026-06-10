@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.27.0
+- **Server GUI gestito da systemd** (`cybergui.service`): parte automaticamente al
+  boot, indipendente dal login, e si riavvia in caso di errore. Risolve il caso in
+  cui l'autostart del desktop avviava il server come figlio della sessione e veniva
+  terminato (finestra aperta ma server non raggiungibile). L'autostart del desktop
+  ora apre solo la finestra app, trovando il server gia' pronto.
+
 ## 2.26.0
 - **Autostart GUI affidabile**: due voci di avvio distinte (server della GUI +
   finestra app), e `cybergui-app` ora attende che il server risponda (controllo
