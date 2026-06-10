@@ -61,6 +61,20 @@ def _popen_bg(cmd):
                             start_new_session=True,
                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
+def _stream_cmd(cmd):
+    # Esegue un comando e produce il suo output riga per riga (per lo streaming).
+    p = subprocess.Popen(["bash", "-lc", cmd], env=env_gui(),
+                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    try:
+        for line in iter(p.stdout.readline, b""):
+            yield line.decode("utf-8", "ignore")
+    finally:
+        try:
+            p.stdout.close()
+        except Exception:
+            pass
+        p.wait()
+
 def _run_in_terminal(inner_cmd, tag="cyberrun"):
     import tempfile, glob, time
     tmp = tempfile.gettempdir()   # /tmp su Linux; portabile altrove (test)
@@ -150,6 +164,25 @@ def install_missing():
         return True, len(pkgs), "installazione di %d pacchetti avviata" % len(pkgs)
     except Exception as ex:
         return False, 0, str(ex)
+
+def install_stream_cmd():
+    # Comando per installare i pacchetti mancanti (sudo non interattivo).
+    pkgs = missing_pkgs()
+    if not pkgs:
+        return None
+    return ("sudo -n apt-get update && sudo -n apt-get install -y " + " ".join(pkgs))
+
+def install_missing_stream():
+    # Installa i pacchetti mancanti mostrando l'output in tempo reale.
+    cmd = install_stream_cmd()
+    if not cmd:
+        yield "Tutti gli strumenti con pacchetto apt sono gia' installati.\n"
+        return
+    yield "Avvio installazione dei pacchetti mancanti...\n"
+    yield "(se chiede la password, usa invece il pulsante che apre il terminale)\n\n"
+    for chunk in _stream_cmd(cmd):
+        yield chunk
+    yield "\n== Operazione terminata ==\n"
 
 def _ollama_chat_stream(model, messages, timeout=300):
     # Streaming: Ollama risponde con una riga JSON (NDJSON) per ogni pezzo di testo.
@@ -323,6 +356,19 @@ class H(http.server.BaseHTTPRequestHandler):
                     self.wfile.flush()
             except Exception:
                 pass   # client disconnesso o errore di rete: chiudiamo e basta
+            return
+        if u.path == "/api/install_missing_stream":
+            # Installazione dei pacchetti mancanti con output in tempo reale.
+            self.send_response(200)
+            self.send_header("Content-Type", "text/plain; charset=utf-8")
+            self.send_header("Cache-Control", "no-cache")
+            self.end_headers()
+            try:
+                for chunk in install_missing_stream():
+                    self.wfile.write(chunk.encode("utf-8"))
+                    self.wfile.flush()
+            except Exception:
+                pass
             return
         return self._send(404, "text/plain", b"not found")
 

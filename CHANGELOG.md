@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.17.0
+- **Avanzamento installazione in tempo reale**: "Installa i mancanti" ora mostra
+  l'output di apt in un pannello live nel browser (endpoint
+  `/api/install_missing_stream`), con fallback al terminale.
+- Nuovi test backend e d'integrazione per l'installazione in streaming.
+
 ## 2.16.0
 - **Preferiti**: aggiungi gli strumenti ai preferiti con la stella; nuova sezione
   "Preferiti" nel menu, persistente tra i riavvii.

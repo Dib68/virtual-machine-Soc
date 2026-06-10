@@ -82,6 +82,12 @@ except urllib.error.HTTPError as e:
     code = e.code
 ck("JSON malformato gestito (400)", code == 400)
 
+# 6) install-missing in streaming: senza pacchetti -> messaggio sicuro (niente apt)
+srv.missing_pkgs = lambda: []
+with post_stream("/api/install_missing_stream", {}) as r:
+    ins = r.read().decode("utf-8", "ignore")
+ck("install streaming endpoint (nessun pacchetto)", "gia'" in ins)
+
 httpd.shutdown(); fake.shutdown()
 passed = sum(1 for _, c in P if c); total = len(P)
 print("\n=== STREAM: %d/%d test superati ===" % (passed, total))

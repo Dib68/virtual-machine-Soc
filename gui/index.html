@@ -235,12 +235,21 @@ function instBar(){const miss=ST.missing||0;return `<div class="note" style="dis
 /* installa in blocco tutti i pacchetti apt mancanti */
 async function installMissing(){const n=ST.missing||0;
   if(!n){toast('Nessun pacchetto mancante da installare');return;}
-  if(!confirm('Installo '+n+' pacchetti mancanti? Si apre un terminale: se chiede la password inseriscila.'))return;
-  toast('Avvio installazione di '+n+' pacchetti...');
-  try{const r=await (await fetch('/api/install_missing')).json();
-    toast(r.ok?('Installazione di '+r.count+' pacchetti avviata'):('Errore: '+r.msg));}
-  catch(e){toast('Errore di rete');}
-  setTimeout(async()=>{try{ST=await (await fetch('/api/status')).json();render();pills();}catch(e){}},30000);}
+  if(!confirm('Installo '+n+' pacchetti mancanti? Vedrai l\'avanzamento qui sotto.'))return;
+  document.getElementById('ovt').textContent='Installazione dei pacchetti mancanti';
+  document.getElementById('ovc').innerHTML='<pre id="installlog" style="white-space:pre-wrap;max-height:60vh;overflow:auto;font-size:12px">Avvio...\n</pre>';
+  document.getElementById('ov').classList.add('show');
+  const pre=document.getElementById('installlog');
+  try{
+    const resp=await fetch('/api/install_missing_stream',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
+    if(!resp.ok||!resp.body||!resp.body.getReader)throw new Error('nostream');
+    const reader=resp.body.getReader(),dec=new TextDecoder();pre.textContent='';
+    while(true){const {done,value}=await reader.read();if(done)break;
+      pre.textContent+=dec.decode(value,{stream:true});pre.scrollTop=pre.scrollHeight;}
+  }catch(e){ // fallback: apre il terminale classico
+    pre.textContent+='\n[avvio nel terminale...]\n';
+    try{await fetch('/api/install_missing');}catch(_){}}
+  try{ST=await (await fetch('/api/status')).json();render();pills();}catch(e){}}
 const SCEN=[
   {t:'scenario-primo-pentest',n:'Primo penetration test (web)',d:'Recon, Burp e SQLi su Juice Shop, passo-passo.'},
   {t:'scenario-soc-analyst',n:'Primo turno da SOC Analyst',d:'SIEM, IDS, OSQuery e gestione di un caso.'},

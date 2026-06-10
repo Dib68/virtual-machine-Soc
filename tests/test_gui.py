@@ -82,6 +82,12 @@ scr3 = sorted(_g.glob(os.path.join(TMP, "install_*.sh")))
 ck("install_missing: avvia un solo apt", okb and nb>0 and "apt-get install" in open(scr3[-1]).read()
    and "pkg-uno" in open(scr3[-1]).read())
 ck("status conta i pacchetti mancanti", "missing" in st and isinstance(st["missing"], int))
+# install in streaming: costruzione comando + percorso "niente da fare"
+_cmd = srv.install_stream_cmd()
+ck("install_stream_cmd costruisce apt", bool(_cmd) and "apt-get install" in _cmd and "pkg-uno" in _cmd)
+_om = srv.missing_pkgs; srv.missing_pkgs = lambda: []
+ck("install_missing_stream: nulla da fare", "gia'" in "".join(srv.install_missing_stream()))
+srv.missing_pkgs = _om
 
 # AI: senza servizio -> messaggio gestito
 ck("AI senza servizio gestita", "non disponibile" in srv.ai_ask("ciao").lower())

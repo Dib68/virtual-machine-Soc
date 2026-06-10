@@ -226,7 +226,10 @@ grep -q "/api/install_missing" gui/server.py     || { echo "  manca endpoint /ap
 grep -q '"missing"' gui/server.py                || { echo "  status non conta i mancanti"; imiss2=1; }
 grep -q "function installMissing" gui/index.html || { echo "  GUI senza pulsante installa-mancanti"; imiss2=1; }
 grep -q "/api/install_missing" gui/index.html    || { echo "  GUI non chiama l'endpoint"; imiss2=1; }
-[ "$imiss2" = 0 ] && pass "installazione automatica dei tool mancanti (backend + GUI)" || err "install-missing incompleto"
+grep -q "def install_missing_stream" gui/server.py || { echo "  manca install_missing_stream (progress live)"; imiss2=1; }
+grep -q "/api/install_missing_stream" gui/server.py || { echo "  manca endpoint streaming installazione"; imiss2=1; }
+grep -q "installlog" gui/index.html              || { echo "  GUI senza pannello di avanzamento"; imiss2=1; }
+[ "$imiss2" = 0 ] && pass "installazione automatica dei tool mancanti (backend + GUI + live)" || err "install-missing incompleto"
 
 echo "== 18. Chat: ricerca, rinomina, copia messaggio; ricerca scenari =="
 wmiss=0
