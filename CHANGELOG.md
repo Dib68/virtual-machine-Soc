@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.19.0
+- **Sicurezza GUI**: difesa da **DNS-rebinding** (accetta solo richieste con Host
+  locale, qualsiasi porta -> altrimenti 403) e header **X-Content-Type-Options:
+  nosniff** su tutte le risposte. Il server resta in ascolto solo su 127.0.0.1.
+- Nuovi test d'integrazione di sicurezza (Host non locale, header) e controlli
+  statici nella suite.
+
 ## 2.18.0
 - **3 nuove guide pratiche** passo-passo: analisi di un file sospetto (malware),
   test di sicurezza di una API REST, triage dei log e threat hunting. Collegate

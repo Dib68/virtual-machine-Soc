@@ -88,6 +88,19 @@ with post_stream("/api/install_missing_stream", {}) as r:
     ins = r.read().decode("utf-8", "ignore")
 ck("install streaming endpoint (nessun pacchetto)", "gia'" in ins)
 
+# 7) sicurezza: difesa da DNS-rebinding (Host non locale -> 403)
+import http.client
+def head_status(host_value):
+    c = http.client.HTTPConnection("127.0.0.1", port, timeout=5)
+    c.request("GET", "/api/status", headers={"Host": host_value})
+    r = c.getresponse(); st = r.status; xcto = r.getheader("X-Content-Type-Options"); c.close()
+    return st, xcto
+st_evil, _ = head_status("evil.example.com")
+ck("Host non locale rifiutato (403)", st_evil == 403)
+st_ok, xcto = head_status("127.0.0.1:%d" % port)
+ck("Host locale accettato (200)", st_ok == 200)
+ck("header anti-sniffing presente", xcto == "nosniff")
+
 httpd.shutdown(); fake.shutdown()
 passed = sum(1 for _, c in P if c); total = len(P)
 print("\n=== STREAM: %d/%d test superati ===" % (passed, total))

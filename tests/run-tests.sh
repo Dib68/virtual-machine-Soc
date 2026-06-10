@@ -243,6 +243,8 @@ grep -q "SCEN.filter" gui/index.html           || { echo "  la ricerca globale n
 
 echo "== 19. Preferiti, analizza output e hardening input =="
 fmiss=0
+grep -q "_host_ok" gui/server.py               || { echo "  backend senza difesa DNS-rebinding (Host)"; fmiss=1; }
+grep -q "X-Content-Type-Options" gui/server.py || { echo "  backend senza header anti-sniffing"; fmiss=1; }
 grep -q "function toggleFav" gui/index.html && grep -q "cyberfav" gui/index.html || { echo "  manca la gestione preferiti"; fmiss=1; }
 grep -q "function favTools" gui/index.html     || { echo "  manca la vista preferiti"; fmiss=1; }
 grep -q "function analyzeOutput" gui/index.html || { echo "  manca 'Analizza output'"; fmiss=1; }
