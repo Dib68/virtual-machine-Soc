@@ -203,7 +203,9 @@ grep -q "Rete & risorse" tools/cyberdoctor.sh || { echo "  cyberdoctor senza che
 grep -q "cybergui" tools/cyberdoctor.sh        || { echo "  cyberdoctor non verifica la GUI"; cmiss=1; }
 grep -q "cyberai" tools/cyberdoctor.sh         || { echo "  cyberdoctor non verifica il modello"; cmiss=1; }
 grep -q '! -t 0' menu/ai.sh                    || { echo "  'ai' non legge da pipe (stdin)"; cmiss=1; }
-[ "$cmiss" = 0 ] && pass "cyberdoctor esteso e CLI 'ai' con pipe" || err "cyberdoctor/CLI incompleti"
+grep -q -- '--persona' menu/ai.sh              || { echo "  'ai' senza opzione --persona"; cmiss=1; }
+grep -q -- '--model' menu/ai.sh                || { echo "  'ai' senza opzione --model"; cmiss=1; }
+[ "$cmiss" = 0 ] && pass "cyberdoctor esteso e CLI 'ai' (pipe + --model/--persona)" || err "cyberdoctor/CLI incompleti"
 
 echo "== 16. AI: persona, conversazioni multiple, rigenera, copia comando =="
 pmiss=0

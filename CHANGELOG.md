@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.22.0
+- Il comando **`ai` accetta le opzioni `--model` e `--persona`** (Red/Blue Team,
+  "spiega semplice"), in parita' con la GUI; `ai --help` mostra l'uso.
+- **Suite di test piu' pulita**: i controlli che richiedono un terminale reale
+  vengono SALTATI (non falliti) quando `bash` non e' funzionante nell'ambiente
+  (es. Windows senza WSL), restando attivi su Linux/CI. Ora la suite passa
+  interamente in locale.
+
 ## 2.21.0
 - **Stato dei lab SOC nella GUI**: ogni stack mostra un badge "attivo/spento" in
   base ai container Docker in esecuzione (endpoint `/api/soclab_status`),

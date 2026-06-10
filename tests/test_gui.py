@@ -47,11 +47,25 @@ ck("tutorial path-safe", "non disponibile" in srv.tutorial("../../etc/passwd").l
 ck("tools.json categorie>=13", len(srv.DATA["categories"]) >= 13)
 ck("tools.json soclab==7", len(srv.DATA["soclab"]) == 7)
 # launch tool finto (term)
+# Verifica se 'bash' e' realmente funzionante (su Windows puo' risolvere allo
+# stub WSL senza distro: in quel caso il terminale finto non parte e i relativi
+# controlli vengono SALTATI, non considerati falliti).
+import subprocess as _sp
+def _bash_ok():
+    try:
+        r = _sp.run(["bash", "-c", "echo BASHOK"], capture_output=True, text=True, timeout=8)
+        return r.stdout.strip() == "BASHOK"
+    except Exception:
+        return False
+BASH_OK = _bash_ok()
 srv.TOOLS["faketool"] = {"bin":"faketool","name":"Fake","desc":"x","cmd":"faketool","tut":"nmap","term":True}
 ok,_ = srv.launch("faketool"); time.sleep(1)
 log = open(termlog).read()
 ck("launch term: ritorna ok", ok)
-ck("launch term: apre il terminale", "QTERM" in log)
+if BASH_OK:
+    ck("launch term: apre il terminale", "QTERM" in log)
+else:
+    print("SKIP launch term: apre il terminale (bash non funzionante in questo ambiente)")
 scr = sorted(glob.glob(os.path.join(TMP, "cyberrun_*.sh")), key=os.path.getmtime)
 ck("launch term: crea script", bool(scr) and "faketool" in open(scr[-1]).read())
 # launch tool non installato
