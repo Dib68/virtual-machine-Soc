@@ -35,7 +35,8 @@ I tool sono scelti in base a cosa chiedono gli HR negli annunci reali — vedi
 - **GUI moderna** (`cybergui`): Control Center grafico nel browser con ricerca,
   schede dei tool, AI in chat e controllo degli stack SOC. Include
   **"Installa i mancanti"**: installa con un clic tutti i tool apt non presenti.
-- **Menu interattivo** (`cybermenu`) con ~74 tutorial (inclusi gli scenari pratici).
+- **Menu interattivo** (`cybermenu`) con ~80 tutorial e **11 scenari pratici**
+  passo-passo (pentest, SOC, AD, wireless, forensics, OSINT, malware, API, log).
 - **Utility**: cyberdoctor, ai-explain, cyberreport, cyberupdate.
 
 ---

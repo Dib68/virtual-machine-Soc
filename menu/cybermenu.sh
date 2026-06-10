@@ -266,7 +266,7 @@ utility_menu() {
 scenari_menu() {
   while true; do
     SEL=$(whiptail --backtitle "$BACKTITLE" --title "Scenari pratici (passo-passo)" \
-      --menu "Mini-laboratori guidati:" 22 76 12 \
+      --menu "Mini-laboratori guidati:" 22 76 13 \
       "1" "Primo penetration test (web)" \
       "2" "Primo turno da SOC Analyst" \
       "3" "Analisi di una cattura di rete (pcap)" \
@@ -275,6 +275,9 @@ scenari_menu() {
       "6" "Analisi forense della memoria (RAM)" \
       "7" "Indagine OSINT su un dominio" \
       "8" "Vulnerability assessment di un'app" \
+      "9" "Analisi di un file sospetto (malware)" \
+      "10" "Test di sicurezza di una API REST" \
+      "11" "Triage dei log e caccia alle minacce" \
       "B" "Indietro" 3>&1 1>&2 2>&3) || return
     case "$SEL" in
       1) show_tutorial "scenario-primo-pentest" ;;
@@ -285,6 +288,9 @@ scenari_menu() {
       6) show_tutorial "scenario-forensics-memoria" ;;
       7) show_tutorial "scenario-osint" ;;
       8) show_tutorial "scenario-vuln-assessment" ;;
+      9) show_tutorial "scenario-malware-analysis" ;;
+      10) show_tutorial "scenario-web-api" ;;
+      11) show_tutorial "scenario-log-triage" ;;
       B|"") return ;;
     esac
   done

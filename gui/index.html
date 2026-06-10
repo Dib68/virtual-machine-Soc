@@ -258,7 +258,10 @@ const SCEN=[
   {t:'scenario-wireless',n:'Audit Wi-Fi (la tua rete)',d:'airmon-ng, handshake e aircrack-ng.'},
   {t:'scenario-forensics-memoria',n:'Forensics della memoria (RAM)',d:'Analisi di un dump con Volatility 3.'},
   {t:'scenario-osint',n:'Indagine OSINT su un dominio',d:'theHarvester, subfinder, httpx, SpiderFoot.'},
-  {t:'scenario-vuln-assessment',n:'Vulnerability assessment',d:'Nuclei, Nikto e OpenVAS su un bersaglio.'}
+  {t:'scenario-vuln-assessment',n:'Vulnerability assessment',d:'Nuclei, Nikto e OpenVAS su un bersaglio.'},
+  {t:'scenario-malware-analysis',n:'Analisi di un file sospetto',d:'Statica e dinamica sicura: strings, binwalk, radare2, ClamAV.'},
+  {t:'scenario-web-api',n:'Test di sicurezza di una API REST',d:'Endpoint, auth/IDOR, nuclei e sqlmap su API autorizzate.'},
+  {t:'scenario-log-triage',n:'Triage dei log e threat hunting',d:'auth.log, log web, SIEM e IOC per il SOC.'}
 ];
 function renderGuide(v){
   v.innerHTML='<div class="note">Mini-laboratori guidati: clicca per aprire la guida passo-passo.</div><div class="grid">'+

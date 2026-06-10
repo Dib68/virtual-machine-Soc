@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.18.0
+- **3 nuove guide pratiche** passo-passo: analisi di un file sospetto (malware),
+  test di sicurezza di una API REST, triage dei log e threat hunting. Collegate
+  sia al menu testuale sia alla GUI e coperte dai test.
+
 ## 2.17.0
 - **Avanzamento installazione in tempo reale**: "Installa i mancanti" ora mostra
   l'output di apt in un pannello live nel browser (endpoint

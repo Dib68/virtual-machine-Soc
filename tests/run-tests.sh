@@ -119,7 +119,7 @@ PYEOF
 
 # 10g: scenari pratici presenti e referenziati in menu e GUI
 gmiss=0
-for sc in scenario-primo-pentest scenario-soc-analyst scenario-analisi-pcap scenario-active-directory scenario-wireless scenario-forensics-memoria scenario-osint scenario-vuln-assessment; do
+for sc in scenario-primo-pentest scenario-soc-analyst scenario-analisi-pcap scenario-active-directory scenario-wireless scenario-forensics-memoria scenario-osint scenario-vuln-assessment scenario-malware-analysis scenario-web-api scenario-log-triage; do
   [ -f "menu/tutorials/$sc.md" ] || { echo "  manca scenario: $sc"; gmiss=1; }
   grep -q "$sc" menu/cybermenu.sh || { echo "  scenario non in cybermenu: $sc"; gmiss=1; }
   grep -q "$sc" gui/index.html || { echo "  scenario non in GUI: $sc"; gmiss=1; }
