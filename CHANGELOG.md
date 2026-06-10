@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.29.0
+- **Splash di avvio con il tuo logo**: lo splash Plymouth "CyberSec AI OS" ora viene
+  effettivamente mostrato al boot (abilitato `splash` nella cmdline GRUB +
+  `update-grub` + rigenerazione initramfs). Prima il tema era impostato ma non
+  appariva perche' mancava `splash`.
+- **status() con timeout su Docker**: `docker info` non puo' piu' bloccare lo stato
+  della GUI (timeout 4s).
+
 ## 2.28.0
 - **Feedback "AI in avvio"**: al primo messaggio la chat mostra "Avvio dell'AI in
   corso…" mentre Ollama si avvia, invece di sembrare bloccata.

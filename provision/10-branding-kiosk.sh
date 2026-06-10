@@ -99,13 +99,29 @@ DESKF="$HOME_DIR/Desktop/CyberSec-ControlCenter.desktop"
 [ -f "$DESKF" ] && sed -i "s|^Icon=.*|Icon=$ICON|" "$DESKF" 2>/dev/null || true
 chown -R "$USER_NAME:$USER_NAME" "$HOME_DIR/.config" 2>/dev/null || true
 
-# Splash di avvio Plymouth (best-effort)
+# Splash di avvio con il TUO logo (Plymouth) al posto di quello di Kali
+echo "==> Splash di avvio personalizzato (Plymouth)..."
 PLY="$BR/plymouth/cybersec"
-if [ -d "$PLY" ] && command -v plymouth-set-default-theme >/dev/null 2>&1; then
-  mkdir -p /usr/share/plymouth/themes/cybersec
-  cp -rf "$PLY"/* /usr/share/plymouth/themes/cybersec/ 2>/dev/null || true
-  plymouth-set-default-theme cybersec 2>/dev/null || true
-  update-initramfs -u >/dev/null 2>&1 || true
+if [ -d "$PLY" ]; then
+  command -v plymouth >/dev/null 2>&1 || apt-get install -y plymouth plymouth-themes >/dev/null 2>&1 || true
+  if command -v plymouth-set-default-theme >/dev/null 2>&1; then
+    mkdir -p /usr/share/plymouth/themes/cybersec
+    cp -rf "$PLY"/* /usr/share/plymouth/themes/cybersec/ 2>/dev/null || true
+    # Abilita lo splash grafico nel boot (serve 'splash' nella cmdline del kernel)
+    if [ -f /etc/default/grub ]; then
+      if grep -q '^GRUB_CMDLINE_LINUX_DEFAULT=' /etc/default/grub; then
+        grep -q 'splash' /etc/default/grub || sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)"/GRUB_CMDLINE_LINUX_DEFAULT="\1 splash"/' /etc/default/grub
+        grep -q 'quiet'  /etc/default/grub || sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT="\(.*\)"/GRUB_CMDLINE_LINUX_DEFAULT="\1 quiet"/'  /etc/default/grub
+      else
+        echo 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"' >> /etc/default/grub
+      fi
+      grep -q '^GRUB_GFXPAYLOAD_LINUX=' /etc/default/grub || echo 'GRUB_GFXPAYLOAD_LINUX=keep' >> /etc/default/grub
+      command -v update-grub >/dev/null 2>&1 && update-grub >/dev/null 2>&1 || true
+    fi
+    # Imposta il tema e rigenera l'initramfs (-R) cosi' il logo appare al boot
+    plymouth-set-default-theme -R cybersec >/dev/null 2>&1 \
+      || { plymouth-set-default-theme cybersec >/dev/null 2>&1; update-initramfs -u >/dev/null 2>&1; } || true
+  fi
 fi
 
-echo "==> Fatto. Al prossimo login la GUI si aprira' da sola in una finestra dedicata."
+echo "==> Fatto. Al prossimo avvio: splash con il tuo logo + GUI in finestra dedicata."

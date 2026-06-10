@@ -318,10 +318,20 @@ def ai_models():
     except Exception:
         return False, []
 
+def _docker_ok():
+    # Controllo con timeout: 'docker info' puo' bloccarsi se il daemon non
+    # risponde; lo status e' chiamato spesso, quindi non deve mai appendersi.
+    if not shutil.which("docker"):
+        return False
+    try:
+        return subprocess.run(["bash", "-lc", "docker info >/dev/null 2>&1"],
+                              timeout=4).returncode == 0
+    except Exception:
+        return False
+
 def status():
     ai, models = ai_models()
-    docker = shutil.which("docker") is not None and subprocess.call(
-        ["bash", "-lc", "docker info >/dev/null 2>&1"]) == 0
+    docker = _docker_ok()
     inst = {b: installed(b) for b in TOOLS}
     missing = sum(1 for b, t in TOOLS.items()
                   if not inst[b] and (t.get("pkg", "") or "").strip())

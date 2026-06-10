@@ -91,8 +91,9 @@ ck("install streaming endpoint (nessun pacchetto)", "gia'" in ins)
 # 7) sicurezza: difesa da DNS-rebinding (Host non locale -> 403)
 import http.client
 def head_status(host_value):
-    c = http.client.HTTPConnection("127.0.0.1", port, timeout=5)
-    c.request("GET", "/api/status", headers={"Host": host_value})
+    # /api/health e' leggero (niente check docker) -> rapido e affidabile
+    c = http.client.HTTPConnection("127.0.0.1", port, timeout=10)
+    c.request("GET", "/api/health", headers={"Host": host_value})
     r = c.getresponse(); st = r.status; xcto = r.getheader("X-Content-Type-Options"); c.close()
     return st, xcto
 st_evil, _ = head_status("evil.example.com")
