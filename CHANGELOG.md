@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.28.0
+- **Feedback "AI in avvio"**: al primo messaggio la chat mostra "Avvio dell'AI in
+  corso…" mentre Ollama si avvia, invece di sembrare bloccata.
+- **Logo come icona**: il logo del progetto diventa l'icona della finestra app e
+  del launcher (Desktop e autostart).
+
 ## 2.27.0
 - **Server GUI gestito da systemd** (`cybergui.service`): parte automaticamente al
   boot, indipendente dal login, e si riavvia in caso di errore. Risolve il caso in

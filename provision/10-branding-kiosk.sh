@@ -15,8 +15,13 @@ echo "==> [1/5] Browser per la finestra app (Chromium)..."
 apt-get update -y >/dev/null 2>&1 || true
 apt-get install -y chromium >/dev/null 2>&1 || apt-get install -y chromium-browser >/dev/null 2>&1 || true
 
-echo "==> [2/5] Launcher finestra-app..."
+echo "==> [2/5] Launcher finestra-app + icona logo..."
 install -m 0755 "$SRC/gui/cybergui-app.sh" /usr/local/bin/cybergui-app 2>/dev/null || true
+# Logo come icona dell'app/launcher
+ICON="security-high"
+if [ -f "$BR/logo.png" ]; then
+  install -m 0644 "$BR/logo.png" /usr/share/pixmaps/cybersec.png 2>/dev/null && ICON="/usr/share/pixmaps/cybersec.png" || true
+fi
 
 echo "==> [3/5] Nome del sistema + messaggio di benvenuto..."
 if [ -f /etc/os-release ] && ! grep -q "CyberSec AI OS" /etc/os-release; then
@@ -84,11 +89,14 @@ Type=Application
 Name=CyberSec Control Center
 Comment=Apre la GUI in una finestra dedicata all'avvio
 Exec=cybergui-app
-Icon=security-high
+Icon=$ICON
 X-GNOME-Autostart-enabled=true
 Terminal=false
 Categories=Security;
 EOF
+# Aggiorna anche l'icona sul Desktop, se presente
+DESKF="$HOME_DIR/Desktop/CyberSec-ControlCenter.desktop"
+[ -f "$DESKF" ] && sed -i "s|^Icon=.*|Icon=$ICON|" "$DESKF" 2>/dev/null || true
 chown -R "$USER_NAME:$USER_NAME" "$HOME_DIR/.config" 2>/dev/null || true
 
 # Splash di avvio Plymouth (best-effort)

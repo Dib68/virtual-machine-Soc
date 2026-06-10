@@ -402,7 +402,7 @@ function aiBusy(on){const s=document.getElementById('aistop'),b=document.getElem
   if(s)s.style.display=on?'':'none';if(b)b.style.display=on?'none':'';}
 function stopAI(){if(AICTRL){try{AICTRL.abort();}catch(e){}}}
 async function aiSend(prompt){const hist=chatHistory();
-  CHAT.push({r:'u',t:prompt});CHAT.push({r:'a',t:''});drawChat();const idx=CHAT.length-1;
+  CHAT.push({r:'u',t:prompt});CHAT.push({r:'a',t:(ST.ai?'⏳ …':'⏳ Avvio dell\'AI in corso…')});drawChat();const idx=CHAT.length-1;
   AICTRL=('AbortController'in window)?new AbortController():null;aiBusy(true);
   try{
     const resp=await fetch('/api/ai_stream',{method:'POST',headers:{'Content-Type':'application/json'},
