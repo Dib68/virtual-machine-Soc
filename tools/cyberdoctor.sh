@@ -23,6 +23,8 @@ if command -v ollama >/dev/null 2>&1; then
   ok "ollama installato"
   if curl -s http://localhost:11434/api/tags >/dev/null 2>&1; then
     ok "servizio attivo"; echo "  modelli: $(ollama list 2>/dev/null | awk 'NR>1{print $1}' | tr '\n' ' ')"
+    if ollama list 2>/dev/null | grep -q '^cyberai'; then ok "modello 'cyberai' presente"
+    else no "modello 'cyberai' assente (ollama create cyberai -f /opt/cybersec/Modelfile)"; fi
   else no "servizio non attivo (sudo systemctl start ollama)"; fi
 else no "ollama non installato"; fi
 echo ""
@@ -31,6 +33,17 @@ if command -v docker >/dev/null 2>&1; then
   ok "docker installato"
   docker info >/dev/null 2>&1 && ok "docker attivo" || no "docker non attivo"
 else no "docker non installato"; fi
+echo ""
+echo "-- Rete & risorse --"
+if ping -c1 -W2 8.8.8.8 >/dev/null 2>&1 || curl -s --max-time 3 https://ollama.com >/dev/null 2>&1; then
+  ok "connettivita' a internet"
+else no "nessuna connettivita' (l'AI locale funziona comunque offline)"; fi
+AVAILK=$(df -Pk / 2>/dev/null | awk 'NR==2{print $4}'); AVAILK=${AVAILK:-0}
+if [ "$AVAILK" -ge 3145728 ]; then ok "spazio su disco sufficiente ($((AVAILK/1024/1024)) GB liberi)"
+else no "spazio su disco basso (<3 GB): libera spazio prima di scaricare modelli/immagini"; fi
+if pgrep -f "gui/server.py" >/dev/null 2>&1 || (command -v ss >/dev/null 2>&1 && ss -ltn 2>/dev/null | grep -q ':8910'); then
+  ok "GUI (cybergui) in esecuzione  ->  http://127.0.0.1:8910"
+else no "GUI non attiva (avviala con: cybergui)"; fi
 echo ""
 if [ -f /opt/cybersec/missing_tools.txt ]; then
   echo -e "${YEL}Pacchetti non installati durante il provisioning:${NC}"

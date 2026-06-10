@@ -26,7 +26,9 @@ for i in $(seq 1 40); do curl -s http://localhost:11434/api/tags >/dev/null 2>&1
 # ----------------------------------------------------------------------------
 RAM_GB=$(free -g 2>/dev/null | awk '/Mem:/{print $2}'); RAM_GB=${RAM_GB:-4}
 [[ "$RAM_GB" =~ ^[0-9]+$ ]] || RAM_GB=4
-if [ "$RAM_GB" -ge 7 ]; then BASE="qwen2.5:7b"; else BASE="llama3.2"; fi
+if   [ "$RAM_GB" -ge 28 ]; then BASE="qwen2.5:14b"   # workstation: piu' preciso
+elif [ "$RAM_GB" -ge 7  ]; then BASE="qwen2.5:7b"    # standard: ottimo compromesso
+else                            BASE="llama3.2"; fi   # leggero: gira ovunque
 echo "==> RAM ${RAM_GB}GB -> modello base scelto: $BASE"
 
 echo "==> Scarico il modello (puo' richiedere parecchio: alcuni GB)..."
@@ -45,7 +47,7 @@ FROM $BASE
 
 PARAMETER temperature 0.35
 PARAMETER top_p 0.9
-PARAMETER num_ctx 4096
+PARAMETER num_ctx 8192
 
 SYSTEM """
 Sei "CyberAI", un assistente esperto di cybersecurity integrato in una macchina
@@ -68,6 +70,8 @@ Regole di risposta:
   (4) eventuali note o errori comuni.
 - Fornisci comandi concreti e corretti per Kali Linux. Niente fronzoli.
 - Se la domanda e' ambigua, fai una sola domanda di chiarimento, poi procedi.
+- La conversazione ha memoria: tieni conto dei messaggi precedenti, non ripetere
+  cose gia' dette e collega le risposte alle domande precedenti dell'utente.
 - Ricorda all'utente, quando pertinente, di operare SOLO su sistemi propri o
   autorizzati: usare questi strumenti senza permesso e' illegale.
 """

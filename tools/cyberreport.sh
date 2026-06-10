@@ -58,6 +58,42 @@ cat > "$FILE" <<EOF
 ## Lezioni apprese
 EOF
   ;;
-  *) echo "uso: cyberreport [pentest|ir]"; exit 1 ;;
+  web)
+cat > "$FILE" <<EOF
+# Report di Web Application Assessment
+- Data: $DATE
+- Applicazione/URL:
+- Tester:
+- Ambito (scope) e autorizzazione:
+
+## Sommario esecutivo
+(rischio complessivo in linguaggio non tecnico)
+
+## Copertura OWASP Top 10
+| Categoria | Esito | Note |
+|---|---|---|
+| A01 Broken Access Control | | |
+| A02 Cryptographic Failures | | |
+| A03 Injection | | |
+| A04 Insecure Design | | |
+| A05 Security Misconfiguration | | |
+| A06 Vulnerable Components | | |
+| A07 Auth Failures | | |
+| A08 Integrity Failures | | |
+| A09 Logging/Monitoring | | |
+| A10 SSRF | | |
+
+## Risultati dettagliati
+### [CRITICO] Titolo
+- Endpoint/Parametro:
+- Descrizione e impatto:
+- Evidenze (richiesta/risposta, payload):
+- CVSS:
+- Remediation:
+
+## Conclusioni e raccomandazioni
+EOF
+  ;;
+  *) echo "uso: cyberreport [pentest|ir|web]"; exit 1 ;;
 esac
 echo "Report creato: $FILE"

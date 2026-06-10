@@ -92,6 +92,22 @@
   .mbody h1{font-size:19px;margin:12px 0 8px}.mbody h2{font-size:15px;margin:14px 0 6px;color:var(--acc2)}
   .mbody p{font-size:13.5px;color:#cfd6ee;margin:5px 0;line-height:1.6}
   .mbody pre{background:#0a1124;border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:12.5px;color:#bdf;white-space:pre-wrap;margin:8px 0}
+  /* blocchi di codice con pulsante Copia (chat + tutorial) */
+  .codewrap{position:relative;margin:8px 0}
+  .codewrap pre{margin:0}
+  .codewrap .copy{position:absolute;top:6px;right:6px;background:var(--card2);border:1px solid var(--line);color:var(--txt);
+    font-size:11px;font-weight:600;padding:3px 9px;border-radius:7px;cursor:pointer;opacity:.85}
+  .codewrap .copy:hover{opacity:1}
+  .m.a pre{background:#0a1124;border:1px solid var(--line);border-radius:9px;padding:10px;overflow:auto;font-size:12px;color:#bdf;margin:0}
+  .m.a p{margin:4px 0}.m.a h1{font-size:15px;margin:6px 0}.m.a h2{font-size:14px;margin:6px 0;color:var(--acc2)}
+  /* evidenziazione sintassi nei blocchi di codice */
+  .c-com{color:#6b7a99;font-style:italic}.c-flag{color:#ffd479}.c-str{color:#7fe3b0}
+  /* barra superiore della chat AI: modello, chip rapide, export */
+  .airow{display:flex;gap:8px;align-items:center;flex:none;flex-wrap:wrap;margin-bottom:10px}
+  .airow select{height:34px;background:var(--bg2);border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:0 8px;outline:none;cursor:pointer}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+  .chip{background:var(--card2);border:1px solid var(--line);color:var(--txt);font-size:11.5px;padding:5px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+  .chip:hover{border-color:var(--acc)}
   #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--card2);border:1px solid var(--line);
     color:var(--txt);padding:11px 18px;border-radius:11px;font-size:13px;z-index:80;opacity:0;transition:opacity .2s;pointer-events:none}
   /* responsive */
@@ -131,6 +147,7 @@
       <div class="pills">
         <span class="pill"><span class="pdot" id="aiDot"></span>AI</span>
         <span class="pill"><span class="pdot" id="dkDot"></span>Docker</span>
+        <span class="pill" id="ver" title="Versione"></span>
       </div>
     </header>
     <section class="content" id="view"></section>
@@ -144,14 +161,27 @@
 <div id="toast"></div>
 
 <script>
-let DATA={categories:[],soclab:[]},ST={installed:{},ai:false,docker:false},CUR="dash",CHAT=[];
+let DATA={categories:[],soclab:[]},ST={installed:{},ai:false,docker:false},CUR="dash",CHAT=[],AIMODEL="",AIPERSONA="",ONLYINST=false;
+let CONVS=[],CURCONV=null;
+try{AIMODEL=localStorage.getItem('cybermodel')||"";}catch(e){}
+try{AIPERSONA=localStorage.getItem('cyberpersona')||"";}catch(e){}
+const PERSONAS=[{v:'',l:'Modalita: generale'},{v:'redteam',l:'Modalita: Red Team'},{v:'blueteam',l:'Modalita: Blue Team / SOC'},{v:'explain',l:'Modalita: spiega semplice'}];
+const QUICK=[
+  {l:'Nmap: scansione',q:'Come faccio una scansione completa con nmap di un host? Dammi i comandi pratici.'},
+  {l:'SQL injection',q:'Come testo una SQL injection con sqlmap? Comandi ed esempi.'},
+  {l:'Crack hash',q:'Come faccio cracking di hash con hashcat e john? Esempi di comando.'},
+  {l:'Analisi PCAP',q:'Come analizzo un file pcap con Wireshark/tshark per attivita sospette?'},
+  {l:'Privesc Linux',q:'Passi e tool per privilege escalation su Linux in un pentest autorizzato.'},
+  {l:'Enum SMB/AD',q:'Come enumero SMB e Active Directory con netexec ed enum4linux-ng?'}
+];
 async function boot(){
   try{DATA=await (await fetch('tools.json')).json();}catch(e){}
   try{ST=await (await fetch('/api/status')).json();}catch(e){}
   buildNav();render();pills();
 }
 function pills(){document.getElementById('aiDot').className='pdot'+(ST.ai?' on':'');
-  document.getElementById('dkDot').className='pdot'+(ST.docker?' on':'');}
+  document.getElementById('dkDot').className='pdot'+(ST.docker?' on':'');
+  var ve=document.getElementById('ver');if(ve)ve.textContent=ST.version?('v'+ST.version):'';}
 function inst(b){return ST.installed&&ST.installed[b];}
 function go(v){CUR=v;buildNav();render();closeSide();}
 function buildNav(){
@@ -179,7 +209,24 @@ function tcard(t,color){const ok=inst(t.bin);
     `<div class="ds">${t.desc}</div><div class="row">`+
     first+
     `<button class="btn" onclick="showTut('${t.tut}','${t.name}')">Guida</button>`+
-    `<button class="btn ai" onclick="askTool('${t.name}')">AI</button></div></div>`;}
+    `<button class="btn ai" onclick="askTool('${t.name}')">AI</button>`+
+    `<button class="btn" title="Copia il comando" onclick="copyCmd('${t.bin}')">&#10697;</button></div></div>`;}
+/* filtro: mostra solo gli strumenti installati */
+function toggleInst(){ONLYINST=!ONLYINST;render();}
+function filt(tools){return ONLYINST?tools.filter(t=>inst(t.bin)):tools;}
+function instBar(){const miss=ST.missing||0;return `<div class="note" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">`+
+  `<button class="btn${ONLYINST?' go':''}" onclick="toggleInst()">${ONLYINST?'Mostra tutti':'Solo installati'}</button>`+
+  (miss?`<button class="btn go" onclick="installMissing()">Installa i mancanti (${miss})</button>`:'<span style="color:var(--acc2)">Tutto installato &#10003;</span>')+
+  `<span style="color:var(--mut)">Filtra le schede e installa con un clic cio' che manca.</span></div>`;}
+/* installa in blocco tutti i pacchetti apt mancanti */
+async function installMissing(){const n=ST.missing||0;
+  if(!n){toast('Nessun pacchetto mancante da installare');return;}
+  if(!confirm('Installo '+n+' pacchetti mancanti? Si apre un terminale: se chiede la password inseriscila.'))return;
+  toast('Avvio installazione di '+n+' pacchetti...');
+  try{const r=await (await fetch('/api/install_missing')).json();
+    toast(r.ok?('Installazione di '+r.count+' pacchetti avviata'):('Errore: '+r.msg));}
+  catch(e){toast('Errore di rete');}
+  setTimeout(async()=>{try{ST=await (await fetch('/api/status')).json();render();pills();}catch(e){}},30000);}
 const SCEN=[
   {t:'scenario-primo-pentest',n:'Primo penetration test (web)',d:'Recon, Burp e SQLi su Juice Shop, passo-passo.'},
   {t:'scenario-soc-analyst',n:'Primo turno da SOC Analyst',d:'SIEM, IDS, OSQuery e gestione di un caso.'},
@@ -204,7 +251,10 @@ function render(){const v=document.getElementById('view'),T=document.getElementB
       <div class="met"><div class="v">${ins}</div><div class="l">Installati</div></div>
       <div class="met"><div class="v">${DATA.categories.length}</div><div class="l">Categorie</div></div>
       <div class="met"><div class="v">${DATA.soclab.length}</div><div class="l">Stack SOC</div></div></div>
-      <div class="note">Clicca <b>Avvia</b> per aprire un tool, <b>Guida</b> per il tutorial, <b>AI</b> per una spiegazione. Usa la ricerca in alto per trovare subito uno strumento.</div>
+      <div class="note" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span>Clicca <b>Avvia</b> per aprire un tool, <b>Guida</b> per il tutorial, <b>AI</b> per una spiegazione. Usa <b>/</b> per cercare.</span>
+        ${ST.missing?`<button class="btn go" onclick="installMissing()">Installa i mancanti (${ST.missing})</button>`:'<span style="color:var(--acc2)">Tutti gli strumenti installati &#10003;</span>'}
+      </div>
       <div class="sec">Categorie</div><div class="grid">${DATA.categories.map((c,i)=>
         `<div class="card" onclick="go('cat:${i}')" style="cursor:pointer"><div class="ch">
           <div class="ic" style="background:${c.color}">${c.name[0]}</div>
@@ -213,9 +263,11 @@ function render(){const v=document.getElementById('view'),T=document.getElementB
           <div class="row"><button class="btn go">Apri categoria</button></div></div>`).join('')}</div>`;
     return;}
   if(CUR==='all'){T.textContent='Tutti gli strumenti';
-    v.innerHTML='<div class="grid">'+DATA.categories.flatMap(c=>c.tools.map(t=>tcard(t,c.color))).join('')+'</div>';return;}
+    const all=DATA.categories.flatMap(c=>filt(c.tools).map(t=>tcard(t,c.color)));
+    v.innerHTML=instBar()+'<div class="grid">'+(all.join('')||'<p style="color:var(--mut)">Nessuno strumento installato in questa vista.</p>')+'</div>';return;}
   if(CUR.startsWith('cat:')){const c=DATA.categories[+CUR.split(':')[1]];T.textContent=c.name;
-    v.innerHTML='<div class="grid">'+c.tools.map(t=>tcard(t,c.color)).join('')+'</div>';return;}
+    const cards=filt(c.tools).map(t=>tcard(t,c.color));
+    v.innerHTML=instBar()+'<div class="grid">'+(cards.join('')||'<p style="color:var(--mut)">Nessuno strumento installato in questa categoria.</p>')+'</div>';return;}
   if(CUR==='guide'){T.textContent='Guide pratiche — scenari passo-passo';renderGuide(v);return;}
   if(CUR==='soc'){T.textContent='SOC Lab — SIEM & bersagli';
     v.innerHTML='<div class="note">Avvia/ferma gli stack (serve Docker). Al primo avvio scaricano le immagini: ci vuole tempo.</div><div class="grid">'+
@@ -225,23 +277,97 @@ function render(){const v=document.getElementById('view'),T=document.getElementB
         <button class="btn" onclick="soc('${s.id}','down')">Ferma</button>
         <button class="btn ai" onclick="openLink('${s.url}')">Apri</button></div></div>`).join('')+'</div>';return;}
   if(CUR==='ai'){T.textContent='Assistente AI';
-    v.innerHTML='<div style="height:100%;display:flex"><div class="chat"><div class="msgs" id="msgs"></div>'+
-      '<div class="cin"><input id="ai" placeholder="Chiedi qualcosa..."><button onclick="sendAI()">Invia</button></div></div></div>';
-    drawChat();const i=document.getElementById('ai');i.addEventListener('keydown',e=>{if(e.key==='Enter')sendAI();});i.focus();return;}
+    v.innerHTML='<div style="height:100%;display:flex;flex-direction:column">'+
+      '<div class="airow">'+
+        '<select id="convsel" onchange="switchConv(this.value)" title="Conversazioni"></select>'+
+        '<button class="btn" onclick="newConv()" title="Nuova conversazione">+ Nuova</button>'+
+        '<button class="btn" onclick="deleteConv()" title="Elimina questa conversazione">Elimina</button>'+
+        '<select id="aimodel" onchange="setModel(this.value)" title="Scegli il modello AI"></select>'+
+        '<select id="aipersona" onchange="setPersona(this.value)" title="Modalita dell\'assistente"></select>'+
+        '<button class="btn" onclick="exportChat()" title="Scarica la conversazione">Esporta</button>'+
+      '</div>'+
+      '<div class="airow"><div class="chips" id="chips"></div></div>'+
+      '<div class="chat" style="flex:1;min-height:0"><div class="msgs" id="msgs"></div>'+
+      '<div class="cin"><input id="ai" placeholder="Chiedi qualcosa... (ricordo la conversazione)"><button id="aisend" onclick="sendAI()">Invia</button><button id="aistop" class="btn" onclick="stopAI()" style="display:none" title="Ferma la risposta">Stop</button><button class="btn" onclick="regenAI()" title="Rigenera l\'ultima risposta">Rigenera</button><button class="btn" onclick="clearChat()" title="Svuota questa conversazione">Pulisci</button></div></div></div>';
+    buildConvSelect();buildModelSelect();buildPersonaSelect();buildChips();drawChat();
+    const i=document.getElementById('ai');i.addEventListener('keydown',e=>{if(e.key==='Enter')sendAI();});i.focus();return;}
 }
 function drawChat(){const m=document.getElementById('msgs');if(!m)return;
-  m.innerHTML=CHAT.map(x=>`<div class="m ${x.r}">${esc(x.t)}</div>`).join('')||
-    '<div class="m a">Ciao! Sono CyberAI. Chiedimi come usare un tool, o incolla un output da analizzare.</div>';
+  m.innerHTML=CHAT.map(x=>`<div class="m ${x.r}">${(x.r==='a'&&x.t!=='...')?md(x.t):esc(x.t)}</div>`).join('')||
+    '<div class="m a">Ciao! Sono CyberAI. Chiedimi come usare un tool, o incolla un output da analizzare. Ricordo le domande precedenti, quindi puoi proseguire la conversazione.</div>';
   m.scrollTop=m.scrollHeight;}
-async function sendAI(){const i=document.getElementById('ai'),q=i.value.trim();if(!q)return;i.value='';
-  CHAT.push({r:'u',t:q});CHAT.push({r:'a',t:'...'});drawChat();
-  try{const r=await (await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:q})})).json();
-    CHAT[CHAT.length-1].t=r.answer;}catch(e){CHAT[CHAT.length-1].t='AI non raggiungibile.';}
-  drawChat();}
-function askTool(name){go('ai');CHAT.push({r:'u',t:'Come uso '+name+'?'});CHAT.push({r:'a',t:'...'});drawChat();
-  fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({prompt:'Spiega come usare '+name+' in cybersecurity con esempi pratici di comando. In italiano.'})})
-   .then(r=>r.json()).then(r=>{CHAT[CHAT.length-1].t=r.answer;drawChat();}).catch(()=>{CHAT[CHAT.length-1].t='AI non raggiungibile.';drawChat();});}
+/* selettore del modello AI */
+function setModel(v){AIMODEL=v;try{localStorage.setItem('cybermodel',v);}catch(e){}}
+function buildModelSelect(){const s=document.getElementById('aimodel');if(!s)return;
+  const opts=['','cyberai','llama3.2'].concat((ST.models||[]).filter(m=>['cyberai','llama3.2'].indexOf(m)<0));
+  s.innerHTML=opts.map(m=>`<option value="${esc(m)}">${m?('Modello: '+esc(m)):'Modello: automatico'}</option>`).join('');
+  s.value=AIMODEL;}
+/* chip di domande rapide */
+function buildChips(){const c=document.getElementById('chips');if(!c)return;
+  c.innerHTML=QUICK.map((x,i)=>`<span class="chip" onclick="quick(${i})">${esc(x.l)}</span>`).join('');}
+function quick(i){const x=QUICK[i];if(x)aiSend(x.q);}
+/* esporta la conversazione in Markdown */
+function exportChat(){if(!CHAT.length){toast('Nessuna conversazione da esportare');return;}
+  const md=CHAT.filter(x=>x.t&&x.t!=='...').map(x=>(x.r==='u'?'## Tu\n':'## CyberAI\n')+x.t).join('\n\n');
+  const blob=new Blob(['# Conversazione CyberAI\n\n'+md+'\n'],{type:'text/markdown'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='cyberai-chat.md';
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('Conversazione esportata');}
+/* cronologia inviata all'AI: tutti i messaggi reali (no segnaposto vuoti) */
+function chatHistory(){return CHAT.filter(x=>x.t&&x.t!=='...').map(x=>({role:x.r==='u'?'user':'assistant',content:x.t}));}
+/* conversazioni multiple, persistenti tra i ricaricamenti */
+function cid(){return 'c'+Math.random().toString(36).slice(2,9);}
+function convMsgs(){const c=CONVS.find(x=>x.id===CURCONV);return c?c.msgs:[];}
+function loadChat(){
+  try{const raw=JSON.parse(localStorage.getItem('cyberconvs')||'null');
+    if(raw&&Array.isArray(raw.list)&&raw.list.length){CONVS=raw.list;CURCONV=raw.cur;}}catch(e){}
+  if(!CONVS.length){ // migra l'eventuale singola chat precedente
+    let old=[];try{old=JSON.parse(localStorage.getItem('cyberchat')||'[]')||[];}catch(e){}
+    CONVS=[{id:cid(),title:'Conversazione 1',msgs:old}];CURCONV=CONVS[0].id;}
+  if(!CURCONV||!CONVS.find(c=>c.id===CURCONV))CURCONV=CONVS[0].id;
+  CHAT=convMsgs();}
+function saveChat(){const c=CONVS.find(x=>x.id===CURCONV);
+  if(c){c.msgs=CHAT.slice(-60);const u=CHAT.find(x=>x.r==='u'&&x.t&&x.t!=='...');if(u)c.title=u.t.slice(0,40);}
+  try{localStorage.setItem('cyberconvs',JSON.stringify({list:CONVS.slice(-20),cur:CURCONV}));}catch(e){}}
+function newConv(){const c={id:cid(),title:'Nuova conversazione',msgs:[]};CONVS.push(c);CURCONV=c.id;CHAT=c.msgs;saveChat();render();}
+function switchConv(id){CURCONV=id;CHAT=convMsgs();render();}
+function deleteConv(){CONVS=CONVS.filter(c=>c.id!==CURCONV);
+  if(!CONVS.length)CONVS=[{id:cid(),title:'Conversazione 1',msgs:[]}];
+  CURCONV=CONVS[0].id;CHAT=convMsgs();saveChat();render();toast('Conversazione eliminata');}
+function buildConvSelect(){const s=document.getElementById('convsel');if(!s)return;
+  s.innerHTML=CONVS.map(c=>`<option value="${c.id}">${esc(c.title||'Senza titolo')}</option>`).join('');s.value=CURCONV;}
+/* rigenera l'ultima risposta dell'AI */
+function regenAI(){let i=CHAT.length-1;while(i>=0&&CHAT[i].r!=='u')i--;
+  if(i<0){toast('Niente da rigenerare');return;}
+  const q=CHAT[i].t;CHAT=CHAT.slice(0,i);saveChat();aiSend(q);}
+/* modalita' (persona) dell'assistente */
+function setPersona(v){AIPERSONA=v;try{localStorage.setItem('cyberpersona',v);}catch(e){}}
+function buildPersonaSelect(){const s=document.getElementById('aipersona');if(!s)return;
+  s.innerHTML=PERSONAS.map(p=>`<option value="${p.v}">${esc(p.l)}</option>`).join('');s.value=AIPERSONA;}
+let AICTRL=null;
+function aiBusy(on){const s=document.getElementById('aistop'),b=document.getElementById('aisend');
+  if(s)s.style.display=on?'':'none';if(b)b.style.display=on?'none':'';}
+function stopAI(){if(AICTRL){try{AICTRL.abort();}catch(e){}}}
+async function aiSend(prompt){const hist=chatHistory();
+  CHAT.push({r:'u',t:prompt});CHAT.push({r:'a',t:''});drawChat();const idx=CHAT.length-1;
+  AICTRL=('AbortController'in window)?new AbortController():null;aiBusy(true);
+  try{
+    const resp=await fetch('/api/ai_stream',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prompt:prompt,history:hist,model:AIMODEL,persona:AIPERSONA}),signal:AICTRL?AICTRL.signal:undefined});
+    if(!resp.ok||!resp.body||!resp.body.getReader)throw new Error('nostream');
+    const reader=resp.body.getReader(),dec=new TextDecoder();let acc='';
+    while(true){const {done,value}=await reader.read();if(done)break;
+      acc+=dec.decode(value,{stream:true});CHAT[idx].t=acc;drawChat();}
+    if(!acc.trim())CHAT[idx].t='(nessuna risposta)';
+  }catch(e){
+    if(e&&e.name==='AbortError'){CHAT[idx].t=(CHAT[idx].t||'')+' [interrotto]';}
+    else{ // fallback: endpoint non-streaming
+      try{const r=await (await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({prompt:prompt,history:hist,model:AIMODEL,persona:AIPERSONA})})).json();CHAT[idx].t=r.answer;}
+      catch(_){CHAT[idx].t='AI non raggiungibile.';}}
+  }finally{aiBusy(false);AICTRL=null;drawChat();saveChat();}}
+function sendAI(){const i=document.getElementById('ai'),q=i.value.trim();if(!q)return;i.value='';aiSend(q);}
+function clearChat(){CHAT.length=0;saveChat();drawChat();const i=document.getElementById('ai');if(i)i.focus();}
+function askTool(name){go('ai');aiSend('Spiega come usare '+name+' in cybersecurity con esempi pratici di comando. In italiano.');}
 async function launch(bin){const r=await (await fetch('/api/launch?bin='+encodeURIComponent(bin))).json();toast(r.ok?'Avviato: '+bin:'Errore: '+r.msg);}
 async function installTool(bin){toast('Installazione di '+bin+'... (apri il terminale e inserisci la password se richiesto)');
   const r=await (await fetch('/api/install?bin='+encodeURIComponent(bin))).json();
@@ -253,14 +379,25 @@ async function showTut(name,title){document.getElementById('ovt').textContent='G
   const t=await (await fetch('/api/tutorial?name='+encodeURIComponent(name))).text();
   document.getElementById('ovc').innerHTML=md(t);document.getElementById('ov').classList.add('show');}
 function closeOv(){document.getElementById('ov').classList.remove('show');}
-function md(s){const L=s.split('\n');let h='',c=false;
-  for(const l of L){if(l.startsWith('```')){h+=c?'</pre>':'<pre>';c=!c;continue;}
-    if(c){h+=esc(l)+'\n';continue;}
+function md(s){const L=(s||'').split('\n');let h='',c=false;
+  const OPEN='<div class="codewrap"><button class="copy" onclick="copyCode(this)">Copia</button><pre>',CLOSE='</pre></div>';
+  for(const l of L){if(l.startsWith('```')){h+=c?CLOSE:OPEN;c=!c;continue;}
+    if(c){h+=hl(esc(l))+'\n';continue;}
     if(l.startsWith('## '))h+='<h2>'+esc(l.slice(3))+'</h2>';
     else if(l.startsWith('# '))h+='<h1>'+esc(l.slice(2))+'</h1>';
     else if(l.trim())h+='<p>'+esc(l)+'</p>';}
-  if(c)h+='</pre>';return h;}
+  if(c)h+=CLOSE;return h;}
+function copyText(t){t=t||'';
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(()=>toast('Copiato'),()=>toast('Copia non riuscita'));return;}
+  try{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('Copiato');}catch(e){toast('Copia non riuscita');}}
+function copyCode(b){const pre=b.nextElementSibling;copyText(pre?(pre.innerText||pre.textContent||''):'');}
+function findTool(bin){for(const c of DATA.categories)for(const t of c.tools)if(t.bin===bin)return t;return null;}
+function copyCmd(bin){const t=findTool(bin);if(t)copyText(t.cmd);}
 function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+/* evidenziazione leggera per i comandi (input gia' HTML-escaped) */
+function hl(line){
+  if(/^\s*#/.test(line))return '<span class="c-com">'+line+'</span>';
+  return line.replace(/(^|\s)(--?[a-zA-Z][\w-]*)/g,'$1<span class="c-flag">$2</span>');}
 function openLink(u){window.open(u,'_blank');}
 let tt;function toast(m){const e=document.getElementById('toast');e.textContent=m;e.style.opacity='1';clearTimeout(tt);tt=setTimeout(()=>e.style.opacity='0',2500);}
 function closeSide(){document.getElementById('side').classList.remove('open');document.getElementById('scrim').classList.remove('show');}
@@ -277,7 +414,13 @@ function applyTheme(t){document.body.classList.toggle('light', t==='light');
   try{localStorage.setItem('cybertheme',t);}catch(e){}
   var b=document.getElementById('theme'); if(b) b.textContent = (t==='light'?'Tema scuro':'Tema chiaro');}
 function toggleTheme(){applyTheme(document.body.classList.contains('light')?'dark':'light');}
+/* scorciatoie da tastiera: Esc chiude, "/" mette a fuoco la ricerca */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeOv();closeSide();}
+  else if(e.key==='/'&&!/^(INPUT|TEXTAREA|SELECT)$/.test((e.target&&e.target.tagName)||'')){
+    const q=document.getElementById('q');if(q){e.preventDefault();q.focus();}}});
 try{applyTheme(localStorage.getItem('cybertheme')||'dark');}catch(e){applyTheme('dark');}
+loadChat();
 boot();
 </script>
 </body>

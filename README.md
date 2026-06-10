@@ -27,8 +27,14 @@ I tool sono scelti in base a cosa chiedono gli HR negli annunci reali — vedi
 - **Stack SOC via Docker** (comando `soclab`): Splunk, ELK/Kibana, Wazuh, MISP,
   TheHive+Cortex, OpenWebUI, e bersagli vulnerabili (DVWA, Juice Shop, WebGoat).
 - **AI locale** (Ollama + modello `cyberai`): gratuita, offline, nessuna API key.
+  La chat risponde **in streaming** (parola per parola, con pulsante Stop), ha
+  **memoria della conversazione**, **conversazioni multiple** salvate, **modalita'**
+  Red/Blue Team o "spiega semplice", scelta del **modello**, **Rigenera** ed
+  **Esporta**, evidenziazione e **Copia** dei comandi. Sceglie il modello migliore
+  in base alla RAM (qwen2.5 14b/7b o llama3.2). Il backend e' multi-thread.
 - **GUI moderna** (`cybergui`): Control Center grafico nel browser con ricerca,
-  schede dei tool, AI in chat e controllo degli stack SOC.
+  schede dei tool, AI in chat e controllo degli stack SOC. Include
+  **"Installa i mancanti"**: installa con un clic tutti i tool apt non presenti.
 - **Menu interattivo** (`cybermenu`) con ~74 tutorial (inclusi gli scenari pratici).
 - **Utility**: cyberdoctor, ai-explain, cyberreport, cyberupdate.
 

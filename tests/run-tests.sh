@@ -156,6 +156,78 @@ grep -q "plymouth" kali-iso/config/hooks/0100-cybersec.hook.chroot || { echo "  
 grep -q "favicon" gui/index.html || { echo "  GUI senza favicon"; imiss=1; }
 [ "$imiss" = 0 ] && pass "remaster Kali: configurazione ISO completa e valida" || err "config ISO incompleta"
 
+echo "== 11. AI con memoria conversazionale =="
+amiss=0
+grep -q "/api/chat" gui/server.py            || { echo "  server.py non usa /api/chat"; amiss=1; }
+grep -q "def ai_ask" gui/server.py && grep -q "history" gui/server.py || { echo "  ai_ask senza cronologia"; amiss=1; }
+grep -q "history:hist" gui/index.html        || { echo "  la GUI non invia la cronologia"; amiss=1; }
+grep -q "function clearChat" gui/index.html  || { echo "  manca il pulsante Pulisci chat"; amiss=1; }
+grep -q "num_ctx 8192" provision/02-ollama.sh || { echo "  contesto AI non ampliato"; amiss=1; }
+[ "$amiss" = 0 ] && pass "AI: memoria conversazionale collegata (backend + GUI)" || err "AI memoria incompleta"
+
+echo "== 12. AI streaming, persistenza e copia =="
+smiss=0
+grep -q "def ai_stream" gui/server.py              || { echo "  server.py senza ai_stream"; smiss=1; }
+grep -q "/api/ai_stream" gui/server.py             || { echo "  manca endpoint /api/ai_stream"; smiss=1; }
+grep -q '"stream": True' gui/server.py             || { echo "  stream non abilitato verso Ollama"; smiss=1; }
+grep -q "/api/ai_stream" gui/index.html            || { echo "  la GUI non usa lo streaming"; smiss=1; }
+grep -q "getReader" gui/index.html                 || { echo "  la GUI non legge lo stream"; smiss=1; }
+grep -q "function stopAI" gui/index.html           || { echo "  manca il pulsante Stop"; smiss=1; }
+grep -q "AbortController" gui/index.html           || { echo "  streaming non interrompibile"; smiss=1; }
+grep -q "function saveChat" gui/index.html && grep -q "cyberchat" gui/index.html || { echo "  conversazione non persistente"; smiss=1; }
+grep -q "function copyCode" gui/index.html         || { echo "  manca Copia sui blocchi di codice"; smiss=1; }
+grep -q "ThreadingMixIn" gui/server.py             || { echo "  server non multi-thread"; smiss=1; }
+[ "$smiss" = 0 ] && pass "AI: streaming + persistenza + copia (backend + GUI)" || err "AI streaming/UX incompleti"
+
+echo "== 13. Test d'integrazione streaming (HTTP reale, multi-thread) =="
+python3 tests/test_stream.py || err "test integrazione streaming"
+
+echo "== 14. Extra GUI: modello, chip, export, scorciatoie, versione =="
+xmiss=0
+grep -q "/api/health" gui/server.py        || { echo "  manca endpoint /api/health"; xmiss=1; }
+grep -q "def ai_models" gui/server.py       || { echo "  manca ai_models (modelli disponibili)"; xmiss=1; }
+grep -q '"version"' gui/server.py           || { echo "  status senza versione"; xmiss=1; }
+grep -q "def _model_order" gui/server.py    || { echo "  manca scelta del modello (backend)"; xmiss=1; }
+grep -q 'id="aimodel"' gui/index.html       || { echo "  manca il selettore modello"; xmiss=1; }
+grep -q "function buildChips" gui/index.html || { echo "  mancano le chip rapide"; xmiss=1; }
+grep -q "function exportChat" gui/index.html || { echo "  manca l'export della chat"; xmiss=1; }
+grep -q "model:AIMODEL" gui/index.html      || { echo "  la GUI non invia il modello scelto"; xmiss=1; }
+grep -q "function hl(" gui/index.html        || { echo "  manca l'evidenziazione sintassi"; xmiss=1; }
+grep -q "e.key==='Escape'" gui/index.html   || { echo "  mancano le scorciatoie da tastiera"; xmiss=1; }
+grep -q 'id="ver"' gui/index.html           || { echo "  versione non mostrata in GUI"; xmiss=1; }
+[ "$xmiss" = 0 ] && pass "GUI extra: modello/chip/export/scorciatoie/versione presenti" || err "GUI extra incompleti"
+
+echo "== 15. cyberdoctor & CLI ai (pipe) =="
+cmiss=0
+grep -q "Rete & risorse" tools/cyberdoctor.sh || { echo "  cyberdoctor senza check rete/risorse"; cmiss=1; }
+grep -q "cybergui" tools/cyberdoctor.sh        || { echo "  cyberdoctor non verifica la GUI"; cmiss=1; }
+grep -q "cyberai" tools/cyberdoctor.sh         || { echo "  cyberdoctor non verifica il modello"; cmiss=1; }
+grep -q '! -t 0' menu/ai.sh                    || { echo "  'ai' non legge da pipe (stdin)"; cmiss=1; }
+[ "$cmiss" = 0 ] && pass "cyberdoctor esteso e CLI 'ai' con pipe" || err "cyberdoctor/CLI incompleti"
+
+echo "== 16. AI: persona, conversazioni multiple, rigenera, copia comando =="
+pmiss=0
+grep -q "PERSONAS" gui/server.py              || { echo "  backend senza modalita' (persona)"; pmiss=1; }
+grep -q "persona" gui/server.py               || { echo "  handler senza persona"; pmiss=1; }
+grep -q 'id="aipersona"' gui/index.html       || { echo "  GUI senza selettore modalita'"; pmiss=1; }
+grep -q "function newConv" gui/index.html && grep -q "cyberconvs" gui/index.html || { echo "  conversazioni multiple assenti"; pmiss=1; }
+grep -q "function switchConv" gui/index.html  || { echo "  manca il cambio conversazione"; pmiss=1; }
+grep -q "function regenAI" gui/index.html     || { echo "  manca Rigenera"; pmiss=1; }
+grep -q "function copyCmd" gui/index.html     || { echo "  manca Copia comando dalle schede"; pmiss=1; }
+grep -q "function toggleInst" gui/index.html && grep -q "ONLYINST" gui/index.html || { echo "  manca il filtro Solo installati"; pmiss=1; }
+grep -q "OWASP Top 10" tools/cyberreport.sh   || { echo "  cyberreport senza template web/OWASP"; pmiss=1; }
+[ "$pmiss" = 0 ] && pass "AI: persona/conversazioni/rigenera/copia + report web" || err "extra avanzati incompleti"
+
+echo "== 17. Installazione automatica dei tool mancanti =="
+imiss2=0
+grep -q "def install_missing" gui/server.py     || { echo "  backend senza install_missing"; imiss2=1; }
+grep -q "def missing_pkgs" gui/server.py         || { echo "  backend senza missing_pkgs"; imiss2=1; }
+grep -q "/api/install_missing" gui/server.py     || { echo "  manca endpoint /api/install_missing"; imiss2=1; }
+grep -q '"missing"' gui/server.py                || { echo "  status non conta i mancanti"; imiss2=1; }
+grep -q "function installMissing" gui/index.html || { echo "  GUI senza pulsante installa-mancanti"; imiss2=1; }
+grep -q "/api/install_missing" gui/index.html    || { echo "  GUI non chiama l'endpoint"; imiss2=1; }
+[ "$imiss2" = 0 ] && pass "installazione automatica dei tool mancanti (backend + GUI)" || err "install-missing incompleto"
+
 echo ""
 if [ "$FAIL" = 0 ]; then echo ">>> TUTTI I TEST SUPERATI <<<"; exit 0
 else echo ">>> ALCUNI TEST FALLITI <<<"; exit 1; fi

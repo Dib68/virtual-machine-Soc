@@ -12,3 +12,7 @@ condivisa/*
 !condivisa/CLICCA-QUI.sh
 !condivisa/CLICCA QUI - Avvia tutto.desktop
 !condivisa/LEGGIMI.txt
+
+# Python bytecode
+__pycache__/
+*.pyc

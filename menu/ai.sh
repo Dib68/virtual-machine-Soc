@@ -35,8 +35,12 @@ echo "  Scrivi la tua domanda. Esci con /bye o Ctrl+D."
 echo "============================================================"
 
 # Se l'utente passa una domanda come argomento, risposta singola.
+# Se l'input arriva da una pipe (es. "cat log | ai"), lo legge come domanda.
 if [ "$#" -gt 0 ]; then
   ollama run "$MODEL" "$*"
+elif [ ! -t 0 ]; then
+  DATA="$(cat)"
+  ollama run "$MODEL" "$DATA"
 else
   ollama run "$MODEL"
 fi
