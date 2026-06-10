@@ -163,7 +163,9 @@ grep -q "def ai_ask" gui/server.py && grep -q "history" gui/server.py || { echo 
 grep -q "history:hist" gui/index.html        || { echo "  la GUI non invia la cronologia"; amiss=1; }
 grep -q "function clearChat" gui/index.html  || { echo "  manca il pulsante Pulisci chat"; amiss=1; }
 grep -q "num_ctx 8192" provision/02-ollama.sh || { echo "  contesto AI non ampliato"; amiss=1; }
-[ "$amiss" = 0 ] && pass "AI: memoria conversazionale collegata (backend + GUI)" || err "AI memoria incompleta"
+grep -q "def _ensure_ollama" gui/server.py    || { echo "  AI non si avvia da sola (manca _ensure_ollama)"; amiss=1; }
+grep -q "_ensure_ollama()" gui/server.py      || { echo "  _ensure_ollama non richiamato in ai_stream"; amiss=1; }
+[ "$amiss" = 0 ] && pass "AI: memoria + avvio automatico del servizio (backend + GUI)" || err "AI memoria incompleta"
 
 echo "== 12. AI streaming, persistenza e copia =="
 smiss=0

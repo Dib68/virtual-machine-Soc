@@ -208,6 +208,35 @@ def install_missing_stream():
         yield chunk
     yield "\n== Operazione terminata ==\n"
 
+def _ollama_up():
+    try:
+        urllib.request.urlopen(OLLAMA + "/api/tags", timeout=2)
+        return True
+    except Exception:
+        return False
+
+def _ensure_ollama():
+    # Avvia automaticamente Ollama se non e' attivo (cosi' l'AI parte da sola
+    # appena l'utente scrive). Non blocca a lungo se Ollama non e' installato.
+    if _ollama_up():
+        return True
+    if not shutil.which("ollama"):        # niente da avviare (es. ambiente di test)
+        return False
+    try:
+        subprocess.Popen(
+            ["bash", "-lc",
+             "sudo -n systemctl start ollama 2>/dev/null || "
+             "setsid ollama serve >/tmp/ollama.log 2>&1 </dev/null &"],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except Exception:
+        pass
+    import time as _t
+    for _ in range(20):                   # attende l'avvio (max ~20s)
+        if _ollama_up():
+            return True
+        _t.sleep(1)
+    return False
+
 def _ollama_chat_stream(model, messages, timeout=300):
     # Streaming: Ollama risponde con una riga JSON (NDJSON) per ogni pezzo di testo.
     body = json.dumps({"model": model, "messages": messages, "stream": True}).encode()
@@ -259,6 +288,7 @@ def ai_stream(prompt, history=None, model=None, persona=None):
     if not (prompt or "").strip():
         yield "Scrivi una domanda."
         return
+    _ensure_ollama()                      # avvia l'AI da sola se non e' attiva
     messages = _build_messages(prompt, history, persona)
     last_err = None
     for m in _model_order(model):         # modello scelto, poi i fallback

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.25.0
+- **L'AI si avvia da sola**: quando scrivi qualcosa in chat, se il servizio Ollama
+  non e' attivo viene avviato automaticamente (`systemctl start ollama` o
+  `ollama serve`), senza dover lanciare nulla a mano.
+
 ## 2.24.0
 - **Kali "CyberSec AI OS"**: branding applicato anche alla VM (nome OS, sfondo,
   MOTD e splash Plymouth quando disponibile) tramite `provision/10-branding-kiosk.sh`.

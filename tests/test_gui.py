@@ -139,6 +139,7 @@ httpd = None
 try:
     httpd = socketserver.TCPServer(("127.0.0.1",11434), F)
     threading.Thread(target=httpd.serve_forever, daemon=True).start(); time.sleep(0.4)
+    ck("AI: _ensure_ollama rileva il servizio attivo", srv._ensure_ollama() is True)
     ck("AI proxy risponde", "OK-AI" in srv.ai_ask("ciao"))
     ck("AI streaming a pezzi", "".join(srv.ai_stream("ciao")) == "OK-AI")
     ck("status rileva AI attivo", srv.status()["ai"] is True)
