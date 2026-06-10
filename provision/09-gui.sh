@@ -15,7 +15,9 @@ command -v qterminal >/dev/null 2>&1 || command -v xfce4-terminal >/dev/null 2>&
 mkdir -p /opt/cybersec/gui
 cp -f /vagrant/gui/index.html /vagrant/gui/server.py /vagrant/gui/tools.json /opt/cybersec/gui/
  cp -f /vagrant/gui/favicon.png /opt/cybersec/gui/ 2>/dev/null || true
+cp -f /vagrant/VERSION /opt/cybersec/VERSION 2>/dev/null || true
 install -m 0755 /vagrant/gui/cybergui.sh /usr/local/bin/cybergui
+install -m 0755 /vagrant/gui/cybergui-app.sh /usr/local/bin/cybergui-app 2>/dev/null || true
 
 # Icona sul desktop
 DESK="/home/vagrant/Desktop"; mkdir -p "$DESK"
@@ -25,7 +27,7 @@ Version=1.0
 Type=Application
 Name=CyberSec Control Center
 Comment=GUI moderna con tutti i tool, AI e SOC lab
-Exec=cybergui
+Exec=cybergui-app
 Icon=security-high
 Terminal=false
 Categories=Security;

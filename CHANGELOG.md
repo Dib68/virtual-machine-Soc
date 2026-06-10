@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.24.0
+- **Kali "CyberSec AI OS"**: branding applicato anche alla VM (nome OS, sfondo,
+  MOTD e splash Plymouth quando disponibile) tramite `provision/10-branding-kiosk.sh`.
+- **GUI in finestra app dedicata** (non una scheda di Firefox): nuovo launcher
+  `cybergui-app` che apre il Control Center con Chromium in modalita' `--app`
+  (chromeless), con fallback a Firefox kiosk.
+- **Apertura automatica della GUI al login** (autostart nella finestra dedicata);
+  l'icona sul Desktop usa la finestra app.
+- Il file `VERSION` viene ora installato in `/opt/cybersec/` (l'header mostra la
+  versione corretta invece di "?"). Nuova sezione di test 22.
+
 ## 2.23.0
 - **Fix installazione tool**: "Installa i mancanti" ora installa i pacchetti
   **uno alla volta**, saltando quelli non disponibili via apt (prima un solo nome

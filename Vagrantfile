@@ -44,6 +44,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "utils",     type: "shell", path: "provision/08-utils.sh",          privileged: true
   config.vm.provision "gui",       type: "shell", path: "provision/09-gui.sh",            privileged: true
   config.vm.provision "menu",      type: "shell", path: "provision/03-menu.sh",           privileged: true
+  config.vm.provision "branding",  type: "shell", path: "provision/10-branding-kiosk.sh", privileged: true
 
   config.vm.post_up_message = <<-MSG
 

@@ -271,6 +271,20 @@ grep -q "function loadSocStatus" gui/index.html || { echo "  GUI non mostra lo s
 grep -q "socst-" gui/index.html                || { echo "  manca il badge di stato SOC"; omiss=1; }
 [ "$omiss" = 0 ] && pass "stato dei lab SOC (backend + GUI)" || err "stato SOC incompleto"
 
+echo "== 22. Branding custom + GUI in finestra app (kiosk) =="
+kmiss=0
+[ -f gui/cybergui-app.sh ]                          || { echo "  manca il launcher finestra-app"; kmiss=1; }
+grep -q -- '--app=' gui/cybergui-app.sh             || { echo "  cybergui-app non usa la modalita' app"; kmiss=1; }
+grep -q "chromium" gui/cybergui-app.sh              || { echo "  cybergui-app senza Chromium"; kmiss=1; }
+[ -f provision/10-branding-kiosk.sh ]               || { echo "  manca lo script di branding/kiosk"; kmiss=1; }
+grep -q "CyberSec AI OS" provision/10-branding-kiosk.sh || { echo "  branding senza nome OS"; kmiss=1; }
+grep -q "cybergui-app" provision/10-branding-kiosk.sh && grep -q "autostart" provision/10-branding-kiosk.sh || { echo "  manca l'autostart della GUI"; kmiss=1; }
+grep -q "10-branding-kiosk.sh" Vagrantfile          || { echo "  branding non nel Vagrantfile"; kmiss=1; }
+grep -q "cybergui-app" setup-inside-vm.sh           || { echo "  cybergui-app non installato da setup-inside-vm"; kmiss=1; }
+bash -n gui/cybergui-app.sh 2>/dev/null             || { echo "  cybergui-app: sintassi"; kmiss=1; }
+bash -n provision/10-branding-kiosk.sh 2>/dev/null  || { echo "  10-branding-kiosk: sintassi"; kmiss=1; }
+[ "$kmiss" = 0 ] && pass "branding custom + GUI in finestra app + autostart" || err "branding/kiosk incompleto"
+
 echo ""
 if [ "$FAIL" = 0 ]; then echo ">>> TUTTI I TEST SUPERATI <<<"; exit 0
 else echo ">>> ALCUNI TEST FALLITI <<<"; exit 1; fi

@@ -23,7 +23,9 @@ install -m 0755 "$SRC/menu/cybermenu.sh" /usr/local/bin/cybermenu 2>/dev/null ||
 install -m 0755 "$SRC/menu/ai.sh"        /usr/local/bin/ai        2>/dev/null || true
 # comandi opzionali (se presenti nel progetto)
 [ -f "$SRC/soc-lab/soclab.sh" ] && { cp -rf "$SRC"/soc-lab/* /opt/cybersec/soc-lab/ 2>/dev/null; install -m 0755 "$SRC/soc-lab/soclab.sh" /usr/local/bin/soclab; }
-[ -d "$SRC/gui" ] && { cp -f "$SRC"/gui/index.html "$SRC"/gui/server.py "$SRC"/gui/tools.json /opt/cybersec/gui/ 2>/dev/null; install -m 0755 "$SRC/gui/cybergui.sh" /usr/local/bin/cybergui 2>/dev/null || true; }
+[ -d "$SRC/gui" ] && { cp -f "$SRC"/gui/index.html "$SRC"/gui/server.py "$SRC"/gui/tools.json /opt/cybersec/gui/ 2>/dev/null; install -m 0755 "$SRC/gui/cybergui.sh" /usr/local/bin/cybergui 2>/dev/null || true; install -m 0755 "$SRC/gui/cybergui-app.sh" /usr/local/bin/cybergui-app 2>/dev/null || true; }
+# Copia il file VERSION (la GUI lo mostra nell'header)
+[ -f "$SRC/VERSION" ] && cp -f "$SRC/VERSION" /opt/cybersec/VERSION 2>/dev/null || true
 for u in cyberdoctor ai-explain cyberreport cyberupdate cyberhelp; do
   [ -f "$SRC/tools/$u.sh" ] && install -m 0755 "$SRC/tools/$u.sh" "/usr/local/bin/$u" 2>/dev/null || true
 done
@@ -62,9 +64,15 @@ EOF
 chmod +x "$USER_HOME/Desktop/CyberSec-Menu.desktop"
 chown -R "$OWNER":"$OWNER" "$USER_HOME/Desktop" 2>/dev/null || true
 
+# Branding "CyberSec AI OS" + apertura automatica della GUI in finestra dedicata
+if [ -f "$SRC/provision/10-branding-kiosk.sh" ]; then
+  echo "==> Applico branding e apertura automatica della GUI..."
+  SUDO_USER="$OWNER" bash "$SRC/provision/10-branding-kiosk.sh" || true
+fi
+
 echo ""
 echo "============================================================"
 echo " FATTO!"
-echo " - Ora puoi digitare:  cybermenu"
-echo " - Al PROSSIMO avvio della VM il menu si aprira' da solo."
+echo " - Ora puoi digitare:  cybermenu   |   GUI:  cybergui-app"
+echo " - Al PROSSIMO avvio la GUI si aprira' da sola in finestra dedicata."
 echo "============================================================"
