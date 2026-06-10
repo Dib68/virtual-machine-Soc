@@ -60,6 +60,9 @@ ck("tool non installato gestito", (not ok2) and "non installato" in msg2)
 # soclab validazione
 ok3,_ = srv.soclab("targets","up"); ck("soclab valido accettato", ok3)
 ok4,m4 = srv.soclab("hacker","boom"); ck("soclab non valido rifiutato", (not ok4))
+# stato degli stack SOC
+_ss = srv.soclab_status()
+ck("soclab_status elenca tutti gli stack", set(_ss.keys()) == srv.SOCK and all(isinstance(v, bool) for v in _ss.values()))
 # install on-demand
 srv.TOOLS["needinst"] = {"bin":"needinst","name":"X","desc":"y","cmd":"needinst","tut":"nmap","term":True,"pkg":"needinst-pkg"}
 oi,mi = srv.install("needinst")

@@ -101,6 +101,10 @@ st_ok, xcto = head_status("127.0.0.1:%d" % port)
 ck("Host locale accettato (200)", st_ok == 200)
 ck("header anti-sniffing presente", xcto == "nosniff")
 
+# 8) stato degli stack SOC via HTTP
+ssj = json.loads(urllib.request.urlopen(BASE + "/api/soclab_status", timeout=5).read())
+ck("/api/soclab_status elenca gli stack", isinstance(ssj, dict) and len(ssj) >= 5)
+
 httpd.shutdown(); fake.shutdown()
 passed = sum(1 for _, c in P if c); total = len(P)
 print("\n=== STREAM: %d/%d test superati ===" % (passed, total))

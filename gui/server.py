@@ -121,6 +121,21 @@ def soclab(stack, action):
     except Exception as ex:
         return False, str(ex)
 
+def soclab_status():
+    # Quali stack SOC risultano attivi (in base ai container Docker in esecuzione).
+    running = {s: False for s in SOCK}
+    if not shutil.which("docker"):
+        return running
+    try:
+        out = subprocess.run(["bash", "-lc", "docker ps --format '{{.Names}}'"],
+                             capture_output=True, text=True, timeout=5).stdout.lower()
+    except Exception:
+        return running
+    for s in SOCK:
+        if s.lower() in out:
+            running[s] = True
+    return running
+
 def install(binname):
     t = TOOLS.get(binname)
     if not t:
@@ -321,6 +336,8 @@ class H(http.server.BaseHTTPRequestHandler):
                               json.dumps(DATA).encode())
         if u.path == "/api/status":
             return self._send(200, "application/json", json.dumps(status()).encode())
+        if u.path == "/api/soclab_status":
+            return self._send(200, "application/json", json.dumps(soclab_status()).encode())
         if u.path == "/api/health":
             ai_ok, models = ai_models()
             return self._send(200, "application/json",

@@ -302,10 +302,10 @@ function render(){const v=document.getElementById('view'),T=document.getElementB
   if(CUR==='soc'){T.textContent='SOC Lab — SIEM & bersagli';
     v.innerHTML='<div class="note">Avvia/ferma gli stack (serve Docker). Al primo avvio scaricano le immagini: ci vuole tempo.</div><div class="grid">'+
       DATA.soclab.map(s=>`<div class="card"><div class="ch"><div class="ic" style="background:#2aa77a">${s.name[0]}</div>
-        <div class="nm" title="${s.name}">${s.name}</div></div><div class="ds">${s.desc}</div>
+        <div class="nm" title="${s.name}">${s.name}</div><span id="socst-${s.id}" class="st ${SOCST[s.id]?'ok':'no'}">${SOCST[s.id]?'attivo':'spento'}</span></div><div class="ds">${s.desc}</div>
         <div class="row"><button class="btn go" onclick="soc('${s.id}','up')">Avvia</button>
         <button class="btn" onclick="soc('${s.id}','down')">Ferma</button>
-        <button class="btn ai" onclick="openLink('${s.url}')">Apri</button></div></div>`).join('')+'</div>';return;}
+        <button class="btn ai" onclick="openLink('${s.url}')">Apri</button></div></div>`).join('')+'</div>';loadSocStatus();return;}
   if(CUR==='ai'){T.textContent='Assistente AI';
     v.innerHTML='<div style="height:100%;display:flex;flex-direction:column">'+
       '<div class="airow">'+
@@ -427,8 +427,13 @@ async function installTool(bin){toast('Installazione di '+bin+'... (apri il term
   const r=await (await fetch('/api/install?bin='+encodeURIComponent(bin))).json();
   toast(r.ok?('Installazione avviata: '+bin):('Errore: '+r.msg));
   setTimeout(async()=>{try{ST=await (await fetch('/api/status')).json();render();pills();}catch(e){}},20000);}
+let SOCST={};
+async function loadSocStatus(){try{SOCST=await (await fetch('/api/soclab_status')).json();}catch(e){return;}
+  (DATA.soclab||[]).forEach(s=>{const el=document.getElementById('socst-'+s.id);
+    if(el){el.className='st '+(SOCST[s.id]?'ok':'no');el.textContent=SOCST[s.id]?'attivo':'spento';}});}
 async function soc(id,act){toast('Eseguo '+id+' '+act+'...');
-  const r=await (await fetch('/api/soclab',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({stack:id,action:act})})).json();toast(r.msg);}
+  const r=await (await fetch('/api/soclab',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({stack:id,action:act})})).json();toast(r.msg);
+  setTimeout(loadSocStatus,8000);}
 async function showTut(name,title){document.getElementById('ovt').textContent='Guida: '+(title||name);
   const t=await (await fetch('/api/tutorial?name='+encodeURIComponent(name))).text();
   document.getElementById('ovc').innerHTML=md(t);document.getElementById('ov').classList.add('show');}

@@ -261,6 +261,14 @@ grep -q "e.key==='?'" gui/index.html            || { echo "  manca la scorciatoi
 grep -q "cyberhelp" provision/08-utils.sh && grep -q "cyberhelp" setup-inside-vm.sh || { echo "  cyberhelp non installato dal provisioning"; hmiss=1; }
 [ "$hmiss" = 0 ] && pass "evidenziazione ricca + aiuto + cyberhelp" || err "extra UX/cyberhelp incompleti"
 
+echo "== 21. Stato dei lab SOC nella GUI =="
+omiss=0
+grep -q "def soclab_status" gui/server.py     || { echo "  backend senza soclab_status"; omiss=1; }
+grep -q "/api/soclab_status" gui/server.py     || { echo "  manca endpoint /api/soclab_status"; omiss=1; }
+grep -q "function loadSocStatus" gui/index.html || { echo "  GUI non mostra lo stato SOC"; omiss=1; }
+grep -q "socst-" gui/index.html                || { echo "  manca il badge di stato SOC"; omiss=1; }
+[ "$omiss" = 0 ] && pass "stato dei lab SOC (backend + GUI)" || err "stato SOC incompleto"
+
 echo ""
 if [ "$FAIL" = 0 ]; then echo ">>> TUTTI I TEST SUPERATI <<<"; exit 0
 else echo ">>> ALCUNI TEST FALLITI <<<"; exit 1; fi

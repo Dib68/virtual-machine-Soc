@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.21.0
+- **Stato dei lab SOC nella GUI**: ogni stack mostra un badge "attivo/spento" in
+  base ai container Docker in esecuzione (endpoint `/api/soclab_status`),
+  aggiornato dopo avvio/arresto.
+- Nuovi test backend e d'integrazione + sezione 21.
+
 ## 2.20.0
 - **Evidenziazione sintassi piu' ricca** nei blocchi di comando: oltre a commenti
   e flag, ora colora anche stringhe tra apici e indirizzi IP/CIDR.
