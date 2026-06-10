@@ -107,7 +107,7 @@ ck("install_missing_stream: nulla da fare", "gia'" in "".join(srv.install_missin
 srv.missing_pkgs = _om
 
 # AI: senza servizio -> messaggio gestito
-ck("AI senza servizio gestita", "non disponibile" in srv.ai_ask("ciao").lower())
+ck("AI senza servizio gestita", "ollama" in srv.ai_ask("ciao").lower())
 ck("AI prompt vuoto gestito", "domanda" in srv.ai_ask("   ").lower())
 # Costruzione messaggi: cronologia + domanda, segnaposto "..." e ruoli ignoti scartati
 _m = srv._build_messages("e poi?", [

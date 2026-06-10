@@ -301,8 +301,14 @@ def ai_stream(prompt, history=None, model=None, persona=None):
                 return
         except Exception as ex:
             last_err = ex
-    yield ("AI non disponibile. Avvia il servizio: sudo systemctl start ollama"
-           + (f"\n({last_err})" if last_err else ""))
+    if not shutil.which("ollama"):
+        yield ("L'AI (Ollama) non e' installata in questa VM.\n"
+               "Installala con questo comando in un terminale:\n"
+               "  sudo bash /vagrant/provision/02-ollama.sh\n"
+               "Scarica il modello AI: serve internet e qualche minuto.")
+    else:
+        yield ("AI non disponibile. Avvia il servizio: sudo systemctl start ollama"
+               + (f"\n({last_err})" if last_err else ""))
 
 def ai_ask(prompt, history=None, model=None, persona=None):
     """Versione non-streaming: raccoglie tutta la risposta in una stringa."""

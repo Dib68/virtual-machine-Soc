@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.32.0
+- **Login senza sovrapposizioni**: il blocco "CyberSec AI OS" e' stato spostato in
+  alto e centrato nel wallpaper, cosi' il riquadro delle credenziali (al centro)
+  non lo copre piu'.
+- **Messaggio AI piu' chiaro**: se Ollama non e' installato, la chat lo segnala e
+  indica il comando per installarlo (`sudo bash /vagrant/provision/02-ollama.sh`).
+
 ## 2.31.0
 - **Branding centrato**: il blocco "CyberSec AI OS" del wallpaper (visibile anche
   nella schermata di login) ora e' perfettamente centrato. Il testo prima partiva
