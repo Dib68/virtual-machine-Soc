@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# cyberhelp - elenco rapido dei comandi della CyberSec AI VM
+GREEN="\e[32m"; BOLD="\e[1m"; NC="\e[0m"
+echo -e "${BOLD}============================================================${NC}"
+echo -e "${BOLD}  CyberSec AI VM - comandi disponibili${NC}"
+echo -e "${BOLD}============================================================${NC}"
+row(){ printf "  ${GREEN}%-14s${NC} %s\n" "$1" "$2"; }
+echo "-- Interfacce --"
+row "cybermenu"  "menu interattivo (tool, tutorial, scenari, SOC lab)"
+row "cybergui"   "GUI Control Center nel browser (http://127.0.0.1:8910)"
+echo "-- Assistente AI --"
+row "ai"         "chat con l'AI di sicurezza (anche: cat file | ai)"
+row "ai-explain" "spiega un file o l'output di un comando"
+echo "-- Diagnostica & manutenzione --"
+row "cyberdoctor" "stato della VM (tool, AI, docker, rete, disco, GUI)"
+row "cyberupdate" "aggiorna sistema, database e modelli AI"
+row "cyberreport" "crea un report (pentest | ir | web)"
+echo "-- Laboratorio --"
+row "soclab"     "avvia/ferma gli stack SOC (splunk, elk, wazuh, misp, thehive...)"
+echo "-- Aiuto --"
+row "cyberhelp"  "mostra questo elenco"
+echo -e "${BOLD}============================================================${NC}"
+echo "Suggerimento: nella GUI premi '?' per le scorciatoie."

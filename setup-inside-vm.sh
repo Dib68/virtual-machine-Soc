@@ -24,7 +24,7 @@ install -m 0755 "$SRC/menu/ai.sh"        /usr/local/bin/ai        2>/dev/null ||
 # comandi opzionali (se presenti nel progetto)
 [ -f "$SRC/soc-lab/soclab.sh" ] && { cp -rf "$SRC"/soc-lab/* /opt/cybersec/soc-lab/ 2>/dev/null; install -m 0755 "$SRC/soc-lab/soclab.sh" /usr/local/bin/soclab; }
 [ -d "$SRC/gui" ] && { cp -f "$SRC"/gui/index.html "$SRC"/gui/server.py "$SRC"/gui/tools.json /opt/cybersec/gui/ 2>/dev/null; install -m 0755 "$SRC/gui/cybergui.sh" /usr/local/bin/cybergui 2>/dev/null || true; }
-for u in cyberdoctor ai-explain cyberreport cyberupdate; do
+for u in cyberdoctor ai-explain cyberreport cyberupdate cyberhelp; do
   [ -f "$SRC/tools/$u.sh" ] && install -m 0755 "$SRC/tools/$u.sh" "/usr/local/bin/$u" 2>/dev/null || true
 done
 

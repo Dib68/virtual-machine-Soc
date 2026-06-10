@@ -107,7 +107,7 @@
   .m.a pre{background:#0a1124;border:1px solid var(--line);border-radius:9px;padding:10px;overflow:auto;font-size:12px;color:#bdf;margin:0}
   .m.a p{margin:4px 0}.m.a h1{font-size:15px;margin:6px 0}.m.a h2{font-size:14px;margin:6px 0;color:var(--acc2)}
   /* evidenziazione sintassi nei blocchi di codice */
-  .c-com{color:#6b7a99;font-style:italic}.c-flag{color:#ffd479}.c-str{color:#7fe3b0}
+  .c-com{color:#6b7a99;font-style:italic}.c-flag{color:#ffd479}.c-str{color:#7fe3b0}.c-num{color:#e3a0ff}
   /* barra superiore della chat AI: modello, chip rapide, export */
   .airow{display:flex;gap:8px;align-items:center;flex:none;flex-wrap:wrap;margin-bottom:10px}
   .airow select{height:34px;background:var(--bg2);border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:0 8px;outline:none;cursor:pointer}
@@ -149,6 +149,7 @@
       <button class="mtoggle" id="mtoggle" aria-label="Menu">&#9776;</button>
       <div class="ttl" id="title">Dashboard</div>
       <div class="search"><input id="q" placeholder="Cerca uno strumento..."></div>
+      <button class="pill" onclick="showHelp()" title="Scorciatoie e aiuto (?)" aria-label="Aiuto">?</button>
       <button id="theme" class="pill" onclick="toggleTheme()" aria-label="Cambia tema">Tema</button>
       <div class="pills">
         <span class="pill"><span class="pdot" id="aiDot"></span>AI</span>
@@ -432,6 +433,24 @@ async function showTut(name,title){document.getElementById('ovt').textContent='G
   const t=await (await fetch('/api/tutorial?name='+encodeURIComponent(name))).text();
   document.getElementById('ovc').innerHTML=md(t);document.getElementById('ov').classList.add('show');}
 function closeOv(){document.getElementById('ov').classList.remove('show');}
+/* pannello aiuto e scorciatoie */
+function showHelp(){document.getElementById('ovt').textContent='Scorciatoie e aiuto';
+  document.getElementById('ovc').innerHTML=
+    '<h2>Scorciatoie da tastiera</h2>'+
+    '<p><b>/</b> &mdash; vai alla ricerca strumenti</p>'+
+    '<p><b>?</b> &mdash; apri questo aiuto</p>'+
+    '<p><b>Esc</b> &mdash; chiudi finestre e menu</p>'+
+    '<p><b>Invio</b> &mdash; invia la domanda all\'AI</p>'+
+    '<h2>Assistente AI</h2>'+
+    '<p>Ricorda la conversazione, gestisci piu\' chat, scegli modello e modalita\' '+
+    '(Red/Blue Team), rigenera, esporta, cerca nei messaggi e analizza l\'output di un comando.</p>'+
+    '<h2>Strumenti</h2>'+
+    '<p>Avvia, apri la guida, chiedi all\'AI, copia il comando o aggiungi ai preferiti '+
+    'con la stella. Usa &laquo;Installa i mancanti&raquo; per completare la VM con un clic.</p>'+
+    '<h2>Comandi nel terminale</h2>'+
+    '<p><b>cybermenu</b>, <b>cybergui</b>, <b>ai</b>, <b>ai-explain</b>, <b>cyberdoctor</b>, '+
+    '<b>cyberreport</b>, <b>cyberupdate</b>, <b>soclab</b>, <b>cyberhelp</b>.</p>';
+  document.getElementById('ov').classList.add('show');}
 function md(s){const L=(s||'').split('\n');let h='',c=false;
   const OPEN='<div class="codewrap"><button class="copy" onclick="copyCode(this)">Copia</button><pre>',CLOSE='</pre></div>';
   for(const l of L){if(l.startsWith('```')){h+=c?CLOSE:OPEN;c=!c;continue;}
@@ -450,7 +469,10 @@ function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replac
 /* evidenziazione leggera per i comandi (input gia' HTML-escaped) */
 function hl(line){
   if(/^\s*#/.test(line))return '<span class="c-com">'+line+'</span>';
-  return line.replace(/(^|\s)(--?[a-zA-Z][\w-]*)/g,'$1<span class="c-flag">$2</span>');}
+  line=line.replace(/("[^"]*"|'[^']*')/g,'<span class="c-str">$1</span>');           // stringhe
+  line=line.replace(/(^|\s)(--?[a-zA-Z][\w-]*)/g,'$1<span class="c-flag">$2</span>'); // flag/opzioni
+  line=line.replace(/\b(\d{1,3}(?:\.\d{1,3}){3}(?:\/\d{1,2})?)\b/g,'<span class="c-num">$1</span>'); // IP/CIDR
+  return line;}
 function openLink(u){window.open(u,'_blank');}
 let tt;function toast(m){const e=document.getElementById('toast');e.textContent=m;e.style.opacity='1';clearTimeout(tt);tt=setTimeout(()=>e.style.opacity='0',2500);}
 function closeSide(){document.getElementById('side').classList.remove('open');document.getElementById('scrim').classList.remove('show');}
@@ -476,9 +498,10 @@ function applyTheme(t){document.body.classList.toggle('light', t==='light');
 function toggleTheme(){applyTheme(document.body.classList.contains('light')?'dark':'light');}
 /* scorciatoie da tastiera: Esc chiude, "/" mette a fuoco la ricerca */
 document.addEventListener('keydown',e=>{
+  const inField=/^(INPUT|TEXTAREA|SELECT)$/.test((e.target&&e.target.tagName)||'');
   if(e.key==='Escape'){closeOv();closeSide();}
-  else if(e.key==='/'&&!/^(INPUT|TEXTAREA|SELECT)$/.test((e.target&&e.target.tagName)||'')){
-    const q=document.getElementById('q');if(q){e.preventDefault();q.focus();}}});
+  else if(e.key==='/'&&!inField){const q=document.getElementById('q');if(q){e.preventDefault();q.focus();}}
+  else if(e.key==='?'&&!inField){e.preventDefault();showHelp();}});
 try{applyTheme(localStorage.getItem('cybertheme')||'dark');}catch(e){applyTheme('dark');}
 loadChat();
 boot();

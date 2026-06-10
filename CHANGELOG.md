@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.20.0
+- **Evidenziazione sintassi piu' ricca** nei blocchi di comando: oltre a commenti
+  e flag, ora colora anche stringhe tra apici e indirizzi IP/CIDR.
+- **Pannello "Scorciatoie e aiuto"** nella GUI (pulsante "?" o tasto `?`).
+- Nuovo comando **`cyberhelp`**: elenca tutti i comandi della VM con descrizione;
+  installato dal provisioning e da setup-inside-vm.
+- Test piu' robusti: i controlli sugli script temporanei usano la data di
+  modifica (eliminata una possibile flakiness della CI). Nuova sezione 20.
+
 ## 2.19.0
 - **Sicurezza GUI**: difesa da **DNS-rebinding** (accetta solo richieste con Host
   locale, qualsiasi porta -> altrimenti 403) e header **X-Content-Type-Options:

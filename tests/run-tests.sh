@@ -252,6 +252,15 @@ grep -q "MAX_PROMPT" gui/server.py             || { echo "  backend senza limite
 grep -q "MAX_BODY" gui/server.py               || { echo "  backend senza limite corpo richiesta"; fmiss=1; }
 [ "$fmiss" = 0 ] && pass "preferiti + analizza output + hardening input" || err "preferiti/hardening incompleti"
 
+echo "== 20. Evidenziazione ricca, aiuto e comando cyberhelp =="
+hmiss=0
+grep -q "c-num" gui/index.html                 || { echo "  evidenziazione IP/numeri assente"; hmiss=1; }
+grep -q "function showHelp" gui/index.html      || { echo "  manca il pannello aiuto"; hmiss=1; }
+grep -q "e.key==='?'" gui/index.html            || { echo "  manca la scorciatoia '?'"; hmiss=1; }
+[ -f tools/cyberhelp.sh ]                       || { echo "  manca lo script cyberhelp"; hmiss=1; }
+grep -q "cyberhelp" provision/08-utils.sh && grep -q "cyberhelp" setup-inside-vm.sh || { echo "  cyberhelp non installato dal provisioning"; hmiss=1; }
+[ "$hmiss" = 0 ] && pass "evidenziazione ricca + aiuto + cyberhelp" || err "extra UX/cyberhelp incompleti"
+
 echo ""
 if [ "$FAIL" = 0 ]; then echo ">>> TUTTI I TEST SUPERATI <<<"; exit 0
 else echo ">>> ALCUNI TEST FALLITI <<<"; exit 1; fi

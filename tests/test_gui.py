@@ -52,7 +52,7 @@ ok,_ = srv.launch("faketool"); time.sleep(1)
 log = open(termlog).read()
 ck("launch term: ritorna ok", ok)
 ck("launch term: apre il terminale", "QTERM" in log)
-scr = sorted(glob.glob(os.path.join(TMP, "cyberrun_*.sh")))
+scr = sorted(glob.glob(os.path.join(TMP, "cyberrun_*.sh")), key=os.path.getmtime)
 ck("launch term: crea script", bool(scr) and "faketool" in open(scr[-1]).read())
 # launch tool non installato
 ok2,msg2 = srv.launch("nmap")
@@ -64,7 +64,7 @@ ok4,m4 = srv.soclab("hacker","boom"); ck("soclab non valido rifiutato", (not ok4
 srv.TOOLS["needinst"] = {"bin":"needinst","name":"X","desc":"y","cmd":"needinst","tut":"nmap","term":True,"pkg":"needinst-pkg"}
 oi,mi = srv.install("needinst")
 import glob as _g, time as _t; _t.sleep(0.5)
-scr2 = sorted(_g.glob(os.path.join(TMP, "install_*.sh")))
+scr2 = sorted(_g.glob(os.path.join(TMP, "install_*.sh")), key=os.path.getmtime)
 ck("install: ritorna ok", oi)
 ck("install: crea script apt", bool(scr2) and "apt-get install" in open(scr2[-1]).read())
 srv.TOOLS["nopkg"] = {"bin":"nopkg","name":"Z","desc":"y","cmd":"nopkg","tut":"nmap","term":True,"pkg":""}
@@ -78,7 +78,7 @@ srv.TOOLS["bulk2"] = {"bin":"bulk2","name":"B2","desc":"y","cmd":"bulk2","tut":"
 mp = srv.missing_pkgs()
 ck("missing_pkgs: raccoglie e deduplica", "pkg-uno" in mp and "pkg-due" in mp and mp.count("pkg-uno")==1)
 okb, nb, _ = srv.install_missing(); _t.sleep(0.5)
-scr3 = sorted(_g.glob(os.path.join(TMP, "install_*.sh")))
+scr3 = sorted(_g.glob(os.path.join(TMP, "install_*.sh")), key=os.path.getmtime)
 ck("install_missing: avvia un solo apt", okb and nb>0 and "apt-get install" in open(scr3[-1]).read()
    and "pkg-uno" in open(scr3[-1]).read())
 ck("status conta i pacchetti mancanti", "missing" in st and isinstance(st["missing"], int))
