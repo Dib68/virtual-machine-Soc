@@ -165,27 +165,36 @@ def missing_pkgs():
                 seen.add(p); out.append(p)
     return out
 
+def _apt_loop_cmd(pkgs, sudo="sudo"):
+    # Installa i pacchetti UNO ALLA VOLTA: se un nome non esiste viene SALTATO,
+    # senza far fallire l'intera operazione (apt si fermerebbe al primo errore).
+    plist = " ".join(pkgs)
+    return (
+        "%s apt-get update; ok=0; ko=0; "
+        "for p in %s; do echo \"== installo $p ==\"; "
+        "if %s apt-get install -y \"$p\"; then ok=$((ok+1)); "
+        "else echo \"   [salto] $p: non disponibile via apt\"; ko=$((ko+1)); fi; done; "
+        "echo; echo \"Completato: $ok installati, $ko saltati. "
+        "I tool non-apt (es. volatility3, nuclei) si installano con COMPLETA-INSTALLAZIONE.\""
+    ) % (sudo, plist, sudo)
+
 def install_missing():
-    # Installa in un colpo solo tutti i pacchetti apt mancanti.
+    # Installa i pacchetti apt mancanti (uno alla volta) in un terminale.
     pkgs = missing_pkgs()
     if not pkgs:
         return False, 0, "tutti gli strumenti con pacchetto apt sono gia' installati"
-    cmd = ("echo 'Installo %d pacchetti mancanti (puo' richiedere tempo)...'; "
-           "sudo apt-get update; sudo apt-get install -y %s; echo; "
-           "echo 'Fatto. Alcuni tool (es. nuclei, ollama) si installano con "
-           "COMPLETA-INSTALLAZIONE.'") % (len(pkgs), " ".join(pkgs))
     try:
-        _run_in_terminal(cmd, tag="install")
+        _run_in_terminal(_apt_loop_cmd(pkgs, "sudo"), tag="install")
         return True, len(pkgs), "installazione di %d pacchetti avviata" % len(pkgs)
     except Exception as ex:
         return False, 0, str(ex)
 
 def install_stream_cmd():
-    # Comando per installare i pacchetti mancanti (sudo non interattivo).
+    # Comando per installare i pacchetti mancanti (sudo non interattivo, in streaming).
     pkgs = missing_pkgs()
     if not pkgs:
         return None
-    return ("sudo -n apt-get update && sudo -n apt-get install -y " + " ".join(pkgs))
+    return _apt_loop_cmd(pkgs, "sudo -n")
 
 def install_missing_stream():
     # Installa i pacchetti mancanti mostrando l'output in tempo reale.

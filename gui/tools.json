@@ -252,7 +252,7 @@
           "cmd": "kerbrute",
           "tut": "kerbrute",
           "term": true,
-          "pkg": "kerbrute"
+          "pkg": ""
         }
       ]
     },
@@ -329,7 +329,7 @@
           "cmd": "vol",
           "tut": "volatility",
           "term": true,
-          "pkg": "volatility3"
+          "pkg": ""
         }
       ]
     },
@@ -372,7 +372,7 @@
           "cmd": "ROPgadget",
           "tut": "ropgadget",
           "term": true,
-          "pkg": "ropgadget"
+          "pkg": ""
         }
       ]
     },
@@ -415,7 +415,7 @@
           "cmd": "osqueryi",
           "tut": "osquery",
           "term": true,
-          "pkg": "osquery"
+          "pkg": ""
         },
         {
           "bin": "velociraptor",

@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.23.0
+- **Fix installazione tool**: "Installa i mancanti" ora installa i pacchetti
+  **uno alla volta**, saltando quelli non disponibili via apt (prima un solo nome
+  inesistente faceva fallire l'intero blocco senza installare nulla). Riepilogo
+  finale con installati/saltati.
+- Corretti i metadati: `volatility3`, `kerbrute`, `ROPgadget`, `osquery` non sono
+  pacchetti apt (si installano via pip/go/repo dal provisioning) e non vengono
+  piu' tentati con apt.
+
 ## 2.22.0
 - Il comando **`ai` accetta le opzioni `--model` e `--persona`** (Red/Blue Team,
   "spiega semplice"), in parita' con la GUI; `ai --help` mostra l'uso.
