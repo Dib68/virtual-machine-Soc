@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.30.0
+- **Schermata di login personalizzata**: il greeter di lightdm usa il tuo sfondo e
+  il tuo logo come avatar; niente piu' branding Kali alla richiesta di
+  username/password.
+- **Menu GRUB brandizzato**: `GRUB_DISTRIBUTOR="CyberSec AI OS"`.
+
 ## 2.29.0
 - **Splash di avvio con il tuo logo**: lo splash Plymouth "CyberSec AI OS" ora viene
   effettivamente mostrato al boot (abilitato `splash` nella cmdline GRUB +

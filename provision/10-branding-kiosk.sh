@@ -116,6 +116,12 @@ if [ -d "$PLY" ]; then
         echo 'GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"' >> /etc/default/grub
       fi
       grep -q '^GRUB_GFXPAYLOAD_LINUX=' /etc/default/grub || echo 'GRUB_GFXPAYLOAD_LINUX=keep' >> /etc/default/grub
+      # Nome nel menu GRUB: "CyberSec AI OS" invece di Kali
+      if grep -q '^GRUB_DISTRIBUTOR=' /etc/default/grub; then
+        sed -i 's/^GRUB_DISTRIBUTOR=.*/GRUB_DISTRIBUTOR="CyberSec AI OS"/' /etc/default/grub
+      else
+        echo 'GRUB_DISTRIBUTOR="CyberSec AI OS"' >> /etc/default/grub
+      fi
       command -v update-grub >/dev/null 2>&1 && update-grub >/dev/null 2>&1 || true
     fi
     # Imposta il tema e rigenera l'initramfs (-R) cosi' il logo appare al boot
@@ -124,4 +130,21 @@ if [ -d "$PLY" ]; then
   fi
 fi
 
-echo "==> Fatto. Al prossimo avvio: splash con il tuo logo + GUI in finestra dedicata."
+# Schermata di LOGIN (lightdm-gtk-greeter) col tuo sfondo e logo
+echo "==> Schermata di login personalizzata..."
+GCONF="/etc/lightdm/lightdm-gtk-greeter.conf"
+if [ -d /etc/lightdm ]; then
+  WPG="/usr/share/backgrounds/cybersec-wallpaper.png"
+  LOGO="/usr/share/pixmaps/cybersec.png"
+  [ -f "$WPG" ] || WPG="$BR/wallpaper.png"
+  [ -f "$GCONF" ] && cp -n "$GCONF" "$GCONF.bak" 2>/dev/null || true
+  cat > "$GCONF" <<EOF
+[greeter]
+background = $WPG
+default-user-image = $LOGO
+hide-user-image = false
+position = 50%,center 55%,center
+EOF
+fi
+
+echo "==> Fatto. Avvio totalmente brandizzato: GRUB + splash + login + desktop + GUI."

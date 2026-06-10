@@ -285,6 +285,8 @@ grep -q "cybergui.service" provision/10-branding-kiosk.sh && grep -q "systemctl 
 grep -q "pixmaps/cybersec.png" provision/10-branding-kiosk.sh || { echo "  logo non usato come icona"; kmiss=1; }
 grep -q "Avvio dell" gui/index.html || { echo "  manca il feedback 'AI in avvio'"; kmiss=1; }
 grep -q "plymouth-set-default-theme" provision/10-branding-kiosk.sh && grep -q "update-grub" provision/10-branding-kiosk.sh && grep -q "splash" provision/10-branding-kiosk.sh || { echo "  splash di boot (Plymouth/GRUB) non configurato"; kmiss=1; }
+grep -q "lightdm-gtk-greeter.conf" provision/10-branding-kiosk.sh || { echo "  schermata di login non personalizzata"; kmiss=1; }
+grep -q "GRUB_DISTRIBUTOR" provision/10-branding-kiosk.sh || { echo "  menu GRUB non brandizzato"; kmiss=1; }
 grep -q "10-branding-kiosk.sh" Vagrantfile          || { echo "  branding non nel Vagrantfile"; kmiss=1; }
 grep -q "cybergui-app" setup-inside-vm.sh           || { echo "  cybergui-app non installato da setup-inside-vm"; kmiss=1; }
 bash -n gui/cybergui-app.sh 2>/dev/null             || { echo "  cybergui-app: sintassi"; kmiss=1; }
