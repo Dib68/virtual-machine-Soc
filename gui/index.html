@@ -76,7 +76,12 @@
   /* chat */
   .chat{display:flex;flex-direction:column;height:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
   .msgs{flex:1;overflow-y:auto;min-height:0;padding:16px;display:flex;flex-direction:column;gap:11px}
-  .m{max-width:82%;padding:10px 13px;border-radius:13px;font-size:13.5px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+  .m{position:relative;max-width:82%;padding:10px 13px;border-radius:13px;font-size:13.5px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+  .m mark{background:#ffd479;color:#1a1a1a;border-radius:3px;padding:0 1px}
+  .msgcopy{position:absolute;top:4px;right:4px;background:var(--bg2);border:1px solid var(--line);color:var(--txt);
+    font-size:11px;padding:1px 6px;border-radius:6px;cursor:pointer;opacity:0;transition:opacity .15s}
+  .m.a:hover .msgcopy{opacity:.85}
+  .chatq{height:30px;background:var(--bg2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:0 10px;outline:none;min-width:160px}
   .m.u{align-self:flex-end;background:linear-gradient(135deg,var(--acc),#3f6fe0);color:#fff;border-bottom-right-radius:4px}
   .m.a{align-self:flex-start;background:var(--card2);border:1px solid var(--line);border-bottom-left-radius:4px}
   .cin{display:flex;gap:8px;padding:11px;border-top:1px solid var(--line);flex:none}
@@ -161,7 +166,7 @@
 <div id="toast"></div>
 
 <script>
-let DATA={categories:[],soclab:[]},ST={installed:{},ai:false,docker:false},CUR="dash",CHAT=[],AIMODEL="",AIPERSONA="",ONLYINST=false;
+let DATA={categories:[],soclab:[]},ST={installed:{},ai:false,docker:false},CUR="dash",CHAT=[],AIMODEL="",AIPERSONA="",ONLYINST=false,CHATQ="";
 let CONVS=[],CURCONV=null;
 try{AIMODEL=localStorage.getItem('cybermodel')||"";}catch(e){}
 try{AIPERSONA=localStorage.getItem('cyberpersona')||"";}catch(e){}
@@ -281,21 +286,41 @@ function render(){const v=document.getElementById('view'),T=document.getElementB
       '<div class="airow">'+
         '<select id="convsel" onchange="switchConv(this.value)" title="Conversazioni"></select>'+
         '<button class="btn" onclick="newConv()" title="Nuova conversazione">+ Nuova</button>'+
+        '<button class="btn" onclick="renameConv()" title="Rinomina questa conversazione">Rinomina</button>'+
         '<button class="btn" onclick="deleteConv()" title="Elimina questa conversazione">Elimina</button>'+
         '<select id="aimodel" onchange="setModel(this.value)" title="Scegli il modello AI"></select>'+
         '<select id="aipersona" onchange="setPersona(this.value)" title="Modalita dell\'assistente"></select>'+
         '<button class="btn" onclick="exportChat()" title="Scarica la conversazione">Esporta</button>'+
       '</div>'+
-      '<div class="airow"><div class="chips" id="chips"></div></div>'+
+      '<div class="airow"><div class="chips" id="chips"></div>'+
+        '<input id="chatq" class="chatq" placeholder="Cerca nella chat..." oninput="searchChat(this.value)" value="'+esc(CHATQ)+'"></div>'+
       '<div class="chat" style="flex:1;min-height:0"><div class="msgs" id="msgs"></div>'+
       '<div class="cin"><input id="ai" placeholder="Chiedi qualcosa... (ricordo la conversazione)"><button id="aisend" onclick="sendAI()">Invia</button><button id="aistop" class="btn" onclick="stopAI()" style="display:none" title="Ferma la risposta">Stop</button><button class="btn" onclick="regenAI()" title="Rigenera l\'ultima risposta">Rigenera</button><button class="btn" onclick="clearChat()" title="Svuota questa conversazione">Pulisci</button></div></div></div>';
     buildConvSelect();buildModelSelect();buildPersonaSelect();buildChips();drawChat();
     const i=document.getElementById('ai');i.addEventListener('keydown',e=>{if(e.key==='Enter')sendAI();});i.focus();return;}
 }
 function drawChat(){const m=document.getElementById('msgs');if(!m)return;
-  m.innerHTML=CHAT.map(x=>`<div class="m ${x.r}">${(x.r==='a'&&x.t!=='...')?md(x.t):esc(x.t)}</div>`).join('')||
-    '<div class="m a">Ciao! Sono CyberAI. Chiedimi come usare un tool, o incolla un output da analizzare. Ricordo le domande precedenti, quindi puoi proseguire la conversazione.</div>';
-  m.scrollTop=m.scrollHeight;}
+  let list=CHAT;
+  if(CHATQ)list=CHAT.filter(x=>x.t&&x.t.toLowerCase().indexOf(CHATQ)>=0);
+  const copyBtn='<button class="msgcopy" title="Copia" onclick="copyMsgBtn(this)">&#10697;</button>';
+  m.innerHTML=list.map(x=>{
+    const body=CHATQ?hlSearch(x.t):((x.r==='a'&&x.t!=='...')?md(x.t):esc(x.t));
+    const cp=(x.r==='a'&&x.t&&x.t!=='...')?copyBtn:'';
+    return `<div class="m ${x.r}">${body}${cp}</div>`;}).join('')||
+    (CHATQ?'<div class="m a">Nessun messaggio trovato per la ricerca.</div>'
+          :'<div class="m a">Ciao! Sono CyberAI. Chiedimi come usare un tool, o incolla un output da analizzare. Ricordo le domande precedenti, quindi puoi proseguire la conversazione.</div>');
+  if(!CHATQ)m.scrollTop=m.scrollHeight;}
+/* ricerca dentro la conversazione */
+function searchChat(v){CHATQ=(v||'').toLowerCase();drawChat();}
+function hlSearch(t){if(!CHATQ)return esc(t);
+  const re=new RegExp('('+CHATQ.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
+  return esc(t).replace(re,'<mark>$1</mark>');}
+function copyMsgBtn(b){const box=b.parentNode.cloneNode(true);const x=box.querySelector('.msgcopy');if(x)x.remove();
+  copyText(box.innerText||box.textContent||'');}
+/* rinomina la conversazione corrente */
+function renameConv(){const c=CONVS.find(x=>x.id===CURCONV);if(!c)return;
+  const v=prompt('Nuovo nome della conversazione:',c.title||'');
+  if(v===null)return;c.title=(v.trim()||c.title).slice(0,40);saveChat();buildConvSelect();toast('Conversazione rinominata');}
 /* selettore del modello AI */
 function setModel(v){AIMODEL=v;try{localStorage.setItem('cybermodel',v);}catch(e){}}
 function buildModelSelect(){const s=document.getElementById('aimodel');if(!s)return;
@@ -328,8 +353,8 @@ function loadChat(){
 function saveChat(){const c=CONVS.find(x=>x.id===CURCONV);
   if(c){c.msgs=CHAT.slice(-60);const u=CHAT.find(x=>x.r==='u'&&x.t&&x.t!=='...');if(u)c.title=u.t.slice(0,40);}
   try{localStorage.setItem('cyberconvs',JSON.stringify({list:CONVS.slice(-20),cur:CURCONV}));}catch(e){}}
-function newConv(){const c={id:cid(),title:'Nuova conversazione',msgs:[]};CONVS.push(c);CURCONV=c.id;CHAT=c.msgs;saveChat();render();}
-function switchConv(id){CURCONV=id;CHAT=convMsgs();render();}
+function newConv(){const c={id:cid(),title:'Nuova conversazione',msgs:[]};CONVS.push(c);CURCONV=c.id;CHAT=c.msgs;CHATQ="";saveChat();render();}
+function switchConv(id){CURCONV=id;CHAT=convMsgs();CHATQ="";render();}
 function deleteConv(){CONVS=CONVS.filter(c=>c.id!==CURCONV);
   if(!CONVS.length)CONVS=[{id:cid(),title:'Conversazione 1',msgs:[]}];
   CURCONV=CONVS[0].id;CHAT=convMsgs();saveChat();render();toast('Conversazione eliminata');}
@@ -408,7 +433,14 @@ document.getElementById('q').addEventListener('input',e=>{const term=e.target.va
   document.getElementById('title').textContent='Risultati: '+term;
   const all=DATA.categories.flatMap(c=>c.tools.map(t=>({t,color:c.color})));
   const f=all.filter(x=>(x.t.name+x.t.desc+x.t.bin).toLowerCase().includes(term));
-  document.getElementById('view').innerHTML='<div class="grid">'+(f.map(x=>tcard(x.t,x.color)).join('')||'<p style="color:var(--mut)">Nessun risultato.</p>')+'</div>';});
+  const sc=SCEN.filter(x=>(x.n+x.d).toLowerCase().includes(term));
+  let html='';
+  if(f.length)html+='<div class="sec">Strumenti</div><div class="grid">'+f.map(x=>tcard(x.t,x.color)).join('')+'</div>';
+  if(sc.length)html+='<div class="sec">Guide pratiche</div><div class="grid">'+sc.map(x=>
+    `<div class="card"><div class="ch"><div class="ic" style="background:#e0a13a">${x.n[0]}</div>`+
+    `<div class="nm" title="${x.n}">${x.n}</div></div><div class="ds">${x.d}</div>`+
+    `<div class="row"><button class="btn go" onclick="showTut('${x.t}','${x.n}')">Apri la guida</button></div></div>`).join('')+'</div>';
+  document.getElementById('view').innerHTML=html||'<p style="color:var(--mut)">Nessun risultato.</p>';});
 setInterval(async()=>{try{ST=await (await fetch('/api/status')).json();pills();}catch(e){}},9000);
 function applyTheme(t){document.body.classList.toggle('light', t==='light');
   try{localStorage.setItem('cybertheme',t);}catch(e){}

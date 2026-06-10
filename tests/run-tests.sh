@@ -228,6 +228,16 @@ grep -q "function installMissing" gui/index.html || { echo "  GUI senza pulsante
 grep -q "/api/install_missing" gui/index.html    || { echo "  GUI non chiama l'endpoint"; imiss2=1; }
 [ "$imiss2" = 0 ] && pass "installazione automatica dei tool mancanti (backend + GUI)" || err "install-missing incompleto"
 
+echo "== 18. Chat: ricerca, rinomina, copia messaggio; ricerca scenari =="
+wmiss=0
+grep -q "function searchChat" gui/index.html  || { echo "  manca la ricerca nella chat"; wmiss=1; }
+grep -q "function hlSearch" gui/index.html     || { echo "  manca l'evidenziazione dei risultati"; wmiss=1; }
+grep -q 'id="chatq"' gui/index.html            || { echo "  manca il campo di ricerca chat"; wmiss=1; }
+grep -q "function renameConv" gui/index.html   || { echo "  manca la rinomina conversazione"; wmiss=1; }
+grep -q "function copyMsgBtn" gui/index.html   || { echo "  manca la copia del singolo messaggio"; wmiss=1; }
+grep -q "SCEN.filter" gui/index.html           || { echo "  la ricerca globale non include gli scenari"; wmiss=1; }
+[ "$wmiss" = 0 ] && pass "chat: ricerca/rinomina/copia + ricerca scenari" || err "extra chat/ricerca incompleti"
+
 echo ""
 if [ "$FAIL" = 0 ]; then echo ">>> TUTTI I TEST SUPERATI <<<"; exit 0
 else echo ">>> ALCUNI TEST FALLITI <<<"; exit 1; fi

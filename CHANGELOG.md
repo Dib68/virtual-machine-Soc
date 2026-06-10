@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.15.0
+- **Ricerca dentro la chat**: filtra ed evidenzia i messaggi della conversazione.
+- **Rinomina conversazione** e **copia singola risposta** (al passaggio del mouse).
+- La **ricerca globale** in alto ora trova anche le **guide pratiche** (scenari),
+  non solo gli strumenti.
+- Nuova sezione di test 18.
+
 ## 2.14.0
 - **Installazione automatica in blocco**: nuovo pulsante "Installa i mancanti (N)"
   nella dashboard e nelle viste degli strumenti, che installa con un solo clic
