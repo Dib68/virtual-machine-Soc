@@ -52,9 +52,19 @@ if [ -f "$BR/wallpaper.png" ]; then
 XML
 fi
 
-echo "==> [5/5] Avvio automatico della GUI (finestra app) al login..."
+echo "==> [5/5] Avvio automatico della GUI al login..."
 ASDIR="$HOME_DIR/.config/autostart"; mkdir -p "$ASDIR"
-# Sostituisce il vecchio autostart che apriva solo il server
+PY="$(command -v python3 || echo /usr/bin/python3)"
+# 1) Server della GUI sempre pronto (affidabile, parte presto, nessuna finestra)
+cat > "$ASDIR/cybergui-server.desktop" <<EOF
+[Desktop Entry]
+Type=Application
+Name=CyberSec GUI server
+Exec=$PY /opt/cybersec/gui/server.py
+X-GNOME-Autostart-enabled=true
+NoDisplay=true
+EOF
+# 2) Finestra app dedicata (attende il server e poi apre Chromium --app)
 rm -f "$ASDIR/cybergui.desktop" 2>/dev/null || true
 cat > "$ASDIR/cybergui-app.desktop" <<EOF
 [Desktop Entry]

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.26.0
+- **Autostart GUI affidabile**: due voci di avvio distinte (server della GUI +
+  finestra app), e `cybergui-app` ora attende che il server risponda (controllo
+  via `/dev/tcp`, niente dipendenza da curl) prima di aprire la finestra. Risolve
+  il caso in cui all'avvio la finestra partiva prima del server.
+
 ## 2.25.0
 - **L'AI si avvia da sola**: quando scrivi qualcosa in chat, se il servizio Ollama
   non e' attivo viene avviato automaticamente (`systemctl start ollama` o
