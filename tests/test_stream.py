@@ -72,6 +72,16 @@ ck("endpoint /api/ai (non-stream) compatibile", ans == "tok0 tok1 tok2 tok3 tok4
 h = json.loads(urllib.request.urlopen(BASE + "/api/health", timeout=5).read())
 ck("/api/health risponde con versione", h.get("ok") is True and isinstance(h.get("version"), str))
 
+# 5) hardening: corpo JSON malformato -> 400 (non crasha il server)
+import urllib.error
+try:
+    bad = urllib.request.Request(BASE + "/api/ai", data=b"{non-json",
+                                 headers={"Content-Type": "application/json"})
+    urllib.request.urlopen(bad, timeout=5); code = 200
+except urllib.error.HTTPError as e:
+    code = e.code
+ck("JSON malformato gestito (400)", code == 400)
+
 httpd.shutdown(); fake.shutdown()
 passed = sum(1 for _, c in P if c); total = len(P)
 print("\n=== STREAM: %d/%d test superati ===" % (passed, total))

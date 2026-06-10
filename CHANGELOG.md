@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.16.0
+- **Preferiti**: aggiungi gli strumenti ai preferiti con la stella; nuova sezione
+  "Preferiti" nel menu, persistente tra i riavvii.
+- **Analizza output**: incolla l'output di un comando e fattelo spiegare dall'AI.
+- **Hardening del backend**: limite alla lunghezza del prompt/cronologia
+  (`MAX_PROMPT`) e al corpo della richiesta (`MAX_BODY`); risposta `400` ai JSON
+  malformati invece di andare in errore.
+- Nuove sezioni di test 19 + test backend e d'integrazione (JSON malformato).
+
 ## 2.15.0
 - **Ricerca dentro la chat**: filtra ed evidenzia i messaggi della conversazione.
 - **Rinomina conversazione** e **copia singola risposta** (al passaggio del mouse).

@@ -238,6 +238,15 @@ grep -q "function copyMsgBtn" gui/index.html   || { echo "  manca la copia del s
 grep -q "SCEN.filter" gui/index.html           || { echo "  la ricerca globale non include gli scenari"; wmiss=1; }
 [ "$wmiss" = 0 ] && pass "chat: ricerca/rinomina/copia + ricerca scenari" || err "extra chat/ricerca incompleti"
 
+echo "== 19. Preferiti, analizza output e hardening input =="
+fmiss=0
+grep -q "function toggleFav" gui/index.html && grep -q "cyberfav" gui/index.html || { echo "  manca la gestione preferiti"; fmiss=1; }
+grep -q "function favTools" gui/index.html     || { echo "  manca la vista preferiti"; fmiss=1; }
+grep -q "function analyzeOutput" gui/index.html || { echo "  manca 'Analizza output'"; fmiss=1; }
+grep -q "MAX_PROMPT" gui/server.py             || { echo "  backend senza limite prompt"; fmiss=1; }
+grep -q "MAX_BODY" gui/server.py               || { echo "  backend senza limite corpo richiesta"; fmiss=1; }
+[ "$fmiss" = 0 ] && pass "preferiti + analizza output + hardening input" || err "preferiti/hardening incompleti"
+
 echo ""
 if [ "$FAIL" = 0 ]; then echo ">>> TUTTI I TEST SUPERATI <<<"; exit 0
 else echo ">>> ALCUNI TEST FALLITI <<<"; exit 1; fi

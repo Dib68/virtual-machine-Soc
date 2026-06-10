@@ -91,6 +91,9 @@ _m = srv._build_messages("e poi?", [
     {"role":"user","content":"ciao"}, {"role":"assistant","content":"salve"},
     {"role":"assistant","content":"..."}, {"role":"system","content":"x"}])
 ck("messaggi: scarta '...' e ruoli ignoti", len(_m)==3 and _m[-1]=={"role":"user","content":"e poi?"})
+# hardening: prompt e cronologia troncati al limite massimo
+_long = srv._build_messages("x"*50000, [{"role":"user","content":"y"*50000}])
+ck("prompt troncato al limite", all(len(mm["content"]) <= srv.MAX_PROMPT for mm in _long))
 # AI: con finto Ollama (endpoint /api/chat). Cattura il body per verificare la memoria.
 LAST = {}
 class F(http.server.BaseHTTPRequestHandler):

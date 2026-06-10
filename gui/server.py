@@ -14,6 +14,9 @@ OLLAMA = os.environ.get("OLLAMA_HOST", "http://localhost:11434")
 AI_MODELS = ("cyberai", "llama3.2")
 # Massimo di messaggi di cronologia tenuti in memoria per conversazione.
 AI_HISTORY_MAX = 12
+# Limiti di sicurezza: lunghezza massima del prompt e del corpo richiesta.
+MAX_PROMPT = 16000
+MAX_BODY = 4 * 1024 * 1024
 # "Modalita'" dell'assistente: istruzione extra di sistema in base al contesto.
 PERSONAS = {
     "redteam":  "Adotta il punto di vista del Red Team / penetration tester: "
@@ -178,11 +181,11 @@ def _build_messages(prompt, history, persona=None):
     hist = []
     for m in (history or []):
         role = m.get("role")
-        content = (m.get("content") or "").strip()
+        content = (m.get("content") or "").strip()[:MAX_PROMPT]
         if role in ("user", "assistant") and content and content != "...":
             hist.append({"role": role, "content": content})
     msgs += hist[-AI_HISTORY_MAX:]           # limita la memoria (e i token)
-    msgs.append({"role": "user", "content": prompt})
+    msgs.append({"role": "user", "content": (prompt or "")[:MAX_PROMPT]})
     return msgs
 
 def _model_order(model):
@@ -293,8 +296,13 @@ class H(http.server.BaseHTTPRequestHandler):
 
     def do_POST(self):
         u = urlparse(self.path)
-        n = int(self.headers.get("Content-Length", 0))
-        data = json.loads(self.rfile.read(n) or b"{}")
+        n = min(int(self.headers.get("Content-Length", 0) or 0), MAX_BODY)
+        try:
+            data = json.loads(self.rfile.read(n) or b"{}")
+            if not isinstance(data, dict):
+                data = {}
+        except Exception:
+            return self._send(400, "application/json", b'{"error":"json non valido"}')
         if u.path == "/api/soclab":
             ok, msg = soclab(data.get("stack", ""), data.get("action", ""))
             return self._send(200, "application/json", json.dumps({"ok": ok, "msg": msg}).encode())
