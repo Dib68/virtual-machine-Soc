@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.42.0
+- **Conteggi coerenti nella dashboard**: prima "installati" e "mancanti (N)" non
+  tornavano col totale, perche' "mancanti" contava solo i tool installabili via apt
+  (i 4 non-apt sparivano). Ora la metrica "Mancanti" = totale - installati e il
+  pulsante dice "Installa N mancanti (via apt)", segnalando quanti richiedono
+  COMPLETA-INSTALLAZIONE. Tutto riconcilia col totale.
+
+## 2.41.0
+- **DNS affidabile nella VM** (`natdnshostresolver` in Vagrantfile): risolve gli
+  errori intermittenti "Temporary failure resolving" che facevano fallire apt e
+  quindi il provisioning (AI, docker, tool) in silenzio. Causa radice dei problemi.
+
+## 2.40.0
+- **06-soclab installa il motore Docker** (`docker.io`), non solo la CLI: senza il
+  daemon gli stack SOC non partivano.
+
 ## 2.39.0
 - **COMPLETA-INSTALLAZIONE** ora applica anche il **branding "CyberSec AI OS"** e la
   **verifica finale** (prima un'installazione completa restava senza branding custom).
