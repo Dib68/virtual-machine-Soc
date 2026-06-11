@@ -10,6 +10,16 @@ echo "==> Installazione di Ollama (AI locale)..."
 if ! command -v ollama >/dev/null 2>&1; then
   curl -fsSL https://ollama.com/install.sh | sh
 fi
+# Tieni il modello "caldo" in RAM 30 min dopo l'uso: le risposte successive
+# sono molto piu' rapide (evita il ricaricamento da disco a ogni domanda).
+if [ -d /etc/systemd/system ]; then
+  mkdir -p /etc/systemd/system/ollama.service.d
+  cat > /etc/systemd/system/ollama.service.d/keepalive.conf <<'EOF'
+[Service]
+Environment="OLLAMA_KEEP_ALIVE=30m"
+EOF
+  systemctl daemon-reload 2>/dev/null || true
+fi
 systemctl enable ollama 2>/dev/null || true
 systemctl start  ollama 2>/dev/null || true
 # Avvio manuale di scorta se non c'e' systemd attivo
