@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.36.0
+- `ai-explain` reso robusto: verifica che Ollama sia installato (altrimenti indica
+  come installarlo) e avvia il servizio da solo se non risponde.
+
+## 2.35.0
+- Pallino "AI" nell'header cliccabile: apre la chat se pronta, altrimenti avvia
+  Installa/Ripara AI.
+
 ## 2.34.0
 - **Pulsante "Installa/Ripara AI"** nella chat: quando l'AI non e' pronta, un clic
   installa/ripara Ollama e il modello mostrando l'avanzamento in tempo reale
