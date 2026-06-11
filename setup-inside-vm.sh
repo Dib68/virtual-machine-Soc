@@ -26,6 +26,8 @@ install -m 0755 "$SRC/menu/ai.sh"        /usr/local/bin/ai        2>/dev/null ||
 [ -d "$SRC/gui" ] && { cp -f "$SRC"/gui/index.html "$SRC"/gui/server.py "$SRC"/gui/tools.json /opt/cybersec/gui/ 2>/dev/null; install -m 0755 "$SRC/gui/cybergui.sh" /usr/local/bin/cybergui 2>/dev/null || true; install -m 0755 "$SRC/gui/cybergui-app.sh" /usr/local/bin/cybergui-app 2>/dev/null || true; }
 # Copia il file VERSION (la GUI lo mostra nell'header)
 [ -f "$SRC/VERSION" ] && cp -f "$SRC/VERSION" /opt/cybersec/VERSION 2>/dev/null || true
+# Copia gli script di provisioning (li usa "Installa/Ripara AI" della GUI)
+[ -d "$SRC/provision" ] && { mkdir -p /opt/cybersec/provision; cp -f "$SRC"/provision/*.sh /opt/cybersec/provision/ 2>/dev/null || true; }
 for u in cyberdoctor ai-explain cyberreport cyberupdate cyberhelp; do
   [ -f "$SRC/tools/$u.sh" ] && install -m 0755 "$SRC/tools/$u.sh" "/usr/local/bin/$u" 2>/dev/null || true
 done

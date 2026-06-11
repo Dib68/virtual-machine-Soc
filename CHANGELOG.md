@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.34.0
+- **Pulsante "Installa/Ripara AI"** nella chat: quando l'AI non e' pronta, un clic
+  installa/ripara Ollama e il modello mostrando l'avanzamento in tempo reale
+  (endpoint `/api/ai_setup_stream`). Niente piu' "AI non attivata" senza via d'uscita.
+- `setup-inside-vm` copia gli script di provisioning in `/opt/cybersec/provision`.
+
 ## 2.33.0
 - **Installazione AI robusta**: `02-ollama.sh` ora scarica il modello con piu'
   tentativi e verifica, crea `cyberai` controllando l'esito (senza nascondere gli

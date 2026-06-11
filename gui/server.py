@@ -208,6 +208,24 @@ def install_missing_stream():
         yield chunk
     yield "\n== Operazione terminata ==\n"
 
+def _ollama_setup_script():
+    for p in ("/vagrant/provision/02-ollama.sh", "/opt/cybersec/provision/02-ollama.sh"):
+        if os.path.isfile(p):
+            return p
+    return None
+
+def ai_setup_stream():
+    # Installa/ripara l'AI (Ollama + modello cyberai) mostrando l'output live.
+    script = _ollama_setup_script()
+    if not script:
+        yield ("Script di installazione AI non trovato.\n"
+               "Esegui in un terminale: sudo bash /vagrant/provision/02-ollama.sh\n")
+        return
+    yield "Avvio installazione/riparazione dell'AI (Ollama + modello). Puo' richiedere alcuni minuti...\n\n"
+    for chunk in _stream_cmd("sudo -n bash %s" % script):
+        yield chunk
+    yield "\n== Operazione AI terminata. Riprova a scrivere in chat. ==\n"
+
 def _ollama_up():
     try:
         urllib.request.urlopen(OLLAMA + "/api/tags", timeout=2)
@@ -453,6 +471,19 @@ class H(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             try:
                 for chunk in install_missing_stream():
+                    self.wfile.write(chunk.encode("utf-8"))
+                    self.wfile.flush()
+            except Exception:
+                pass
+            return
+        if u.path == "/api/ai_setup_stream":
+            # Installazione/riparazione dell'AI con output in tempo reale.
+            self.send_response(200)
+            self.send_header("Content-Type", "text/plain; charset=utf-8")
+            self.send_header("Cache-Control", "no-cache")
+            self.end_headers()
+            try:
+                for chunk in ai_setup_stream():
                     self.wfile.write(chunk.encode("utf-8"))
                     self.wfile.flush()
             except Exception:

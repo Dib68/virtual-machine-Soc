@@ -251,6 +251,21 @@ async function installMissing(){const n=ST.missing||0;
     pre.textContent+='\n[avvio nel terminale...]\n';
     try{await fetch('/api/install_missing');}catch(_){}}
   try{ST=await (await fetch('/api/status')).json();render();pills();}catch(e){}}
+/* installa o ripara l'AI locale (Ollama + modello), con avanzamento live */
+async function setupAI(){
+  if(!confirm('Installo/riparo l\'AI locale? Scarica il modello: puo\' richiedere alcuni minuti.'))return;
+  document.getElementById('ovt').textContent='Installazione / riparazione AI';
+  document.getElementById('ovc').innerHTML='<pre id="ailog" style="white-space:pre-wrap;max-height:60vh;overflow:auto;font-size:12px">Avvio...\n</pre>';
+  document.getElementById('ov').classList.add('show');
+  const pre=document.getElementById('ailog');
+  try{
+    const resp=await fetch('/api/ai_setup_stream',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
+    if(!resp.ok||!resp.body||!resp.body.getReader)throw new Error('nostream');
+    const reader=resp.body.getReader(),dec=new TextDecoder();pre.textContent='';
+    while(true){const {done,value}=await reader.read();if(done)break;
+      pre.textContent+=dec.decode(value,{stream:true});pre.scrollTop=pre.scrollHeight;}
+  }catch(e){pre.textContent+='\n[errore: esegui in un terminale: sudo bash /vagrant/provision/02-ollama.sh]\n';}
+  try{ST=await (await fetch('/api/status')).json();render();pills();}catch(e){}}
 const SCEN=[
   {t:'scenario-primo-pentest',n:'Primo penetration test (web)',d:'Recon, Burp e SQLi su Juice Shop, passo-passo.'},
   {t:'scenario-soc-analyst',n:'Primo turno da SOC Analyst',d:'SIEM, IDS, OSQuery e gestione di un caso.'},
@@ -317,6 +332,7 @@ function render(){const v=document.getElementById('view'),T=document.getElementB
         '<select id="aipersona" onchange="setPersona(this.value)" title="Modalita dell\'assistente"></select>'+
         '<button class="btn" onclick="analyzeOutput()" title="Incolla l\'output di un comando da analizzare">Analizza output</button>'+
         '<button class="btn" onclick="exportChat()" title="Scarica la conversazione">Esporta</button>'+
+        (ST.ai?'':'<button class="btn go" onclick="setupAI()" title="Installa o ripara l\'AI locale">Installa/Ripara AI</button>')+
       '</div>'+
       '<div class="airow"><div class="chips" id="chips"></div>'+
         '<input id="chatq" class="chatq" placeholder="Cerca nella chat..." oninput="searchChat(this.value)" value="'+esc(CHATQ)+'"></div>'+

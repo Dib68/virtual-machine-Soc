@@ -165,7 +165,9 @@ grep -q "function clearChat" gui/index.html  || { echo "  manca il pulsante Puli
 grep -q "num_ctx 8192" provision/02-ollama.sh || { echo "  contesto AI non ampliato"; amiss=1; }
 grep -q "def _ensure_ollama" gui/server.py    || { echo "  AI non si avvia da sola (manca _ensure_ollama)"; amiss=1; }
 grep -q "_ensure_ollama()" gui/server.py      || { echo "  _ensure_ollama non richiamato in ai_stream"; amiss=1; }
-[ "$amiss" = 0 ] && pass "AI: memoria + avvio automatico del servizio (backend + GUI)" || err "AI memoria incompleta"
+grep -q "def ai_setup_stream" gui/server.py   || { echo "  manca ai_setup_stream (installa/ripara AI)"; amiss=1; }
+grep -q "/api/ai_setup_stream" gui/server.py && grep -q "function setupAI" gui/index.html || { echo "  manca il pulsante Installa/Ripara AI"; amiss=1; }
+[ "$amiss" = 0 ] && pass "AI: memoria + avvio automatico + installa/ripara (backend + GUI)" || err "AI memoria incompleta"
 
 echo "== 12. AI streaming, persistenza e copia =="
 smiss=0
