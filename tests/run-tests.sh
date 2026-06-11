@@ -209,7 +209,9 @@ grep -q "cyberai" tools/cyberdoctor.sh         || { echo "  cyberdoctor non veri
 grep -q '! -t 0' menu/ai.sh                    || { echo "  'ai' non legge da pipe (stdin)"; cmiss=1; }
 grep -q -- '--persona' menu/ai.sh              || { echo "  'ai' senza opzione --persona"; cmiss=1; }
 grep -q -- '--model' menu/ai.sh                || { echo "  'ai' senza opzione --model"; cmiss=1; }
-[ "$cmiss" = 0 ] && pass "cyberdoctor esteso e CLI 'ai' (pipe + --model/--persona)" || err "cyberdoctor/CLI incompleti"
+[ -f provision/11-verify.sh ] && grep -q "11-verify.sh" Vagrantfile || { echo "  manca la verifica finale del provisioning"; cmiss=1; }
+grep -q "provision_incomplete" tools/cyberdoctor.sh || { echo "  cyberdoctor non rileva provisioning incompleto"; cmiss=1; }
+[ "$cmiss" = 0 ] && pass "cyberdoctor esteso, CLI 'ai', verifica finale provisioning" || err "cyberdoctor/CLI incompleti"
 
 echo "== 16. AI: persona, conversazioni multiple, rigenera, copia comando =="
 pmiss=0

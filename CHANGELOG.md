@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.38.0
+- **Verifica finale del provisioning** (`provision/11-verify.sh`, ultimo step):
+  controlla tool chiave, AI e Docker e, se manca qualcosa, lo segnala chiaramente
+  e lascia un marcatore (`/opt/cybersec/provision_incomplete`) con le istruzioni.
+  `cyberdoctor` lo riporta. Evita installazioni parziali "invisibili" come quella
+  che aveva lasciato l'AI non installata.
+
+## 2.37.0
+- **Modello AI tenuto caldo** in RAM (`OLLAMA_KEEP_ALIVE=30m`): le risposte
+  successive alla prima sono molto piu' rapide.
+
 ## 2.36.0
 - `ai-explain` reso robusto: verifica che Ollama sia installato (altrimenti indica
   come installarlo) e avvia il servizio da solo se non risponde.

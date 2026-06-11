@@ -49,6 +49,10 @@ if pgrep -f "gui/server.py" >/dev/null 2>&1 || (command -v ss >/dev/null 2>&1 &&
   ok "GUI (cybergui) in esecuzione  ->  http://127.0.0.1:8910"
 else no "GUI non attiva (avviala con: cybergui)"; fi
 echo ""
+if [ -f /opt/cybersec/provision_incomplete ]; then
+  echo -e "${YEL}Provisioning INCOMPLETO: $(cat /opt/cybersec/provision_incomplete)${NC}"
+  echo "  Completa con la GUI ('Installa i mancanti'/'Installa-Ripara AI') o COMPLETA-INSTALLAZIONE."
+fi
 if [ -f /opt/cybersec/missing_tools.txt ]; then
   echo -e "${YEL}Pacchetti non installati durante il provisioning:${NC}"
   sort -u /opt/cybersec/missing_tools.txt | sed 's/^/  - /'
