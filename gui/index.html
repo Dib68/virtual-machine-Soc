@@ -152,7 +152,7 @@
       <button class="pill" onclick="showHelp()" title="Scorciatoie e aiuto (?)" aria-label="Aiuto">?</button>
       <button id="theme" class="pill" onclick="toggleTheme()" aria-label="Cambia tema">Tema</button>
       <div class="pills">
-        <span class="pill"><span class="pdot" id="aiDot"></span>AI</span>
+        <span class="pill" id="aiPill" title="Stato AI" style="cursor:pointer" onclick="aiPillClick()"><span class="pdot" id="aiDot"></span>AI</span>
         <span class="pill"><span class="pdot" id="dkDot"></span>Docker</span>
         <span class="pill" id="ver" title="Versione"></span>
       </div>
@@ -194,7 +194,10 @@ async function boot(){
 }
 function pills(){document.getElementById('aiDot').className='pdot'+(ST.ai?' on':'');
   document.getElementById('dkDot').className='pdot'+(ST.docker?' on':'');
-  var ve=document.getElementById('ver');if(ve)ve.textContent=ST.version?('v'+ST.version):'';}
+  var ve=document.getElementById('ver');if(ve)ve.textContent=ST.version?('v'+ST.version):'';
+  var ap=document.getElementById('aiPill');if(ap)ap.title=ST.ai?'AI pronta':'AI non pronta — clic per installare/riparare';}
+/* clic sul pallino AI: se non e' pronta, avvia installa/ripara */
+function aiPillClick(){if(ST.ai){go('ai');}else{setupAI();}}
 function inst(b){return ST.installed&&ST.installed[b];}
 function go(v){CUR=v;buildNav();render();closeSide();}
 function buildNav(){
