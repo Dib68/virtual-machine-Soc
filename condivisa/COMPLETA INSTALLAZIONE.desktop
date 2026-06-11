@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=>>> COMPLETA INSTALLAZIONE (tool + AI) <<<
+Comment=Installa tutti gli strumenti e l'AI dentro la VM
+Exec=bash -lc "xfce4-terminal --title='Completa installazione' -e 'bash /home/vagrant/condivisa/COMPLETA-INSTALLAZIONE.sh' || x-terminal-emulator -e 'bash /home/vagrant/condivisa/COMPLETA-INSTALLAZIONE.sh' || qterminal -e 'bash /home/vagrant/condivisa/COMPLETA-INSTALLAZIONE.sh'"
+Icon=system-software-install
+Terminal=false
+Categories=Security;

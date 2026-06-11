@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.39.0
+- **COMPLETA-INSTALLAZIONE** ora applica anche il **branding "CyberSec AI OS"** e la
+  **verifica finale** (prima un'installazione completa restava senza branding custom).
+- L'installer one-click e il suo lanciatore sono ora **versionati** (erano esclusi
+  dal `.gitignore` per errore).
+
 ## 2.38.0
 - **Verifica finale del provisioning** (`provision/11-verify.sh`, ultimo step):
   controlla tool chiave, AI e Docker e, se manca qualcosa, lo segnala chiaramente
