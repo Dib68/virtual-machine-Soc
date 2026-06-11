@@ -24,6 +24,10 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--clipboard-mode", "bidirectional"]
     vb.customize ["modifyvm", :id, "--draganddrop", "bidirectional"]
     vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
+    # DNS affidabile via il resolver dell'host: evita gli errori intermittenti
+    # "Temporary failure resolving ..." che facevano fallire apt nel provisioning.
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
   end
 
   # Cartella condivisa host <-> VM
