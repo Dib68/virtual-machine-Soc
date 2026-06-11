@@ -73,7 +73,7 @@ ok2,msg2 = srv.launch("nmap")
 ck("tool non installato gestito", (not ok2) and "non installato" in msg2)
 # soclab validazione
 ok3,_ = srv.soclab("targets","up"); ck("soclab valido accettato", ok3)
-ok4,m4 = srv.soclab("hacker","boom"); ck("soclab non valido rifiutato", (not ok4))
+ok4,m4 = srv.soclab("hacker","boom"); ck("soclab non valido rifiutato", (not ok4) and "non valida" in m4)
 # stato degli stack SOC
 _ss = srv.soclab_status()
 ck("soclab_status elenca tutti gli stack", set(_ss.keys()) == srv.SOCK and all(isinstance(v, bool) for v in _ss.values()))
@@ -87,8 +87,8 @@ ck("install: crea script apt", bool(scr2) and "apt-get install" in open(scr2[-1]
 srv.TOOLS["nopkg"] = {"bin":"nopkg","name":"Z","desc":"y","cmd":"nopkg","tut":"nmap","term":True,"pkg":""}
 on,mn = srv.install("nopkg")
 ck("install senza pkg gestito", (not on) and "COMPLETA" in mn)
-ok_ai,_ = srv.install("faketool")  # gia' installato
-ck("install gia' installato gestito", not ok_ai)
+ok_ai,m_ai = srv.install("faketool")  # gia' installato
+ck("install gia' installato gestito", (not ok_ai) and "gia'" in m_ai)
 # install in blocco dei pacchetti mancanti
 srv.TOOLS["bulk1"] = {"bin":"bulk1","name":"B1","desc":"y","cmd":"bulk1","tut":"nmap","term":True,"pkg":"pkg-uno"}
 srv.TOOLS["bulk2"] = {"bin":"bulk2","name":"B2","desc":"y","cmd":"bulk2","tut":"nmap","term":True,"pkg":"pkg-due pkg-uno"}
