@@ -32,11 +32,23 @@ else                            BASE="llama3.2"; fi   # leggero: gira ovunque
 echo "==> RAM ${RAM_GB}GB -> modello base scelto: $BASE"
 
 echo "==> Scarico il modello (puo' richiedere parecchio: alcuni GB)..."
-if ! ollama pull "$BASE"; then
-  echo "   !! '$BASE' non scaricato, passo a llama3.2"; BASE="llama3.2"; ollama pull "$BASE" || true
+# Pull con piu' tentativi (la rete puo' fallire a meta'): non lasciare buchi.
+pull_retry() {
+  local m="$1" i
+  for i in 1 2 3; do
+    echo "   - pull '$m' (tentativo $i/3)..."
+    if ollama pull "$m"; then return 0; fi
+    sleep 3
+  done
+  return 1
+}
+if ! pull_retry "$BASE"; then
+  echo "   !! '$BASE' non scaricato dopo 3 tentativi, passo al modello leggero llama3.2"
+  BASE="llama3.2"
+  pull_retry "$BASE" || echo "   !! anche llama3.2 ha fallito: controlla la connessione internet"
 fi
-# Modello leggero sempre presente come riserva
-ollama pull llama3.2 2>/dev/null || true
+# Modello leggero sempre presente come riserva (fallback della GUI)
+[ "$BASE" = "llama3.2" ] || pull_retry llama3.2 || true
 
 # ----------------------------------------------------------------------------
 # Modello specializzato "cyberai": tutor esperto di cybersecurity.
@@ -78,11 +90,29 @@ Regole di risposta:
 EOF
 
 echo "==> Creo il modello 'cyberai' (base: $BASE)..."
-ollama create cyberai -f /opt/cybersec/Modelfile 2>/dev/null \
-  || echo "   !! creazione 'cyberai' rimandata (poi: ollama create cyberai -f /opt/cybersec/Modelfile)"
+# Crea con verifica + un secondo tentativo. NIENTE 2>/dev/null: vogliamo vedere
+# gli errori se qualcosa va storto (in passato fallivano in silenzio).
+model_exists() { ollama list 2>/dev/null | awk 'NR>1{print $1}' | grep -q "^cyberai"; }
+if ! model_exists; then ollama create cyberai -f /opt/cybersec/Modelfile || true; fi
+if ! model_exists; then
+  echo "   ...secondo tentativo di creazione di 'cyberai'..."
+  ollama create cyberai -f /opt/cybersec/Modelfile || true
+fi
 
+# ----------------------------------------------------------------------------
+# Verifica finale: se 'cyberai' non esiste, lo segnaliamo FORTE e lasciamo un
+# marcatore che cyberdoctor e la GUI possono rilevare (niente fallimenti muti).
+# ----------------------------------------------------------------------------
 echo ""
 echo "============================================================"
-echo " AI locale pronta. Modello: cyberai (base $BASE)"
-echo " Avvio:  ai     oppure:  ollama run cyberai"
+if model_exists; then
+  rm -f /opt/cybersec/ai_install_failed 2>/dev/null || true
+  echo " AI locale PRONTA. Modello: cyberai (base $BASE)"
+  echo " Avvio:  ai     oppure:  ollama run cyberai"
+else
+  echo "AI_INSTALL_FAILED: modello 'cyberai' NON creato (base $BASE)." > /opt/cybersec/ai_install_failed
+  echo " !! ATTENZIONE: l'AI NON e' stata installata correttamente."
+  echo " !! Riprova con:  sudo bash /vagrant/provision/02-ollama.sh"
+  echo " !! (serve connessione internet per scaricare il modello)"
+fi
 echo "============================================================"

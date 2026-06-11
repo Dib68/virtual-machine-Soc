@@ -24,9 +24,13 @@ if command -v ollama >/dev/null 2>&1; then
   if curl -s http://localhost:11434/api/tags >/dev/null 2>&1; then
     ok "servizio attivo"; echo "  modelli: $(ollama list 2>/dev/null | awk 'NR>1{print $1}' | tr '\n' ' ')"
     if ollama list 2>/dev/null | grep -q '^cyberai'; then ok "modello 'cyberai' presente"
-    else no "modello 'cyberai' assente (ollama create cyberai -f /opt/cybersec/Modelfile)"; fi
+    else no "modello 'cyberai' assente -> RIPARA con: sudo bash /vagrant/provision/02-ollama.sh"; fi
   else no "servizio non attivo (sudo systemctl start ollama)"; fi
-else no "ollama non installato"; fi
+else no "ollama NON installato -> INSTALLA con: sudo bash /vagrant/provision/02-ollama.sh"; fi
+# Marcatore di installazione AI fallita (lasciato da 02-ollama.sh)
+if [ -f /opt/cybersec/ai_install_failed ]; then
+  no "ultima installazione AI FALLITA -> riprova: sudo bash /vagrant/provision/02-ollama.sh"
+fi
 echo ""
 echo "-- Docker / lab SOC --"
 if command -v docker >/dev/null 2>&1; then

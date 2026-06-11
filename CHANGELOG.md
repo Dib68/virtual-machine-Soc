@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.33.0
+- **Installazione AI robusta**: `02-ollama.sh` ora scarica il modello con piu'
+  tentativi e verifica, crea `cyberai` controllando l'esito (senza nascondere gli
+  errori) e, se fallisce, lascia un marcatore e istruzioni chiare invece di
+  fallire in silenzio. `cyberdoctor` rileva il problema e indica come riparare.
+  Questo era il motivo per cui l'AI poteva risultare "non attivata".
+
 ## 2.32.0
 - **Login senza sovrapposizioni**: il blocco "CyberSec AI OS" e' stato spostato in
   alto e centrato nel wallpaper, cosi' il riquadro delle credenziali (al centro)
