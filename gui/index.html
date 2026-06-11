@@ -234,8 +234,8 @@ function toggleInst(){ONLYINST=!ONLYINST;render();}
 function filt(tools){return ONLYINST?tools.filter(t=>inst(t.bin)):tools;}
 function instBar(){const miss=ST.missing||0;return `<div class="note" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">`+
   `<button class="btn${ONLYINST?' go':''}" onclick="toggleInst()">${ONLYINST?'Mostra tutti':'Solo installati'}</button>`+
-  (miss?`<button class="btn go" onclick="installMissing()">Installa i mancanti (${miss})</button>`:'<span style="color:var(--acc2)">Tutto installato &#10003;</span>')+
-  `<span style="color:var(--mut)">Filtra le schede e installa con un clic cio' che manca.</span></div>`;}
+  (miss?`<button class="btn go" onclick="installMissing()">Installa ${miss} mancanti (via apt)</button>`:'<span style="color:var(--acc2)">Niente da installare via apt &#10003;</span>')+
+  `<span style="color:var(--mut)">Installa via apt cio' che manca; il resto con COMPLETA-INSTALLAZIONE.</span></div>`;}
 /* installa in blocco tutti i pacchetti apt mancanti */
 async function installMissing(){const n=ST.missing||0;
   if(!n){toast('Nessun pacchetto mancante da installare');return;}
@@ -290,15 +290,15 @@ function renderGuide(v){
 }
 function render(){const v=document.getElementById('view'),T=document.getElementById('title');
   if(CUR==='dash'){T.textContent='Dashboard';
-    const tot=totTools(),ins=Object.values(ST.installed||{}).filter(Boolean).length;
+    const tot=totTools(),ins=Object.values(ST.installed||{}).filter(Boolean).length,miss=tot-ins,apt=ST.missing||0,extra=miss-apt;
     v.innerHTML=`<div class="metrics">
       <div class="met"><div class="v">${tot}</div><div class="l">Strumenti</div></div>
       <div class="met"><div class="v">${ins}</div><div class="l">Installati</div></div>
-      <div class="met"><div class="v">${DATA.categories.length}</div><div class="l">Categorie</div></div>
+      <div class="met"><div class="v">${miss}</div><div class="l">Mancanti</div></div>
       <div class="met"><div class="v">${DATA.soclab.length}</div><div class="l">Stack SOC</div></div></div>
       <div class="note" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
         <span>Clicca <b>Avvia</b> per aprire un tool, <b>Guida</b> per il tutorial, <b>AI</b> per una spiegazione. Usa <b>/</b> per cercare.</span>
-        ${ST.missing?`<button class="btn go" onclick="installMissing()">Installa i mancanti (${ST.missing})</button>`:'<span style="color:var(--acc2)">Tutti gli strumenti installati &#10003;</span>'}
+        ${miss?((apt?`<button class="btn go" onclick="installMissing()">Installa ${apt} mancanti (via apt)</button>`:'')+(extra>0?`<span style="color:var(--mut)">${extra} richiedono COMPLETA-INSTALLAZIONE</span>`:'')):'<span style="color:var(--acc2)">Tutti gli strumenti installati &#10003;</span>'}
       </div>
       <div class="sec">Categorie</div><div class="grid">${DATA.categories.map((c,i)=>
         `<div class="card" onclick="go('cat:${i}')" style="cursor:pointer"><div class="ch">
