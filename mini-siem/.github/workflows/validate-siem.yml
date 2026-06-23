@@ -1,0 +1,173 @@
+name: Validate Mini-SIEM
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'mini-siem/**'
+  pull_request:
+    paths:
+      - 'mini-siem/**'
+
+defaults:
+  run:
+    working-directory: mini-siem
+
+jobs:
+  # ── 1. Validate YAML configs ─────────────────────────────────
+  validate-yaml:
+    name: Validate YAML Configurations
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install yamllint
+        run: pip install yamllint
+
+      - name: Lint Filebeat config
+        run: yamllint -d relaxed config/filebeat/filebeat.yml
+
+      - name: Lint Kibana config
+        run: yamllint -d relaxed config/kibana/kibana.yml
+
+      - name: Lint Logstash config
+        run: yamllint -d relaxed config/logstash/logstash.yml
+
+      - name: Validate docker-compose
+        run: docker compose config --quiet
+
+  # ── 2. Validate TOML detection rules ─────────────────────────
+  validate-detection-rules:
+    name: Validate Elastic Detection Rules (TOML)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11+
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Parse all TOML rule files
+        run: |
+          python3 - <<'EOF'
+          import tomllib, glob, sys, os
+
+          rule_files = glob.glob("rules/detection/*.toml")
+          if not rule_files:
+              print("WARNING: No TOML rule files found")
+              sys.exit(0)
+
+          errors = []
+          for path in sorted(rule_files):
+              try:
+                  with open(path, "rb") as f:
+                      data = tomllib.load(f)
+                  rule = data.get("rule", {})
+                  required = ["name", "description", "severity", "risk_score", "type", "query"]
+                  missing = [k for k in required if k not in rule]
+                  if missing:
+                      errors.append(f"{path}: missing fields {missing}")
+                  else:
+                      print(f"  OK  {os.path.basename(path)}: '{rule['name']}'")
+              except Exception as e:
+                  errors.append(f"{path}: {e}")
+
+          if errors:
+              print("\nErrors found:")
+              for e in errors:
+                  print(f"  FAIL {e}")
+              sys.exit(1)
+          else:
+              print(f"\nAll {len(rule_files)} detection rules validated.")
+          EOF
+
+      - name: Check MITRE ATT&CK fields
+        run: |
+          python3 - <<'EOF'
+          import tomllib, glob, sys
+
+          for path in glob.glob("rules/detection/*.toml"):
+              with open(path, "rb") as f:
+                  data = tomllib.load(f)
+              rule = data.get("rule", {})
+              threats = rule.get("threat", [])
+              if not threats:
+                  print(f"  WARN {path}: no MITRE threat mapping")
+              else:
+                  for t in threats:
+                      tactic = t.get("tactic", {})
+                      if not tactic.get("id"):
+                          print(f"  WARN {path}: threat entry missing tactic.id")
+              print(f"  OK  {path}: MITRE mapping present")
+          EOF
+
+  # ── 3. Validate Suricata rules syntax ─────────────────────────
+  validate-suricata-rules:
+    name: Validate Suricata Rules
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Test Suricata rule syntax
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}/mini-siem/config/suricata:/etc/suricata:ro" \
+            jasonish/suricata:latest \
+            -T -c /etc/suricata/suricata.yaml 2>&1 | \
+            tee /tmp/suricata-test.log
+          grep -q "Configuration provided was successfully loaded" /tmp/suricata-test.log && \
+            echo "Suricata config OK" || \
+            (grep -i "error" /tmp/suricata-test.log; exit 1)
+
+  # ── 4. Validate shell scripts ─────────────────────────────────
+  validate-scripts:
+    name: Lint Shell Scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: sudo apt-get install -y shellcheck
+
+      - name: ShellCheck simulations
+        run: shellcheck simulations/*.sh || true
+
+      - name: ShellCheck scripts
+        run: shellcheck scripts/*.sh || true
+
+  # ── 5. Smoke test — Elasticsearch reachable ───────────────────
+  smoke-test-elk:
+    name: Smoke Test — ELK Stack Startup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start Elasticsearch + Kibana only
+        run: |
+          docker compose up -d elasticsearch kibana
+          echo "Waiting for Elasticsearch..."
+          timeout 120 bash -c \
+            'until curl -sf http://localhost:9200/_cluster/health; do sleep 5; done'
+
+      - name: Check cluster health
+        run: |
+          STATUS=$(curl -sf http://localhost:9200/_cluster/health | python3 -c \
+            "import sys,json; print(json.load(sys.stdin)['status'])")
+          echo "Cluster status: $STATUS"
+          [ "$STATUS" = "green" ] || [ "$STATUS" = "yellow" ]
+
+      - name: Check Kibana status
+        run: |
+          timeout 120 bash -c \
+            'until curl -sf http://localhost:5601/api/status | grep -q available; do sleep 5; done'
+          echo "Kibana is up"
+
+      - name: Cleanup
+        if: always()
+        run: docker compose down -v

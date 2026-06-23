@@ -1,0 +1,80 @@
+[metadata]
+creation_date = "2026/06/23"
+maturity = "production"
+updated_date = "2026/06/23"
+
+[rule]
+author = ["Damiano Di Biase"]
+description = """
+Detects SSH connections originating from external (non-RFC1918) IP addresses
+to internal hosts, which may indicate lateral movement or remote access by
+an external threat actor. Also flags RDP connection attempts from external
+networks (T1133 - External Remote Services).
+"""
+from = "now-5m"
+index = ["siem-suricata-*", "siem-auth-*"]
+language = "kuery"
+license = "MIT"
+name = "[T1021.004 / T1133] Remote Services — External SSH / RDP"
+note = """
+## Triage
+1. Is the source IP expected? Check VPN/jump-host allowlist.
+2. Look for prior recon activity (T1046) from the same IP.
+3. If SSH: was authentication successful? Check auth.log for 'Accepted'.
+4. If RDP: check Windows event log 4624/4625.
+
+## Containment
+- Block unexpected external IPs on the firewall.
+- Enforce MFA for all external SSH/RDP access.
+- Review what the session did (commands, file access) if successful.
+"""
+risk_score = 55
+rule_id = "d4e5f6a7-1021-0004-abcd-siemlablat001"
+severity = "medium"
+tags = [
+  "Mini-SIEM Lab",
+  "Lateral Movement",
+  "Persistence",
+  "T1021.004",
+  "T1133",
+  "SSH",
+  "RDP",
+  "External Access",
+]
+type = "query"
+
+query = '''
+suricata.event_type: "alert"
+  and suricata.alert.signature: ("*T1021*" or "*T1133*" or "*External*SSH*" or "*RDP*External*")
+'''
+
+[[rule.threat]]
+framework = "MITRE ATT&CK"
+
+  [rule.threat.tactic]
+  id = "TA0008"
+  name = "Lateral Movement"
+  reference = "https://attack.mitre.org/tactics/TA0008/"
+
+  [[rule.threat.technique]]
+  id = "T1021"
+  name = "Remote Services"
+  reference = "https://attack.mitre.org/techniques/T1021/"
+
+    [[rule.threat.technique.subtechnique]]
+    id = "T1021.004"
+    name = "SSH"
+    reference = "https://attack.mitre.org/techniques/T1021/004/"
+
+[[rule.threat]]
+framework = "MITRE ATT&CK"
+
+  [rule.threat.tactic]
+  id = "TA0003"
+  name = "Persistence"
+  reference = "https://attack.mitre.org/tactics/TA0003/"
+
+  [[rule.threat.technique]]
+  id = "T1133"
+  name = "External Remote Services"
+  reference = "https://attack.mitre.org/techniques/T1133/"

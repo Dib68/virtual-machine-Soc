@@ -1,0 +1,73 @@
+[metadata]
+creation_date = "2026/06/23"
+maturity = "production"
+updated_date = "2026/06/23"
+
+[rule]
+author = ["Damiano Di Biase"]
+description = """
+Detects a burst of failed SSH authentication attempts from a single source IP
+within a short time window, indicating a possible password guessing or credential
+stuffing attack. Correlates Suricata network alerts with auth.log events.
+"""
+from = "now-5m"
+index = ["siem-auth-*", "siem-suricata-*"]
+language = "kuery"
+license = "MIT"
+name = "[T1110.001] SSH Brute Force — Multiple Failed Logins"
+note = """
+## Triage
+1. Check if source IP is a known Tor exit node or VPN (query AbuseIPDB).
+2. Look for any *Accepted* login from the same IP in the same window.
+3. If the IP is internal, escalate — may indicate a compromised host pivoting.
+
+## Containment
+- Block IP with iptables: `iptables -I INPUT -s <ip> -j DROP`
+- Enable fail2ban SSH jail if not active.
+- Create TheHive case and assign to on-call analyst.
+
+## References
+- https://attack.mitre.org/techniques/T1110/001/
+- https://www.elastic.co/guide/en/security/current/prebuilt-rule-8-4-2-ssh-brute-force-login-attempts.html
+"""
+risk_score = 73
+rule_id = "a1b2c3d4-1110-0001-abcd-siemlabbrute1"
+severity = "high"
+tags = [
+  "Mini-SIEM Lab",
+  "Credential Access",
+  "T1110",
+  "T1110.001",
+  "SSH",
+  "Linux",
+  "Brute Force",
+]
+timestamp_override = "event.ingested"
+type = "threshold"
+
+query = '''
+event.category: "authentication" and event.outcome: "failure"
+  and (auth.action: "Failed*" or suricata.alert.signature: "*Brute Force*")
+'''
+
+[[rule.threat]]
+framework = "MITRE ATT&CK"
+
+  [rule.threat.tactic]
+  id = "TA0006"
+  name = "Credential Access"
+  reference = "https://attack.mitre.org/tactics/TA0006/"
+
+  [[rule.threat.technique]]
+  id = "T1110"
+  name = "Brute Force"
+  reference = "https://attack.mitre.org/techniques/T1110/"
+
+    [[rule.threat.technique.subtechnique]]
+    id = "T1110.001"
+    name = "Password Guessing"
+    reference = "https://attack.mitre.org/techniques/T1110/001/"
+
+[rule.threshold]
+field = ["source.ip"]
+value = 5

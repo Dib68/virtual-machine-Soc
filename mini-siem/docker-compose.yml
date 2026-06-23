@@ -1,8 +1,13 @@
 # Mini-SIEM — Threat Detection Lab
-# Stack: Elasticsearch + Logstash + Kibana + Filebeat + Suricata
-# Avvio: docker compose up -d
-# Kibana:  http://localhost:5601
-# Elastic: http://localhost:9200
+# Stack: Elasticsearch + Logstash + Kibana + Filebeat + Suricata + Target
+#
+# Avvio rapido:   docker compose up -d          oppure:  make up
+# Tutte le sim.:  make attack-all
+# Alert check:    make check
+# Kibana:         http://localhost:5601
+# Elastic:        http://localhost:9200
+# Target SSH:     ssh labuser@localhost -p 2222  (pass: labpass)
+# Target HTTP:    http://localhost:8080
 
 services:
 
@@ -112,6 +117,41 @@ services:
       - ./scripts/load-dashboards.sh:/load-dashboards.sh:ro
     command: sh /load-dashboards.sh
     restart: no
+
+  # ── Target Machine (vulnerable SSH + HTTP) ────────────────────
+  target:
+    image: ubuntu:22.04
+    container_name: siem-target
+    hostname: lab-target
+    ports:
+      - "2222:22"    # SSH (simulazioni brute force)
+      - "8080:80"    # HTTP (simulazioni web attack)
+    volumes:
+      - ./config/target/setup.sh:/setup.sh:ro
+    command: >
+      bash -c "
+        apt-get update -qq &&
+        apt-get install -y -qq openssh-server nginx python3 2>/dev/null &&
+        useradd -m -s /bin/bash labuser &&
+        echo 'labuser:labpass' | chpasswd &&
+        echo 'root:toor' | chpasswd &&
+        sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config &&
+        sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config &&
+        mkdir -p /run/sshd &&
+        service ssh start &&
+        nginx -g 'daemon off;'
+      "
+    networks:
+      siem-net:
+        ipv4_address: 172.20.0.10
+    restart: unless-stopped
+
+networks:
+  siem-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
 
 volumes:
   es-data:

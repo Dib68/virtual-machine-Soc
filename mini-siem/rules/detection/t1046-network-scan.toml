@@ -1,0 +1,60 @@
+[metadata]
+creation_date = "2026/06/23"
+maturity = "production"
+updated_date = "2026/06/23"
+
+[rule]
+author = ["Damiano Di Biase"]
+description = """
+Detects rapid TCP SYN scanning activity consistent with automated network
+service discovery tools such as Nmap. A single source sends SYN packets
+to many destination ports within a short window, which is characteristic
+of T1046 - Network Service Scanning.
+"""
+from = "now-2m"
+index = ["siem-suricata-*"]
+language = "kuery"
+license = "MIT"
+name = "[T1046] Network Service Scanning — Nmap SYN Sweep"
+note = """
+## Triage
+1. Identify the scanning source IP: internal or external?
+2. If internal: possible unauthorized recon or compromised host.
+3. If external: correlate with other alerts (brute force, web attack) — may be
+   part of an attack chain (Recon → Initial Access).
+4. Check if the scan targeted sensitive ports (22, 3389, 445, 1433).
+
+## Containment
+- If internal: isolate the scanning host and investigate.
+- If external: add to deny-list and monitor for follow-up activity.
+"""
+risk_score = 47
+rule_id = "b2c3d4e5-1046-0002-abcd-siemlabscan01"
+severity = "medium"
+tags = [
+  "Mini-SIEM Lab",
+  "Discovery",
+  "T1046",
+  "Nmap",
+  "Port Scan",
+  "Network",
+]
+type = "query"
+
+query = '''
+suricata.event_type: "alert"
+  and suricata.alert.signature: ("*Port Scan*" or "*Nmap*" or "*T1046*")
+'''
+
+[[rule.threat]]
+framework = "MITRE ATT&CK"
+
+  [rule.threat.tactic]
+  id = "TA0007"
+  name = "Discovery"
+  reference = "https://attack.mitre.org/tactics/TA0007/"
+
+  [[rule.threat.technique]]
+  id = "T1046"
+  name = "Network Service Scanning"
+  reference = "https://attack.mitre.org/techniques/T1046/"
