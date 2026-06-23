@@ -1,0 +1,159 @@
+%YAML 1.1
+---
+vars:
+  address-groups:
+    HOME_NET: "[192.168.0.0/16,10.0.0.0/8,172.16.0.0/12]"
+    EXTERNAL_NET: "!$HOME_NET"
+    HTTP_SERVERS: "$HOME_NET"
+    SMTP_SERVERS: "$HOME_NET"
+    SQL_SERVERS: "$HOME_NET"
+    DNS_SERVERS: "$HOME_NET"
+    TELNET_SERVERS: "$HOME_NET"
+    AIM_SERVERS: "$EXTERNAL_NET"
+    DC_SERVERS: "$HOME_NET"
+    DNP3_SERVER: "$HOME_NET"
+    DNP3_CLIENT: "$HOME_NET"
+    MODBUS_CLIENT: "$HOME_NET"
+    MODBUS_SERVER: "$HOME_NET"
+    ENIP_CLIENT: "$HOME_NET"
+    ENIP_SERVER: "$HOME_NET"
+
+  port-groups:
+    HTTP_PORTS:   "80"
+    SHELLCODE_PORTS: "!80"
+    ORACLE_PORTS: 1521
+    SSH_PORTS:    22
+    DNP3_PORTS:   20000
+    MODBUS_PORTS: 502
+    FILE_DATA_PORTS: "[$HTTP_PORTS,110,143]"
+    FTP_PORTS:    21
+    VXLAN_PORTS:  4789
+    TEREDO_PORTS: 3544
+
+default-log-dir: /var/log/suricata/
+
+stats:
+  enabled: yes
+  interval: 8
+
+outputs:
+  - fast:
+      enabled: yes
+      filename: fast.log
+      append: yes
+
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      community-id: true
+      types:
+        - alert:
+            payload: yes
+            payload-buffer-size: 4kb
+            payload-printable: yes
+            packet: yes
+            metadata: yes
+            http-body: yes
+            http-body-printable: yes
+            tagged-packets: yes
+        - anomaly:
+            enabled: yes
+            types:
+              decode: no
+              stream: no
+              applayer: yes
+        - http:
+            extended: yes
+        - dns:
+            query: yes
+            answer: yes
+        - tls:
+            extended: yes
+        - files:
+            force-magic: no
+        - smtp: ~
+        - dnp3: ~
+        - ftp: ~
+        - ssh: ~
+        - flow: ~
+        - netflow: ~
+
+  - http-log:
+      enabled: no
+      filename: http.log
+
+  - stats:
+      enabled: yes
+      filename: stats.log
+
+logging:
+  default-log-level: notice
+  outputs:
+    - console:
+        enabled: yes
+    - file:
+        enabled: yes
+        level: info
+        filename: /var/log/suricata/suricata.log
+
+af-packet:
+  - interface: eth0
+    cluster-id: 99
+    cluster-type: cluster_flow
+    defrag: yes
+    use-mmap: yes
+    tpacket-v3: yes
+
+pcap:
+  - interface: eth0
+
+app-layer:
+  protocols:
+    tls:
+      enabled: yes
+      detection-ports:
+        dp: 443
+    http:
+      enabled: yes
+      libhtp:
+        default-config:
+          personality: IDS
+          request-body-limit: 100kb
+          response-body-limit: 100kb
+          request-body-minimal-inspect-size: 32kb
+          request-body-inspect-window: 4kb
+          response-body-minimal-inspect-size: 40kb
+          response-body-inspect-window: 16kb
+          response-body-decompress-layer-limit: 2
+          http-body-inline: auto
+          swf-decompression:
+            enabled: yes
+            type: both
+            compress-depth: 100kb
+            decompress-depth: 100kb
+          double-decode-path: no
+          double-decode-query: no
+    smtp:
+      enabled: yes
+    imap:
+      enabled: detection-only
+    ssh:
+      enabled: yes
+    dns:
+      enabled: yes
+      version: 2
+      memcaps:
+        state: 64mb
+        request: 8mb
+    ftp:
+      enabled: yes
+      memcap: 64mb
+
+rule-files:
+  - suricata.rules
+  - /etc/suricata/rules/local.rules
+
+classification-file: /etc/suricata/classification.config
+reference-config-file: /etc/suricata/reference.config
+threshold-file: /etc/suricata/threshold.config

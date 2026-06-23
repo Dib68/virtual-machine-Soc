@@ -1,0 +1,266 @@
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" font-family="'Inter','Segoe UI',sans-serif">
+  <!-- Background -->
+  <rect width="1280" height="720" fill="#1a1c21"/>
+
+  <!-- Top navbar -->
+  <rect width="1280" height="48" fill="#141519"/>
+  <rect x="0" y="48" width="1280" height="1" fill="#343741"/>
+  <!-- Elastic logo area -->
+  <rect x="12" y="12" width="28" height="24" rx="4" fill="#00bfb3"/>
+  <text x="50" y="30" fill="#ffffff" font-size="15" font-weight="600">Elastic</text>
+  <text x="98" y="30" fill="#9ba3af" font-size="13">Security</text>
+
+  <!-- Nav items -->
+  <text x="220" y="30" fill="#9ba3af" font-size="13">Dashboards</text>
+  <text x="310" y="30" fill="#ffffff" font-size="13" font-weight="600">Overview</text>
+  <text x="390" y="30" fill="#9ba3af" font-size="13">Alerts</text>
+  <text x="440" y="30" fill="#9ba3af" font-size="13">Timelines</text>
+  <text x="520" y="30" fill="#9ba3af" font-size="13">Cases</text>
+
+  <!-- Right navbar -->
+  <text x="1100" y="30" fill="#9ba3af" font-size="12">Last 24 hours ▼</text>
+  <rect x="1200" y="14" width="68" height="22" rx="4" fill="#006bb4"/>
+  <text x="1225" y="30" fill="#ffffff" font-size="12" font-weight="600">Refresh</text>
+
+  <!-- Page title -->
+  <text x="24" y="84" fill="#ffffff" font-size="20" font-weight="700">SOC Overview</text>
+  <text x="24" y="104" fill="#6b7280" font-size="12">Mini-SIEM Lab — Last 24h • 2026-06-23</text>
+
+  <!-- ── KPI Cards row ────────────────────────────── -->
+  <!-- Card 1: Total Events -->
+  <rect x="24" y="118" width="235" height="90" rx="6" fill="#1e2028" stroke="#343741" stroke-width="1"/>
+  <text x="40" y="145" fill="#9ba3af" font-size="11" font-weight="500">TOTAL EVENTS</text>
+  <text x="40" y="180" fill="#ffffff" font-size="32" font-weight="700">48,291</text>
+  <text x="40" y="200" fill="#34d399" font-size="11">▲ 12% vs yesterday</text>
+
+  <!-- Card 2: Alerts -->
+  <rect x="272" y="118" width="235" height="90" rx="6" fill="#1e2028" stroke="#343741" stroke-width="1"/>
+  <text x="288" y="145" fill="#9ba3af" font-size="11" font-weight="500">SECURITY ALERTS</text>
+  <text x="288" y="180" fill="#f87171" font-size="32" font-weight="700">127</text>
+  <text x="288" y="200" fill="#f87171" font-size="11">▲ 34% — investigate</text>
+
+  <!-- Card 3: Critical -->
+  <rect x="520" y="118" width="235" height="90" rx="6" fill="#1e2028" stroke="#7f1d1d" stroke-width="1"/>
+  <text x="536" y="145" fill="#9ba3af" font-size="11" font-weight="500">CRITICAL ALERTS</text>
+  <text x="536" y="180" fill="#ef4444" font-size="32" font-weight="700">8</text>
+  <text x="536" y="200" fill="#ef4444" font-size="11">● Immediate action required</text>
+
+  <!-- Card 4: Unique IPs -->
+  <rect x="768" y="118" width="235" height="90" rx="6" fill="#1e2028" stroke="#343741" stroke-width="1"/>
+  <text x="784" y="145" fill="#9ba3af" font-size="11" font-weight="500">UNIQUE SOURCE IPs</text>
+  <text x="784" y="180" fill="#60a5fa" font-size="32" font-weight="700">43</text>
+  <text x="784" y="200" fill="#9ba3af" font-size="11">12 external / 31 internal</text>
+
+  <!-- Card 5: MITRE Tactics -->
+  <rect x="1016" y="118" width="240" height="90" rx="6" fill="#1e2028" stroke="#343741" stroke-width="1"/>
+  <text x="1032" y="145" fill="#9ba3af" font-size="11" font-weight="500">MITRE TACTICS HIT</text>
+  <text x="1032" y="180" fill="#a78bfa" font-size="32" font-weight="700">6 / 14</text>
+  <text x="1032" y="200" fill="#9ba3af" font-size="11">Credential Access • Discovery</text>
+
+  <!-- ── Events Over Time chart ────────────────────── -->
+  <rect x="24" y="224" width="760" height="220" rx="6" fill="#1e2028" stroke="#343741" stroke-width="1"/>
+  <text x="40" y="252" fill="#ffffff" font-size="13" font-weight="600">Events &amp; Alerts Over Time</text>
+  <text x="40" y="268" fill="#6b7280" font-size="10">Count per hour • last 24h</text>
+
+  <!-- Chart axes -->
+  <line x1="60" y1="420" x2="770" y2="420" stroke="#343741" stroke-width="1"/>
+  <line x1="60" y1="290" x2="60" y2="420" stroke="#343741" stroke-width="1"/>
+
+  <!-- Y axis labels -->
+  <text x="32" y="295" fill="#6b7280" font-size="9">2000</text>
+  <text x="32" y="340" fill="#6b7280" font-size="9">1000</text>
+  <text x="42" y="422" fill="#6b7280" font-size="9">0</text>
+
+  <!-- Time bars (24 hours) -->
+  <!-- Normal traffic bars (blue) -->
+  <g fill="#1d4ed8" opacity="0.7">
+    <rect x="68"  y="370" width="25" height="50"/>
+    <rect x="98"  y="360" width="25" height="60"/>
+    <rect x="128" y="375" width="25" height="45"/>
+    <rect x="158" y="368" width="25" height="52"/>
+    <rect x="188" y="372" width="25" height="48"/>
+    <rect x="218" y="355" width="25" height="65"/>
+    <rect x="248" y="345" width="25" height="75"/>
+    <rect x="278" y="330" width="25" height="90"/>
+    <rect x="308" y="320" width="25" height="100"/>
+    <rect x="338" y="310" width="25" height="110"/>
+    <rect x="368" y="315" width="25" height="105"/>
+    <rect x="398" y="325" width="25" height="95"/>
+    <rect x="428" y="320" width="25" height="100"/>
+    <rect x="458" y="318" width="25" height="102"/>
+    <rect x="488" y="322" width="25" height="98"/>
+    <rect x="518" y="340" width="25" height="80"/>
+    <rect x="548" y="352" width="25" height="68"/>
+    <rect x="578" y="362" width="25" height="58"/>
+    <rect x="608" y="358" width="25" height="62"/>
+    <rect x="638" y="365" width="25" height="55"/>
+    <rect x="668" y="370" width="25" height="50"/>
+    <rect x="698" y="375" width="25" height="45"/>
+    <rect x="728" y="368" width="25" height="52"/>
+  </g>
+  <!-- Alert spikes (red) -->
+  <g fill="#ef4444" opacity="0.85">
+    <rect x="248" y="338" width="25" height="7"/>
+    <rect x="308" y="298" width="25" height="22"/>
+    <rect x="338" y="285" width="25" height="25"/>
+    <rect x="368" y="292" width="25" height="23"/>
+    <rect x="518" y="326" width="25" height="14"/>
+  </g>
+
+  <!-- Legend -->
+  <rect x="580" y="248" width="10" height="10" fill="#1d4ed8" opacity="0.7"/>
+  <text x="594" y="258" fill="#9ba3af" font-size="10">Events</text>
+  <rect x="640" y="248" width="10" height="10" fill="#ef4444" opacity="0.85"/>
+  <text x="654" y="258" fill="#9ba3af" font-size="10">Alerts</text>
+
+  <!-- X axis hour labels -->
+  <text x="65"  y="432" fill="#6b7280" font-size="8">00:00</text>
+  <text x="185" y="432" fill="#6b7280" font-size="8">04:00</text>
+  <text x="308" y="432" fill="#6b7280" font-size="8">08:00</text>
+  <text x="428" y="432" fill="#6b7280" font-size="8">12:00</text>
+  <text x="548" y="432" fill="#6b7280" font-size="8">16:00</text>
+  <text x="668" y="432" fill="#6b7280" font-size="8">20:00</text>
+
+  <!-- ── Alert Severity Donut ───────────────────── -->
+  <rect x="800" y="224" width="456" height="220" rx="6" fill="#1e2028" stroke="#343741" stroke-width="1"/>
+  <text x="816" y="252" fill="#ffffff" font-size="13" font-weight="600">Alert Severity Distribution</text>
+  <text x="816" y="268" fill="#6b7280" font-size="10">By severity level</text>
+
+  <!-- Donut chart (SVG arc approximation) -->
+  <!-- CRITICAL slice (red) ~6% -->
+  <path d="M960,360 L960,300 A60,60 0 0,1 1003,330 Z" fill="#ef4444"/>
+  <!-- HIGH slice (orange) ~25% -->
+  <path d="M960,360 L1003,330 A60,60 0 0,1 1008,395 Z" fill="#f97316"/>
+  <!-- MEDIUM slice (yellow) ~40% -->
+  <path d="M960,360 L1008,395 A60,60 0 0,1 930,418 Z" fill="#eab308"/>
+  <!-- LOW slice (green) ~29% -->
+  <path d="M960,360 L930,418 A60,60 0 1,1 960,300 Z" fill="#22c55e"/>
+  <!-- Inner circle (donut hole) -->
+  <circle cx="960" cy="360" r="36" fill="#1e2028"/>
+  <text x="950" y="356" fill="#ffffff" font-size="11" font-weight="700">127</text>
+  <text x="944" y="370" fill="#9ba3af" font-size="9">alerts</text>
+
+  <!-- Legend -->
+  <rect x="1040" y="300" width="12" height="12" rx="2" fill="#ef4444"/>
+  <text x="1058" y="312" fill="#d1d5db" font-size="11">Critical</text>
+  <text x="1200" y="312" fill="#ef4444" font-size="11" font-weight="600">8</text>
+
+  <rect x="1040" y="322" width="12" height="12" rx="2" fill="#f97316"/>
+  <text x="1058" y="334" fill="#d1d5db" font-size="11">High</text>
+  <text x="1200" y="334" fill="#f97316" font-size="11" font-weight="600">31</text>
+
+  <rect x="1040" y="344" width="12" height="12" rx="2" fill="#eab308"/>
+  <text x="1058" y="356" fill="#d1d5db" font-size="11">Medium</text>
+  <text x="1200" y="356" fill="#eab308" font-size="11" font-weight="600">51</text>
+
+  <rect x="1040" y="366" width="12" height="12" rx="2" fill="#22c55e"/>
+  <text x="1058" y="378" fill="#d1d5db" font-size="11">Low</text>
+  <text x="1200" y="378" fill="#22c55e" font-size="11" font-weight="600">37</text>
+
+  <!-- ── Recent Alerts table ───────────────────────── -->
+  <rect x="24" y="458" width="760" height="248" rx="6" fill="#1e2028" stroke="#343741" stroke-width="1"/>
+  <text x="40" y="486" fill="#ffffff" font-size="13" font-weight="600">Recent Security Alerts</text>
+
+  <!-- Table header -->
+  <rect x="24" y="496" width="760" height="28" fill="#141519"/>
+  <text x="40"  y="515" fill="#9ba3af" font-size="11" font-weight="600">TIMESTAMP</text>
+  <text x="180" y="515" fill="#9ba3af" font-size="11" font-weight="600">RULE / MITRE</text>
+  <text x="460" y="515" fill="#9ba3af" font-size="11" font-weight="600">SOURCE IP</text>
+  <text x="580" y="515" fill="#9ba3af" font-size="11" font-weight="600">SEVERITY</text>
+  <text x="680" y="515" fill="#9ba3af" font-size="11" font-weight="600">STATUS</text>
+
+  <!-- Row 1 - Critical -->
+  <rect x="24" y="524" width="760" height="34" fill="#1e2028"/>
+  <line x1="24" y1="558" x2="784" y2="558" stroke="#2a2d35" stroke-width="1"/>
+  <text x="40"  y="546" fill="#d1d5db" font-size="11">09:14:22</text>
+  <rect x="174" y="531" width="8" height="8" rx="1" fill="#ef4444"/>
+  <text x="186" y="543" fill="#d1d5db" font-size="11">[T1110] SSH Brute Force (5 attempts)</text>
+  <text x="460" y="546" fill="#60a5fa" font-size="11">185.220.101.42</text>
+  <rect x="572" y="533" width="52" height="16" rx="8" fill="#7f1d1d"/>
+  <text x="581" y="545" fill="#ef4444" font-size="10" font-weight="600">CRITICAL</text>
+  <text x="680" y="546" fill="#fbbf24" font-size="11">Open</text>
+
+  <!-- Row 2 - High -->
+  <rect x="24" y="558" width="760" height="34" fill="#1e2028"/>
+  <line x1="24" y1="592" x2="784" y2="592" stroke="#2a2d35" stroke-width="1"/>
+  <text x="40"  y="580" fill="#d1d5db" font-size="11">09:12:07</text>
+  <rect x="174" y="565" width="8" height="8" rx="1" fill="#f97316"/>
+  <text x="186" y="577" fill="#d1d5db" font-size="11">[T1046] Nmap SYN Scan (328 ports)</text>
+  <text x="460" y="580" fill="#60a5fa" font-size="11">10.0.2.15</text>
+  <rect x="572" y="567" width="36" height="16" rx="8" fill="#7c2d12"/>
+  <text x="578" y="579" fill="#f97316" font-size="10" font-weight="600">HIGH</text>
+  <text x="680" y="580" fill="#fbbf24" font-size="11">Open</text>
+
+  <!-- Row 3 - High -->
+  <rect x="24" y="592" width="760" height="34" fill="#1e2028"/>
+  <line x1="24" y1="626" x2="784" y2="626" stroke="#2a2d35" stroke-width="1"/>
+  <text x="40"  y="614" fill="#d1d5db" font-size="11">09:10:55</text>
+  <rect x="174" y="599" width="8" height="8" rx="1" fill="#f97316"/>
+  <text x="186" y="611" fill="#d1d5db" font-size="11">[T1190] SQL Injection Attempt in URI</text>
+  <text x="460" y="614" fill="#60a5fa" font-size="11">192.168.1.105</text>
+  <rect x="572" y="601" width="36" height="16" rx="8" fill="#7c2d12"/>
+  <text x="578" y="613" fill="#f97316" font-size="10" font-weight="600">HIGH</text>
+  <text x="680" y="614" fill="#34d399" font-size="11">Closed</text>
+
+  <!-- Row 4 - Medium -->
+  <rect x="24" y="626" width="760" height="34" fill="#1e2028"/>
+  <line x1="24" y1="660" x2="784" y2="660" stroke="#2a2d35" stroke-width="1"/>
+  <text x="40"  y="648" fill="#d1d5db" font-size="11">09:08:31</text>
+  <rect x="174" y="633" width="8" height="8" rx="1" fill="#eab308"/>
+  <text x="186" y="645" fill="#d1d5db" font-size="11">[T1595.002] Nikto Web Scanner Detected</text>
+  <text x="460" y="648" fill="#60a5fa" font-size="11">10.0.2.15</text>
+  <rect x="572" y="635" width="54" height="16" rx="8" fill="#713f12"/>
+  <text x="577" y="647" fill="#eab308" font-size="10" font-weight="600">MEDIUM</text>
+  <text x="680" y="648" fill="#fbbf24" font-size="11">Open</text>
+
+  <!-- Row 5 - Low -->
+  <rect x="24" y="660" width="760" height="34" fill="#1e2028"/>
+  <text x="40"  y="682" fill="#d1d5db" font-size="11">09:05:18</text>
+  <rect x="174" y="667" width="8" height="8" rx="1" fill="#22c55e"/>
+  <text x="186" y="679" fill="#d1d5db" font-size="11">[T1021.004] SSH from External Network</text>
+  <text x="460" y="682" fill="#60a5fa" font-size="11">203.0.113.88</text>
+  <rect x="572" y="669" width="28" height="16" rx="8" fill="#14532d"/>
+  <text x="577" y="681" fill="#22c55e" font-size="10" font-weight="600">LOW</text>
+  <text x="680" y="682" fill="#34d399" font-size="11">Closed</text>
+
+  <!-- ── Top Source IPs ─────────────────────────────── -->
+  <rect x="800" y="458" width="456" height="248" rx="6" fill="#1e2028" stroke="#343741" stroke-width="1"/>
+  <text x="816" y="486" fill="#ffffff" font-size="13" font-weight="600">Top Source IPs by Alert Count</text>
+
+  <!-- Horizontal bars -->
+  <!-- IP 1 -->
+  <text x="816" y="526" fill="#9ba3af" font-size="11">185.220.101.42</text>
+  <text x="1230" y="526" fill="#ef4444" font-size="11" font-weight="600">42</text>
+  <rect x="816" y="530" width="380" height="10" rx="3" fill="#2a2d35"/>
+  <rect x="816" y="530" width="380" height="10" rx="3" fill="#ef4444" opacity="0.9"/>
+
+  <!-- IP 2 -->
+  <text x="816" y="560" fill="#9ba3af" font-size="11">10.0.2.15</text>
+  <text x="1230" y="560" fill="#f97316" font-size="11" font-weight="600">31</text>
+  <rect x="816" y="564" width="280" height="10" rx="3" fill="#2a2d35"/>
+  <rect x="816" y="564" width="280" height="10" rx="3" fill="#f97316" opacity="0.9"/>
+
+  <!-- IP 3 -->
+  <text x="816" y="594" fill="#9ba3af" font-size="11">192.168.1.105</text>
+  <text x="1230" y="594" fill="#eab308" font-size="11" font-weight="600">18</text>
+  <rect x="816" y="598" width="180" height="10" rx="3" fill="#2a2d35"/>
+  <rect x="816" y="598" width="180" height="10" rx="3" fill="#eab308" opacity="0.9"/>
+
+  <!-- IP 4 -->
+  <text x="816" y="628" fill="#9ba3af" font-size="11">203.0.113.88</text>
+  <text x="1230" y="628" fill="#60a5fa" font-size="11" font-weight="600">12</text>
+  <rect x="816" y="632" width="120" height="10" rx="3" fill="#2a2d35"/>
+  <rect x="816" y="632" width="120" height="10" rx="3" fill="#60a5fa" opacity="0.9"/>
+
+  <!-- IP 5 -->
+  <text x="816" y="662" fill="#9ba3af" font-size="11">198.51.100.22</text>
+  <text x="1230" y="662" fill="#22c55e" font-size="11" font-weight="600">7</text>
+  <rect x="816" y="666" width="70" height="10" rx="3" fill="#2a2d35"/>
+  <rect x="816" y="666" width="70" height="10" rx="3" fill="#22c55e" opacity="0.9"/>
+
+  <!-- IP 6 -->
+  <text x="816" y="696" fill="#9ba3af" font-size="11">10.0.2.99</text>
+  <text x="1230" y="696" fill="#9ba3af" font-size="11" font-weight="600">4</text>
+  <rect x="816" y="700" width="40" height="10" rx="3" fill="#2a2d35"/>
+  <rect x="816" y="700" width="40" height="10" rx="3" fill="#6b7280" opacity="0.9"/>
+</svg>

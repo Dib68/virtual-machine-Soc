@@ -1,0 +1,204 @@
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" font-family="'Inter','Segoe UI',sans-serif">
+  <!-- Background -->
+  <rect width="1280" height="720" fill="#1a1c21"/>
+
+  <!-- Top navbar -->
+  <rect width="1280" height="48" fill="#141519"/>
+  <rect x="0" y="48" width="1280" height="1" fill="#343741"/>
+  <rect x="12" y="12" width="28" height="24" rx="4" fill="#00bfb3"/>
+  <text x="50" y="30" fill="#ffffff" font-size="15" font-weight="600">Elastic</text>
+  <text x="98" y="30" fill="#9ba3af" font-size="13">Security</text>
+  <text x="220" y="30" fill="#9ba3af" font-size="13">Dashboards</text>
+  <text x="310" y="30" fill="#9ba3af" font-size="13">Overview</text>
+  <text x="390" y="30" fill="#ffffff" font-size="13" font-weight="600">Alerts</text>
+  <text x="440" y="30" fill="#9ba3af" font-size="13">Timelines</text>
+  <text x="520" y="30" fill="#9ba3af" font-size="13">Cases</text>
+
+  <!-- Alert detail header -->
+  <rect x="0" y="48" width="1280" height="72" fill="#1e2028"/>
+  <rect x="0" y="120" width="1280" height="1" fill="#343741"/>
+
+  <!-- Back button -->
+  <text x="24" y="76" fill="#60a5fa" font-size="12">← Back to Alerts</text>
+
+  <!-- Alert title -->
+  <rect x="24" y="84" width="8" height="28" rx="2" fill="#ef4444"/>
+  <text x="40" y="101" fill="#ffffff" font-size="18" font-weight="700">[MITRE T1110] SSH Brute Force Attempt</text>
+  <text x="40" y="116" fill="#6b7280" font-size="12">Rule ID: local-9000001 · Created: 2026-06-23 09:14:22 UTC</text>
+
+  <!-- Status badges top right -->
+  <rect x="980" y="86" width="60" height="22" rx="11" fill="#7f1d1d"/>
+  <text x="989" y="102" fill="#ef4444" font-size="11" font-weight="700">CRITICAL</text>
+  <rect x="1052" y="86" width="52" height="22" rx="11" fill="#1e3a5f"/>
+  <text x="1061" y="102" fill="#60a5fa" font-size="11">Open</text>
+  <rect x="1116" y="86" width="148" height="22" rx="4" fill="#006bb4"/>
+  <text x="1126" y="102" fill="#ffffff" font-size="11" font-weight="600">Acknowledge Alert</text>
+
+  <!-- ── Left column ────────────────────────────── -->
+  <!-- Alert details card -->
+  <rect x="24" y="132" width="580" height="200" rx="6" fill="#1e2028" stroke="#343741" stroke-width="1"/>
+  <text x="40" y="158" fill="#ffffff" font-size="13" font-weight="600">Alert Details</text>
+  <line x1="40" y1="166" x2="588" y2="166" stroke="#343741" stroke-width="1"/>
+
+  <!-- Details grid -->
+  <text x="40" y="186" fill="#6b7280" font-size="11">Rule Name</text>
+  <text x="200" y="186" fill="#d1d5db" font-size="11">[MITRE T1110] SSH Brute Force Attempt</text>
+
+  <text x="40" y="206" fill="#6b7280" font-size="11">MITRE Tactic</text>
+  <rect x="198" y="194" width="108" height="18" rx="9" fill="#312e81"/>
+  <text x="208" y="207" fill="#a5b4fc" font-size="11">Credential Access</text>
+
+  <text x="40" y="226" fill="#6b7280" font-size="11">MITRE Technique</text>
+  <rect x="198" y="214" width="150" height="18" rx="9" fill="#1e3a5f"/>
+  <text x="208" y="227" fill="#60a5fa" font-size="11">T1110.001 — Password Guessing</text>
+
+  <text x="40" y="246" fill="#6b7280" font-size="11">Source IP</text>
+  <text x="200" y="246" fill="#f87171" font-size="11" font-weight="600">185.220.101.42</text>
+  <text x="310" y="246" fill="#6b7280" font-size="11">(Tor Exit Node — RU)</text>
+
+  <text x="40" y="266" fill="#6b7280" font-size="11">Destination</text>
+  <text x="200" y="266" fill="#d1d5db" font-size="11">192.168.56.10:22 (ssh)</text>
+
+  <text x="40" y="286" fill="#6b7280" font-size="11">Threshold</text>
+  <text x="200" y="286" fill="#d1d5db" font-size="11">5 attempts / 60 seconds (exceeded: 42)</text>
+
+  <text x="40" y="306" fill="#6b7280" font-size="11">Suricata SID</text>
+  <text x="200" y="306" fill="#d1d5db" font-size="11">9000001 · 9000002</text>
+
+  <text x="40" y="326" fill="#6b7280" font-size="11">Severity Score</text>
+  <text x="200" y="326" fill="#ef4444" font-size="11" font-weight="600">96 / 100</text>
+
+  <!-- Auth log card -->
+  <rect x="24" y="344" width="580" height="160" rx="6" fill="#141519" stroke="#343741" stroke-width="1"/>
+  <text x="40" y="368" fill="#ffffff" font-size="13" font-weight="600">Auth Log — Failed SSH Attempts</text>
+  <text x="40" y="384" fill="#6b7280" font-size="10">/var/log/auth.log</text>
+  <line x1="40" y1="390" x2="588" y2="390" stroke="#343741" stroke-width="1"/>
+
+  <!-- Log lines -->
+  <text x="40" y="410" fill="#34d399" font-size="10" font-family="'Consolas','Courier New',monospace">Jun 23 09:14:18 target sshd[1842]: Failed password for root from 185.220.101.42 port 51234</text>
+  <text x="40" y="426" fill="#34d399" font-size="10" font-family="'Consolas','Courier New',monospace">Jun 23 09:14:19 target sshd[1843]: Failed password for admin from 185.220.101.42 port 51235</text>
+  <text x="40" y="442" fill="#34d399" font-size="10" font-family="'Consolas','Courier New',monospace">Jun 23 09:14:19 target sshd[1844]: Failed password for user from 185.220.101.42 port 51236</text>
+  <text x="40" y="458" fill="#f87171" font-size="10" font-family="'Consolas','Courier New',monospace">Jun 23 09:14:20 target sshd[1845]: Failed password for root from 185.220.101.42 port 51237</text>
+  <text x="40" y="474" fill="#f87171" font-size="10" font-family="'Consolas','Courier New',monospace">Jun 23 09:14:22 target sshd[1846]: Failed password for root from 185.220.101.42 port 51238</text>
+  <text x="40" y="490" fill="#fbbf24" font-size="10" font-family="'Consolas','Courier New',monospace">Jun 23 09:14:22 target sshd[1847]: error: maximum authentication attempts exceeded (6/6)</text>
+
+  <!-- Recommended response card -->
+  <rect x="24" y="516" width="580" height="188" rx="6" fill="#1e2028" stroke="#343741" stroke-width="1"/>
+  <text x="40" y="542" fill="#ffffff" font-size="13" font-weight="600">Recommended Response (Playbook)</text>
+  <line x1="40" y1="550" x2="588" y2="550" stroke="#343741" stroke-width="1"/>
+
+  <rect x="40" y="562" width="16" height="16" rx="8" fill="#22c55e"/>
+  <text x="64" y="574" fill="#d1d5db" font-size="12">1. Block source IP: iptables -I INPUT -s 185.220.101.42 -j DROP</text>
+
+  <rect x="40" y="584" width="16" height="16" rx="8" fill="#22c55e"/>
+  <text x="64" y="596" fill="#d1d5db" font-size="12">2. Check successful logins from same IP in last 24h</text>
+
+  <rect x="40" y="606" width="16" height="16" rx="8" fill="#fbbf24"/>
+  <text x="64" y="618" fill="#d1d5db" font-size="12">3. Review /var/log/auth.log for Accepted password entries</text>
+
+  <rect x="40" y="628" width="16" height="16" rx="8" fill="#fbbf24"/>
+  <text x="64" y="640" fill="#d1d5db" font-size="12">4. Enable fail2ban SSH jail (ban after 5 failures / 10 min)</text>
+
+  <rect x="40" y="650" width="16" height="16" rx="8" fill="#6b7280"/>
+  <text x="64" y="662" fill="#d1d5db" font-size="12">5. Pivot: check other targets attacked by 185.220.101.42</text>
+
+  <rect x="40" y="672" width="16" height="16" rx="8" fill="#6b7280"/>
+  <text x="64" y="684" fill="#d1d5db" font-size="12">6. Create case in TheHive → assign to analyst</text>
+
+  <text x="40" y="700" fill="#6b7280" font-size="10">MITRE D3FEND: D3-NTF (Network Traffic Filtering) · D3-ATAR (Authentication Attempt Rate Limiting)</text>
+
+  <!-- ── Right column ───────────────────────────── -->
+  <!-- Attempts timeline -->
+  <rect x="620" y="132" width="636" height="230" rx="6" fill="#1e2028" stroke="#343741" stroke-width="1"/>
+  <text x="636" y="158" fill="#ffffff" font-size="13" font-weight="600">Login Attempt Timeline (last 10 min)</text>
+  <text x="636" y="172" fill="#6b7280" font-size="10">Failed attempts per 30-second window</text>
+
+  <!-- Mini timeline bars -->
+  <line x1="656" y1="330" x2="1240" y2="330" stroke="#343741" stroke-width="1"/>
+  <line x1="656" y1="200" x2="656" y2="330" stroke="#343741" stroke-width="1"/>
+  <text x="630" y="204" fill="#6b7280" font-size="9">15</text>
+  <text x="630" y="238" fill="#6b7280" font-size="9">10</text>
+  <text x="634" y="272" fill="#6b7280" font-size="9">5</text>
+  <text x="634" y="332" fill="#6b7280" font-size="9">0</text>
+
+  <g fill="#ef4444" opacity="0.8">
+    <rect x="662"  y="322" width="30" height="8"  />
+    <rect x="700"  y="318" width="30" height="12" />
+    <rect x="738"  y="314" width="30" height="16" />
+    <rect x="776"  y="308" width="30" height="22" />
+    <rect x="814"  y="302" width="30" height="28" />
+    <rect x="852"  y="295" width="30" height="35" />
+    <rect x="890"  y="287" width="30" height="43" />
+    <rect x="928"  y="278" width="30" height="52" />
+    <rect x="966"  y="270" width="30" height="60" />
+    <rect x="1004" y="261" width="30" height="69" />
+    <rect x="1042" y="252" width="30" height="78" />
+    <rect x="1080" y="244" width="30" height="86" />
+    <rect x="1118" y="238" width="30" height="92" />
+    <rect x="1156" y="233" width="30" height="97" />
+    <rect x="1194" y="230" width="30" height="100"/>
+  </g>
+
+  <!-- Time labels -->
+  <text x="656"  y="344" fill="#6b7280" font-size="8">09:05</text>
+  <text x="776"  y="344" fill="#6b7280" font-size="8">09:08</text>
+  <text x="890"  y="344" fill="#6b7280" font-size="8">09:10</text>
+  <text x="1004" y="344" fill="#6b7280" font-size="8">09:12</text>
+  <text x="1118" y="344" fill="#6b7280" font-size="8">09:14</text>
+  <rect x="1194" y="225" width="36" height="106" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="1196" y="220" fill="#ef4444" font-size="9">Alert!</text>
+
+  <!-- GeoIP card -->
+  <rect x="620" y="374" width="636" height="120" rx="6" fill="#1e2028" stroke="#343741" stroke-width="1"/>
+  <text x="636" y="400" fill="#ffffff" font-size="13" font-weight="600">Source IP Intelligence</text>
+  <line x1="636" y1="408" x2="1240" y2="408" stroke="#343741" stroke-width="1"/>
+
+  <text x="636" y="428" fill="#6b7280" font-size="11">IP Address</text>
+  <text x="760" y="428" fill="#f87171" font-size="11" font-weight="600">185.220.101.42</text>
+
+  <text x="636" y="448" fill="#6b7280" font-size="11">Country</text>
+  <text x="760" y="448" fill="#d1d5db" font-size="11">🇷🇺 Russian Federation (Moscow)</text>
+
+  <text x="636" y="468" fill="#6b7280" font-size="11">ASN / ISP</text>
+  <text x="760" y="468" fill="#d1d5db" font-size="11">AS60729 — Tor Exit Node (known malicious)</text>
+
+  <text x="636" y="488" fill="#6b7280" font-size="11">Threat Intel</text>
+  <rect x="758" y="476" width="130" height="18" rx="9" fill="#7f1d1d"/>
+  <text x="766" y="489" fill="#f87171" font-size="11">AbuseIPDB Score: 98/100</text>
+
+  <!-- MITRE card -->
+  <rect x="620" y="506" width="636" height="198" rx="6" fill="#1e2028" stroke="#343741" stroke-width="1"/>
+  <text x="636" y="532" fill="#ffffff" font-size="13" font-weight="600">MITRE ATT&amp;CK Mapping</text>
+  <line x1="636" y1="540" x2="1240" y2="540" stroke="#343741" stroke-width="1"/>
+
+  <!-- Tactic chain -->
+  <rect x="636" y="552" width="95" height="32" rx="6" fill="#1e3a5f" stroke="#2563eb" stroke-width="1"/>
+  <text x="643" y="564" fill="#93c5fd" font-size="9" font-weight="600">RECONNAISSANCE</text>
+  <text x="643" y="578" fill="#60a5fa" font-size="10">T1595.002</text>
+  <text x="736" y="570" fill="#6b7280" font-size="14">→</text>
+
+  <rect x="748" y="552" width="95" height="32" rx="6" fill="#312e81" stroke="#4f46e5" stroke-width="1"/>
+  <text x="755" y="564" fill="#c4b5fd" font-size="9" font-weight="600">CRED. ACCESS</text>
+  <text x="755" y="578" fill="#a5b4fc" font-size="10">T1110.001</text>
+  <text x="848" y="570" fill="#6b7280" font-size="14">→</text>
+
+  <rect x="860" y="552" width="95" height="32" rx="6" fill="#1e3a5f" stroke="#2563eb" stroke-width="1" opacity="0.5"/>
+  <text x="867" y="564" fill="#93c5fd" font-size="9" font-weight="600">LATERAL MOV.</text>
+  <text x="867" y="578" fill="#60a5fa" font-size="10" opacity="0.5">T1021.004</text>
+
+  <!-- Rule details -->
+  <text x="636" y="612" fill="#6b7280" font-size="11">Tactic</text>
+  <text x="760" y="612" fill="#d1d5db" font-size="11">TA0006 — Credential Access</text>
+
+  <text x="636" y="632" fill="#6b7280" font-size="11">Technique</text>
+  <text x="760" y="632" fill="#d1d5db" font-size="11">T1110 — Brute Force</text>
+
+  <text x="636" y="652" fill="#6b7280" font-size="11">Sub-technique</text>
+  <text x="760" y="652" fill="#d1d5db" font-size="11">T1110.001 — Password Guessing</text>
+
+  <text x="636" y="672" fill="#6b7280" font-size="11">Data Source</text>
+  <text x="760" y="672" fill="#d1d5db" font-size="11">DS0028 — Logon Session / DS0015 — Application Log</text>
+
+  <text x="636" y="692" fill="#6b7280" font-size="11">Detection</text>
+  <text x="760" y="692" fill="#d1d5db" font-size="11">Suricata SID:9000001 + Filebeat auth.log parser</text>
+</svg>

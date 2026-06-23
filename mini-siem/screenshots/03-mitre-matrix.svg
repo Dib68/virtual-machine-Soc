@@ -1,0 +1,400 @@
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" font-family="'Inter','Segoe UI',sans-serif">
+  <rect width="1280" height="720" fill="#1a1c21"/>
+
+  <!-- Header -->
+  <rect width="1280" height="48" fill="#141519"/>
+  <rect x="0" y="48" width="1280" height="1" fill="#343741"/>
+  <rect x="12" y="12" width="28" height="24" rx="4" fill="#00bfb3"/>
+  <text x="50" y="30" fill="#ffffff" font-size="15" font-weight="600">Elastic</text>
+  <text x="98" y="30" fill="#9ba3af" font-size="13">Security</text>
+  <text x="220" y="30" fill="#9ba3af" font-size="13">MITRE ATT&amp;CK</text>
+
+  <!-- Page title -->
+  <text x="24" y="84" fill="#ffffff" font-size="20" font-weight="700">MITRE ATT&amp;CK Coverage Matrix</text>
+  <text x="24" y="104" fill="#6b7280" font-size="12">Mini-SIEM Lab — Enterprise Matrix v14 · 6 / 14 Tactics Covered</text>
+
+  <!-- Legend -->
+  <rect x="900" y="66" width="14" height="14" rx="3" fill="#ef4444"/>
+  <text x="918" y="78" fill="#9ba3af" font-size="11">Detected (active rule)</text>
+  <rect x="900" y="86" width="14" height="14" rx="3" fill="#1d4ed8" opacity="0.6"/>
+  <text x="918" y="98" fill="#9ba3af" font-size="11">Monitored (partial)</text>
+  <rect x="900" y="106" width="14" height="14" rx="3" fill="#2a2d35"/>
+  <text x="918" y="118" fill="#9ba3af" font-size="11">Not covered</text>
+
+  <rect x="1080" y="66" width="14" height="14" rx="3" fill="#eab308"/>
+  <text x="1098" y="78" fill="#9ba3af" font-size="11">Simulated this session</text>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- TACTIC COLUMNS (14 tactics, simplified to 11 visible) -->
+  <!-- ══════════════════════════════════════════════════════ -->
+
+  <!-- Column widths: each ~110px, 11 columns = 1210px total, start x=24 -->
+  <!-- Tactics: Recon | Resource Dev | Initial Access | Exec | Persist | Priv Esc | Defense Evasion | Cred Access | Discovery | Lateral Mov | Collection | C2 | Exfil | Impact -->
+  <!-- Showing 11 columns for readability -->
+
+  <!-- Helper: tactic header boxes -->
+  <!-- Recon -->
+  <rect x="24"  y="128" width="107" height="40" rx="4" fill="#1e3a5f"/>
+  <text x="77"  y="144" fill="#93c5fd" font-size="9" font-weight="700" text-anchor="middle">RECONNAIS-</text>
+  <text x="77"  y="156" fill="#93c5fd" font-size="9" font-weight="700" text-anchor="middle">SANCE</text>
+  <text x="77"  y="164" fill="#60a5fa" font-size="8" text-anchor="middle">TA0043</text>
+
+  <!-- Initial Access -->
+  <rect x="135" y="128" width="107" height="40" rx="4" fill="#1e3a5f"/>
+  <text x="188" y="144" fill="#93c5fd" font-size="9" font-weight="700" text-anchor="middle">INITIAL</text>
+  <text x="188" y="156" fill="#93c5fd" font-size="9" font-weight="700" text-anchor="middle">ACCESS</text>
+  <text x="188" y="164" fill="#60a5fa" font-size="8" text-anchor="middle">TA0001</text>
+
+  <!-- Execution -->
+  <rect x="246" y="128" width="107" height="40" rx="4" fill="#2a2d35"/>
+  <text x="299" y="144" fill="#9ba3af" font-size="9" font-weight="700" text-anchor="middle">EXECUTION</text>
+  <text x="299" y="164" fill="#6b7280" font-size="8" text-anchor="middle">TA0002</text>
+
+  <!-- Persistence -->
+  <rect x="357" y="128" width="107" height="40" rx="4" fill="#1e3a5f" opacity="0.5"/>
+  <text x="410" y="144" fill="#93c5fd" font-size="9" font-weight="700" text-anchor="middle">PERSISTENCE</text>
+  <text x="410" y="164" fill="#60a5fa" font-size="8" text-anchor="middle">TA0003</text>
+
+  <!-- Privilege Escalation -->
+  <rect x="468" y="128" width="107" height="40" rx="4" fill="#2a2d35"/>
+  <text x="521" y="144" fill="#9ba3af" font-size="9" font-weight="700" text-anchor="middle">PRIVILEGE</text>
+  <text x="521" y="156" fill="#9ba3af" font-size="9" font-weight="700" text-anchor="middle">ESCALATION</text>
+  <text x="521" y="164" fill="#6b7280" font-size="8" text-anchor="middle">TA0004</text>
+
+  <!-- Defense Evasion -->
+  <rect x="579" y="128" width="107" height="40" rx="4" fill="#2a2d35"/>
+  <text x="632" y="144" fill="#9ba3af" font-size="9" font-weight="700" text-anchor="middle">DEFENSE</text>
+  <text x="632" y="156" fill="#9ba3af" font-size="9" font-weight="700" text-anchor="middle">EVASION</text>
+  <text x="632" y="164" fill="#6b7280" font-size="8" text-anchor="middle">TA0005</text>
+
+  <!-- Credential Access -->
+  <rect x="690" y="128" width="107" height="40" rx="4" fill="#312e81"/>
+  <text x="743" y="144" fill="#c4b5fd" font-size="9" font-weight="700" text-anchor="middle">CREDENTIAL</text>
+  <text x="743" y="156" fill="#c4b5fd" font-size="9" font-weight="700" text-anchor="middle">ACCESS</text>
+  <text x="743" y="164" fill="#a5b4fc" font-size="8" text-anchor="middle">TA0006</text>
+
+  <!-- Discovery -->
+  <rect x="801" y="128" width="107" height="40" rx="4" fill="#1e3a5f"/>
+  <text x="854" y="148" fill="#93c5fd" font-size="9" font-weight="700" text-anchor="middle">DISCOVERY</text>
+  <text x="854" y="164" fill="#60a5fa" font-size="8" text-anchor="middle">TA0007</text>
+
+  <!-- Lateral Movement -->
+  <rect x="912" y="128" width="107" height="40" rx="4" fill="#1e3a5f" opacity="0.7"/>
+  <text x="965" y="144" fill="#93c5fd" font-size="9" font-weight="700" text-anchor="middle">LATERAL</text>
+  <text x="965" y="156" fill="#93c5fd" font-size="9" font-weight="700" text-anchor="middle">MOVEMENT</text>
+  <text x="965" y="164" fill="#60a5fa" font-size="8" text-anchor="middle">TA0008</text>
+
+  <!-- C2 -->
+  <rect x="1023" y="128" width="107" height="40" rx="4" fill="#1e3a5f" opacity="0.5"/>
+  <text x="1076" y="144" fill="#93c5fd" font-size="9" font-weight="700" text-anchor="middle">COMMAND &amp;</text>
+  <text x="1076" y="156" fill="#93c5fd" font-size="9" font-weight="700" text-anchor="middle">CONTROL</text>
+  <text x="1076" y="164" fill="#60a5fa" font-size="8" text-anchor="middle">TA0011</text>
+
+  <!-- Exfiltration -->
+  <rect x="1134" y="128" width="107" height="40" rx="4" fill="#1e3a5f" opacity="0.4"/>
+  <text x="1187" y="144" fill="#93c5fd" font-size="9" font-weight="700" text-anchor="middle">EXFIL-</text>
+  <text x="1187" y="156" fill="#93c5fd" font-size="9" font-weight="700" text-anchor="middle">TRATION</text>
+  <text x="1187" y="164" fill="#60a5fa" font-size="8" text-anchor="middle">TA0010</text>
+
+  <!-- ══ TECHNIQUE CELLS ══ -->
+  <!-- ROW 1 (y=176) -->
+
+  <!-- T1595.002 Vuln Scanning - DETECTED + simulated -->
+  <rect x="24"  y="176" width="107" height="44" rx="3" fill="#ef4444" opacity="0.85"/>
+  <rect x="24"  y="176" width="107" height="44" rx="3" fill="none" stroke="#eab308" stroke-width="2"/>
+  <text x="77"  y="194" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">T1595.002</text>
+  <text x="77"  y="208" fill="#fef2f2" font-size="9" text-anchor="middle">Vuln Scanning</text>
+  <text x="77"  y="216" fill="#fef9c3" font-size="8" text-anchor="middle">● Simulated</text>
+
+  <!-- T1190 Exploit App - DETECTED + simulated -->
+  <rect x="135" y="176" width="107" height="44" rx="3" fill="#ef4444" opacity="0.85"/>
+  <rect x="135" y="176" width="107" height="44" rx="3" fill="none" stroke="#eab308" stroke-width="2"/>
+  <text x="188" y="194" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">T1190</text>
+  <text x="188" y="208" fill="#fef2f2" font-size="9" text-anchor="middle">Exploit App</text>
+  <text x="188" y="216" fill="#fef9c3" font-size="8" text-anchor="middle">● Simulated</text>
+
+  <!-- T1059 Cmd Interpreter - not covered -->
+  <rect x="246" y="176" width="107" height="44" rx="3" fill="#2a2d35"/>
+  <text x="299" y="194" fill="#6b7280" font-size="10" text-anchor="middle">T1059</text>
+  <text x="299" y="208" fill="#6b7280" font-size="9" text-anchor="middle">Cmd Interpreter</text>
+
+  <!-- T1133 External Remote - monitored -->
+  <rect x="357" y="176" width="107" height="44" rx="3" fill="#1d4ed8" opacity="0.55"/>
+  <text x="410" y="194" fill="#bfdbfe" font-size="10" font-weight="600" text-anchor="middle">T1133</text>
+  <text x="410" y="208" fill="#bfdbfe" font-size="9" text-anchor="middle">External Remote</text>
+  <text x="410" y="216" fill="#93c5fd" font-size="8" text-anchor="middle">SID: 9000070</text>
+
+  <!-- T1547 Boot Autostart - not covered -->
+  <rect x="468" y="176" width="107" height="44" rx="3" fill="#2a2d35"/>
+  <text x="521" y="194" fill="#6b7280" font-size="10" text-anchor="middle">T1547</text>
+  <text x="521" y="208" fill="#6b7280" font-size="9" text-anchor="middle">Boot Autostart</text>
+
+  <!-- T1562 Impair Defense - not covered -->
+  <rect x="579" y="176" width="107" height="44" rx="3" fill="#2a2d35"/>
+  <text x="632" y="194" fill="#6b7280" font-size="10" text-anchor="middle">T1562</text>
+  <text x="632" y="208" fill="#6b7280" font-size="9" text-anchor="middle">Impair Defense</text>
+
+  <!-- T1110 Brute Force - DETECTED + simulated -->
+  <rect x="690" y="176" width="107" height="44" rx="3" fill="#ef4444" opacity="0.9"/>
+  <rect x="690" y="176" width="107" height="44" rx="3" fill="none" stroke="#eab308" stroke-width="2"/>
+  <text x="743" y="194" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">T1110.001</text>
+  <text x="743" y="208" fill="#fef2f2" font-size="9" text-anchor="middle">Brute Force</text>
+  <text x="743" y="216" fill="#fef9c3" font-size="8" text-anchor="middle">● Simulated</text>
+
+  <!-- T1046 Net Service Scan - DETECTED + simulated -->
+  <rect x="801" y="176" width="107" height="44" rx="3" fill="#ef4444" opacity="0.85"/>
+  <rect x="801" y="176" width="107" height="44" rx="3" fill="none" stroke="#eab308" stroke-width="2"/>
+  <text x="854" y="194" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">T1046</text>
+  <text x="854" y="208" fill="#fef2f2" font-size="9" text-anchor="middle">Net Svc Scan</text>
+  <text x="854" y="216" fill="#fef9c3" font-size="8" text-anchor="middle">● Simulated</text>
+
+  <!-- T1021.004 SSH - DETECTED + simulated -->
+  <rect x="912" y="176" width="107" height="44" rx="3" fill="#ef4444" opacity="0.8"/>
+  <rect x="912" y="176" width="107" height="44" rx="3" fill="none" stroke="#eab308" stroke-width="2"/>
+  <text x="965" y="194" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">T1021.004</text>
+  <text x="965" y="208" fill="#fef2f2" font-size="9" text-anchor="middle">Remote SSH</text>
+  <text x="965" y="216" fill="#fef9c3" font-size="8" text-anchor="middle">● Simulated</text>
+
+  <!-- T1071.001 Web C2 - monitored -->
+  <rect x="1023" y="176" width="107" height="44" rx="3" fill="#1d4ed8" opacity="0.55"/>
+  <text x="1076" y="194" fill="#bfdbfe" font-size="10" font-weight="600" text-anchor="middle">T1071.001</text>
+  <text x="1076" y="208" fill="#bfdbfe" font-size="9" text-anchor="middle">Web C2 Beacon</text>
+  <text x="1076" y="216" fill="#93c5fd" font-size="8" text-anchor="middle">SID: 9000060</text>
+
+  <!-- T1048.003 DNS Tunnel - monitored -->
+  <rect x="1134" y="176" width="107" height="44" rx="3" fill="#1d4ed8" opacity="0.5"/>
+  <text x="1187" y="194" fill="#bfdbfe" font-size="10" font-weight="600" text-anchor="middle">T1048.003</text>
+  <text x="1187" y="208" fill="#bfdbfe" font-size="9" text-anchor="middle">DNS Tunneling</text>
+  <text x="1187" y="216" fill="#93c5fd" font-size="8" text-anchor="middle">SID: 9000050</text>
+
+  <!-- ROW 2 (y=228) -->
+  <rect x="24"  y="228" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="77"  y="244" fill="#6b7280" font-size="10" text-anchor="middle">T1589</text>
+  <text x="77"  y="258" fill="#6b7280" font-size="9" text-anchor="middle">Gather Identity</text>
+
+  <rect x="135" y="228" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="188" y="244" fill="#6b7280" font-size="10" text-anchor="middle">T1566</text>
+  <text x="188" y="258" fill="#6b7280" font-size="9" text-anchor="middle">Phishing</text>
+
+  <rect x="246" y="228" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="299" y="244" fill="#6b7280" font-size="10" text-anchor="middle">T1203</text>
+  <text x="299" y="258" fill="#6b7280" font-size="9" text-anchor="middle">Exploit for Exec</text>
+
+  <rect x="357" y="228" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="410" y="244" fill="#6b7280" font-size="10" text-anchor="middle">T1098</text>
+  <text x="410" y="258" fill="#6b7280" font-size="9" text-anchor="middle">Acct Manipulation</text>
+
+  <rect x="468" y="228" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="521" y="244" fill="#6b7280" font-size="10" text-anchor="middle">T1055</text>
+  <text x="521" y="258" fill="#6b7280" font-size="9" text-anchor="middle">Process Injection</text>
+
+  <rect x="579" y="228" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="632" y="244" fill="#6b7280" font-size="10" text-anchor="middle">T1070</text>
+  <text x="632" y="258" fill="#6b7280" font-size="9" text-anchor="middle">Indicator Removal</text>
+
+  <rect x="690" y="228" width="107" height="38" rx="3" fill="#1d4ed8" opacity="0.45"/>
+  <text x="743" y="244" fill="#bfdbfe" font-size="10" font-weight="600" text-anchor="middle">T1078</text>
+  <text x="743" y="258" fill="#bfdbfe" font-size="9" text-anchor="middle">Valid Accounts</text>
+
+  <rect x="801" y="228" width="107" height="38" rx="3" fill="#ef4444" opacity="0.75"/>
+  <text x="854" y="244" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle">T1082</text>
+  <text x="854" y="258" fill="#fef2f2" font-size="9" text-anchor="middle">Sys Info Disc.</text>
+
+  <rect x="912" y="228" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="965" y="244" fill="#6b7280" font-size="10" text-anchor="middle">T1550</text>
+  <text x="965" y="258" fill="#6b7280" font-size="9" text-anchor="middle">Use Alt Auth</text>
+
+  <rect x="1023" y="228" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="1076" y="244" fill="#6b7280" font-size="10" text-anchor="middle">T1095</text>
+  <text x="1076" y="258" fill="#6b7280" font-size="9" text-anchor="middle">Non-App Layer</text>
+
+  <rect x="1134" y="228" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="1187" y="244" fill="#6b7280" font-size="10" text-anchor="middle">T1020</text>
+  <text x="1187" y="258" fill="#6b7280" font-size="9" text-anchor="middle">Auto Exfil</text>
+
+  <!-- ROW 3 (y=274) -->
+  <rect x="24"  y="274" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="77"  y="299" fill="#6b7280" font-size="9" text-anchor="middle">T1590 — Net Info</text>
+
+  <rect x="135" y="274" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="188" y="299" fill="#6b7280" font-size="9" text-anchor="middle">T1200 — HW Add</text>
+
+  <rect x="246" y="274" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="299" y="299" fill="#6b7280" font-size="9" text-anchor="middle">T1569 — Svc Exec</text>
+
+  <rect x="357" y="274" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="410" y="299" fill="#6b7280" font-size="9" text-anchor="middle">T1505 — Server SW</text>
+
+  <rect x="468" y="274" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="521" y="299" fill="#6b7280" font-size="9" text-anchor="middle">T1548 — Abuse Elev</text>
+
+  <rect x="579" y="274" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="632" y="299" fill="#6b7280" font-size="9" text-anchor="middle">T1036 — Masquerade</text>
+
+  <rect x="690" y="274" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="743" y="299" fill="#6b7280" font-size="9" text-anchor="middle">T1555 — Cred Stores</text>
+
+  <rect x="801" y="274" width="107" height="38" rx="3" fill="#1d4ed8" opacity="0.45"/>
+  <text x="854" y="290" fill="#bfdbfe" font-size="10" font-weight="600" text-anchor="middle">T1049</text>
+  <text x="854" y="304" fill="#bfdbfe" font-size="9" text-anchor="middle">Net Connections</text>
+
+  <rect x="912" y="274" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="965" y="299" fill="#6b7280" font-size="9" text-anchor="middle">T1534 — Internal Sp</text>
+
+  <rect x="1023" y="274" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="1076" y="299" fill="#6b7280" font-size="9" text-anchor="middle">T1572 — Tunneling</text>
+
+  <rect x="1134" y="274" width="107" height="38" rx="3" fill="#2a2d35"/>
+  <text x="1187" y="299" fill="#6b7280" font-size="9" text-anchor="middle">T1041 — C2 Channel</text>
+
+  <!-- Coverage Summary Bar -->
+  <rect x="24" y="330" width="1221" height="1" fill="#343741"/>
+
+  <!-- Coverage stats -->
+  <rect x="24" y="342" width="1221" height="60" rx="6" fill="#1e2028" stroke="#343741" stroke-width="1"/>
+  <text x="40" y="364" fill="#ffffff" font-size="13" font-weight="600">Coverage Summary</text>
+
+  <text x="40"  y="390" fill="#ef4444" font-size="12" font-weight="700">6</text>
+  <text x="52"  y="390" fill="#9ba3af" font-size="11">  Techniques Detected</text>
+
+  <text x="220" y="390" fill="#1d4ed8" font-size="12" font-weight="700">4</text>
+  <text x="232" y="390" fill="#9ba3af" font-size="11">  Monitored (partial)</text>
+
+  <text x="400" y="390" fill="#6b7280" font-size="12" font-weight="700">22</text>
+  <text x="418" y="390" fill="#9ba3af" font-size="11">  Not covered</text>
+
+  <text x="620" y="390" fill="#eab308" font-size="12" font-weight="700">4</text>
+  <text x="632" y="390" fill="#9ba3af" font-size="11">  Simulated this session</text>
+
+  <!-- Progress bar -->
+  <rect x="860" y="358" width="360" height="12" rx="6" fill="#2a2d35"/>
+  <rect x="860" y="358" width="68"  height="12" rx="6" fill="#ef4444"/>
+  <rect x="928" y="358" width="38"  height="12" rx="0" fill="#1d4ed8" opacity="0.6"/>
+  <text x="870" y="384" fill="#9ba3af" font-size="10">6 / 32 mapped techniques (19%)</text>
+  <text x="1100" y="384" fill="#6b7280" font-size="10">Goal: expand to 40%+ ↗</text>
+
+  <!-- Detection Rules Table -->
+  <rect x="24" y="416" width="1221" height="288" rx="6" fill="#1e2028" stroke="#343741" stroke-width="1"/>
+  <text x="40" y="442" fill="#ffffff" font-size="13" font-weight="600">Active Detection Rules — Suricata + Filebeat</text>
+  <rect x="24" y="452" width="1221" height="26" fill="#141519"/>
+  <text x="40"  y="469" fill="#9ba3af" font-size="10" font-weight="600">SID</text>
+  <text x="110" y="469" fill="#9ba3af" font-size="10" font-weight="600">RULE NAME</text>
+  <text x="460" y="469" fill="#9ba3af" font-size="10" font-weight="600">TECHNIQUE</text>
+  <text x="600" y="469" fill="#9ba3af" font-size="10" font-weight="600">TACTIC</text>
+  <text x="750" y="469" fill="#9ba3af" font-size="10" font-weight="600">SENSOR</text>
+  <text x="880" y="469" fill="#9ba3af" font-size="10" font-weight="600">ALERTS (24h)</text>
+  <text x="1020" y="469" fill="#9ba3af" font-size="10" font-weight="600">STATUS</text>
+
+  <!-- Rules rows -->
+  <g font-size="11">
+    <!-- row 1 -->
+    <line x1="24" y1="478" x2="1245" y2="478" stroke="#2a2d35" stroke-width="1"/>
+    <text x="40"   y="492" fill="#6b7280">9000001</text>
+    <text x="110"  y="492" fill="#d1d5db">SSH Brute Force Attempt</text>
+    <text x="460"  y="492" fill="#a5b4fc">T1110.001</text>
+    <text x="600"  y="492" fill="#c4b5fd">Credential Access</text>
+    <text x="750"  y="492" fill="#9ba3af">Suricata</text>
+    <text x="880"  y="492" fill="#ef4444" font-weight="600">42</text>
+    <rect x="1020" y="482" width="46" height="16" rx="8" fill="#14532d"/>
+    <text x="1028" y="494" fill="#22c55e" font-size="10">Active</text>
+
+    <!-- row 2 -->
+    <line x1="24" y1="502" x2="1245" y2="502" stroke="#2a2d35" stroke-width="1"/>
+    <text x="40"   y="516" fill="#6b7280">9000010</text>
+    <text x="110"  y="516" fill="#d1d5db">TCP Port Scan Detected (SYN)</text>
+    <text x="460"  y="516" fill="#a5b4fc">T1046</text>
+    <text x="600"  y="516" fill="#9ba3af">Discovery</text>
+    <text x="750"  y="516" fill="#9ba3af">Suricata</text>
+    <text x="880"  y="516" fill="#f97316" font-weight="600">31</text>
+    <rect x="1020" y="506" width="46" height="16" rx="8" fill="#14532d"/>
+    <text x="1028" y="518" fill="#22c55e" font-size="10">Active</text>
+
+    <!-- row 3 -->
+    <line x1="24" y1="526" x2="1245" y2="526" stroke="#2a2d35" stroke-width="1"/>
+    <text x="40"   y="540" fill="#6b7280">9000020</text>
+    <text x="110"  y="540" fill="#d1d5db">Nikto Web Scanner Detected</text>
+    <text x="460"  y="540" fill="#a5b4fc">T1595.002</text>
+    <text x="600"  y="540" fill="#9ba3af">Reconnaissance</text>
+    <text x="750"  y="540" fill="#9ba3af">Suricata</text>
+    <text x="880"  y="540" fill="#eab308" font-weight="600">18</text>
+    <rect x="1020" y="530" width="46" height="16" rx="8" fill="#14532d"/>
+    <text x="1028" y="542" fill="#22c55e" font-size="10">Active</text>
+
+    <!-- row 4 -->
+    <line x1="24" y1="550" x2="1245" y2="550" stroke="#2a2d35" stroke-width="1"/>
+    <text x="40"   y="564" fill="#6b7280">9000030</text>
+    <text x="110"  y="564" fill="#d1d5db">SQL Injection Attempt in URI</text>
+    <text x="460"  y="564" fill="#a5b4fc">T1190</text>
+    <text x="600"  y="564" fill="#9ba3af">Initial Access</text>
+    <text x="750"  y="564" fill="#9ba3af">Suricata</text>
+    <text x="880"  y="564" fill="#eab308" font-weight="600">9</text>
+    <rect x="1020" y="554" width="46" height="16" rx="8" fill="#14532d"/>
+    <text x="1028" y="566" fill="#22c55e" font-size="10">Active</text>
+
+    <!-- row 5 -->
+    <line x1="24" y1="574" x2="1245" y2="574" stroke="#2a2d35" stroke-width="1"/>
+    <text x="40"   y="588" fill="#6b7280">9000040</text>
+    <text x="110"  y="588" fill="#d1d5db">SSH Connection from External Network</text>
+    <text x="460"  y="588" fill="#a5b4fc">T1021.004</text>
+    <text x="600"  y="588" fill="#9ba3af">Lateral Movement</text>
+    <text x="750"  y="588" fill="#9ba3af">Suricata</text>
+    <text x="880"  y="588" fill="#60a5fa" font-weight="600">12</text>
+    <rect x="1020" y="578" width="46" height="16" rx="8" fill="#14532d"/>
+    <text x="1028" y="590" fill="#22c55e" font-size="10">Active</text>
+
+    <!-- row 6 -->
+    <line x1="24" y1="598" x2="1245" y2="598" stroke="#2a2d35" stroke-width="1"/>
+    <text x="40"   y="612" fill="#6b7280">9000050</text>
+    <text x="110"  y="612" fill="#d1d5db">Possible DNS Tunneling (long hostname)</text>
+    <text x="460"  y="612" fill="#a5b4fc">T1048.003</text>
+    <text x="600"  y="612" fill="#9ba3af">Exfiltration</text>
+    <text x="750"  y="612" fill="#9ba3af">Suricata</text>
+    <text x="880"  y="612" fill="#9ba3af" font-weight="600">3</text>
+    <rect x="1020" y="602" width="46" height="16" rx="8" fill="#14532d"/>
+    <text x="1028" y="614" fill="#22c55e" font-size="10">Active</text>
+
+    <!-- row 7 -->
+    <line x1="24" y1="622" x2="1245" y2="622" stroke="#2a2d35" stroke-width="1"/>
+    <text x="40"   y="636" fill="#6b7280">9000060</text>
+    <text x="110"  y="636" fill="#d1d5db">HTTP C2 Beacon (periodic small POST)</text>
+    <text x="460"  y="636" fill="#a5b4fc">T1071.001</text>
+    <text x="600"  y="636" fill="#9ba3af">Command &amp; Control</text>
+    <text x="750"  y="636" fill="#9ba3af">Suricata</text>
+    <text x="880"  y="636" fill="#9ba3af" font-weight="600">1</text>
+    <rect x="1020" y="626" width="46" height="16" rx="8" fill="#14532d"/>
+    <text x="1028" y="638" fill="#22c55e" font-size="10">Active</text>
+
+    <!-- row 8 (filebeat) -->
+    <line x1="24" y1="646" x2="1245" y2="646" stroke="#2a2d35" stroke-width="1"/>
+    <text x="40"   y="660" fill="#6b7280">FB-001</text>
+    <text x="110"  y="660" fill="#d1d5db">SSH Login Failure (auth.log parser)</text>
+    <text x="460"  y="660" fill="#a5b4fc">T1110</text>
+    <text x="600"  y="660" fill="#9ba3af">Credential Access</text>
+    <text x="750"  y="660" fill="#60a5fa">Filebeat</text>
+    <text x="880"  y="660" fill="#ef4444" font-weight="600">127</text>
+    <rect x="1020" y="650" width="46" height="16" rx="8" fill="#14532d"/>
+    <text x="1028" y="662" fill="#22c55e" font-size="10">Active</text>
+
+    <!-- row 9 RDP -->
+    <line x1="24" y1="670" x2="1245" y2="670" stroke="#2a2d35" stroke-width="1"/>
+    <text x="40"   y="684" fill="#6b7280">9000070</text>
+    <text x="110"  y="684" fill="#d1d5db">RDP Connection Attempt from External</text>
+    <text x="460"  y="684" fill="#a5b4fc">T1133</text>
+    <text x="600"  y="684" fill="#9ba3af">Persistence</text>
+    <text x="750"  y="684" fill="#9ba3af">Suricata</text>
+    <text x="880"  y="684" fill="#9ba3af" font-weight="600">0</text>
+    <rect x="1020" y="674" width="46" height="16" rx="8" fill="#14532d"/>
+    <text x="1028" y="686" fill="#22c55e" font-size="10">Active</text>
+
+    <!-- row 10 XSS -->
+    <line x1="24" y1="694" x2="1245" y2="694" stroke="#2a2d35" stroke-width="1"/>
+    <text x="40"   y="708" fill="#6b7280">9000031</text>
+    <text x="110"  y="708" fill="#d1d5db">XSS Attempt in URI</text>
+    <text x="460"  y="708" fill="#a5b4fc">T1190</text>
+    <text x="600"  y="708" fill="#9ba3af">Initial Access</text>
+    <text x="750"  y="708" fill="#9ba3af">Suricata</text>
+    <text x="880"  y="708" fill="#60a5fa" font-weight="600">7</text>
+    <rect x="1020" y="698" width="46" height="16" rx="8" fill="#14532d"/>
+    <text x="1028" y="710" fill="#22c55e" font-size="10">Active</text>
+  </g>
+</svg>

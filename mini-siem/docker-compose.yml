@@ -1,0 +1,118 @@
+# Mini-SIEM — Threat Detection Lab
+# Stack: Elasticsearch + Logstash + Kibana + Filebeat + Suricata
+# Avvio: docker compose up -d
+# Kibana:  http://localhost:5601
+# Elastic: http://localhost:9200
+
+services:
+
+  # ── Elasticsearch ──────────────────────────────────────────────
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.3
+    container_name: siem-es
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.ml.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - bootstrap.memory_lock=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # ── Logstash (parsing pipeline) ────────────────────────────────
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.14.3
+    container_name: siem-logstash
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    ports:
+      - "5044:5044"    # Beats input
+      - "5000:5000"    # Syslog TCP
+      - "5140:5140/udp" # Syslog UDP
+    volumes:
+      - ./config/logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./config/logstash/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+    environment:
+      - LS_JAVA_OPTS=-Xms512m -Xmx512m
+    restart: unless-stopped
+
+  # ── Kibana (SIEM UI) ───────────────────────────────────────────
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.14.3
+    container_name: siem-kibana
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    ports:
+      - "5601:5601"
+    volumes:
+      - ./config/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5601/api/status"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # ── Filebeat (log shipper) ─────────────────────────────────────
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.14.3
+    container_name: siem-filebeat
+    user: root
+    depends_on:
+      - logstash
+    volumes:
+      - ./config/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/log:/host/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - suricata-logs:/suricata-logs:ro
+    command: filebeat -e -strict.perms=false
+    restart: unless-stopped
+
+  # ── Suricata (IDS/IPS) ─────────────────────────────────────────
+  suricata:
+    image: jasonish/suricata:latest
+    container_name: siem-suricata
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_NICE
+    volumes:
+      - ./config/suricata/suricata.yaml:/etc/suricata/suricata.yaml:ro
+      - ./config/suricata/rules:/etc/suricata/rules:ro
+      - suricata-logs:/var/log/suricata
+    command: -i eth0 --set outputs.1.eve-log.enabled=yes
+    restart: unless-stopped
+
+  # ── Kibana Dashboard Loader ────────────────────────────────────
+  dashboard-loader:
+    image: curlimages/curl:latest
+    container_name: siem-dashboard-loader
+    depends_on:
+      kibana:
+        condition: service_healthy
+    volumes:
+      - ./config/kibana/dashboards:/dashboards:ro
+      - ./scripts/load-dashboards.sh:/load-dashboards.sh:ro
+    command: sh /load-dashboards.sh
+    restart: no
+
+volumes:
+  es-data:
+  suricata-logs:

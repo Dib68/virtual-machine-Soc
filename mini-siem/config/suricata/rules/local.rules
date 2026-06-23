@@ -1,0 +1,138 @@
+# =============================================================
+#  Regole Suricata personalizzate — Mini-SIEM Lab
+#  Mappate su MITRE ATT&CK (Enterprise)
+#  Autore: Damiano Di Biase
+# =============================================================
+
+# ── T1110 — Brute Force ──────────────────────────────────────
+alert tcp any any -> $HOME_NET 22 (
+  msg:"[MITRE T1110] SSH Brute Force Attempt";
+  flow:to_server,established;
+  content:"SSH-";
+  detection_filter:track by_src, count 5, seconds 60;
+  classtype:attempted-admin;
+  sid:9000001; rev:1;
+  metadata:mitre_tactic "Credential Access", mitre_technique "T1110.001";
+)
+
+alert tcp any any -> $HOME_NET 22 (
+  msg:"[MITRE T1110] SSH Login Failure Burst";
+  flow:to_server;
+  content:"SSH-2.0-";
+  detection_filter:track by_src, count 10, seconds 30;
+  classtype:policy-violation;
+  sid:9000002; rev:1;
+  metadata:mitre_tactic "Credential Access", mitre_technique "T1110";
+)
+
+# ── T1046 — Network Service Discovery / Port Scan ────────────
+alert tcp any any -> $HOME_NET any (
+  msg:"[MITRE T1046] TCP Port Scan Detected (SYN)";
+  flags:S,12;
+  detection_filter:track by_src, count 50, seconds 10;
+  classtype:network-scan;
+  sid:9000010; rev:1;
+  metadata:mitre_tactic "Discovery", mitre_technique "T1046";
+)
+
+alert tcp any any -> $HOME_NET any (
+  msg:"[MITRE T1046] Nmap SYN Scan Signature";
+  flags:S;
+  window:1024;
+  detection_filter:track by_src, count 30, seconds 5;
+  classtype:network-scan;
+  sid:9000011; rev:1;
+  metadata:mitre_tactic "Discovery", mitre_technique "T1046";
+)
+
+# ── T1595.002 — Vulnerability Scanning ───────────────────────
+alert http any any -> $HOME_NET any (
+  msg:"[MITRE T1595.002] Nikto Web Scanner Detected";
+  http.user_agent;
+  content:"Nikto";
+  classtype:web-application-activity;
+  sid:9000020; rev:1;
+  metadata:mitre_tactic "Reconnaissance", mitre_technique "T1595.002";
+)
+
+alert http any any -> $HOME_NET any (
+  msg:"[MITRE T1595.002] sqlmap SQL Injection Scanner";
+  http.user_agent;
+  content:"sqlmap";
+  classtype:web-application-attack;
+  sid:9000021; rev:1;
+  metadata:mitre_tactic "Reconnaissance", mitre_technique "T1595.002";
+)
+
+# ── T1190 — Exploit Public-Facing Application ────────────────
+alert http any any -> $HOME_NET $HTTP_PORTS (
+  msg:"[MITRE T1190] SQL Injection Attempt in URI";
+  http.uri;
+  content:"' OR '1'='1";
+  nocase;
+  classtype:web-application-attack;
+  sid:9000030; rev:1;
+  metadata:mitre_tactic "Initial Access", mitre_technique "T1190";
+)
+
+alert http any any -> $HOME_NET $HTTP_PORTS (
+  msg:"[MITRE T1190] XSS Attempt in URI";
+  http.uri;
+  content:"<script>";
+  nocase;
+  classtype:web-application-attack;
+  sid:9000031; rev:1;
+  metadata:mitre_tactic "Initial Access", mitre_technique "T1190";
+)
+
+alert http any any -> $HOME_NET $HTTP_PORTS (
+  msg:"[MITRE T1190] Directory Traversal Attempt";
+  http.uri;
+  content:"../../../";
+  classtype:web-application-attack;
+  sid:9000032; rev:1;
+  metadata:mitre_tactic "Initial Access", mitre_technique "T1190";
+)
+
+# ── T1021.004 — Remote Services: SSH ─────────────────────────
+alert tcp $EXTERNAL_NET any -> $HOME_NET 22 (
+  msg:"[MITRE T1021.004] SSH Connection from External Network";
+  flow:to_server,established;
+  content:"SSH-2.0-";
+  classtype:policy-violation;
+  sid:9000040; rev:1;
+  metadata:mitre_tactic "Lateral Movement", mitre_technique "T1021.004";
+)
+
+# ── T1048 — Exfiltration Over Alternative Protocol ───────────
+alert dns any any -> any any (
+  msg:"[MITRE T1048.003] Possible DNS Tunneling (long hostname)";
+  dns.query;
+  byte_test:1,>,50,0,relative;
+  classtype:policy-violation;
+  sid:9000050; rev:1;
+  metadata:mitre_tactic "Exfiltration", mitre_technique "T1048.003";
+)
+
+# ── T1071.001 — Web Protocols C2 ─────────────────────────────
+alert http $HOME_NET any -> $EXTERNAL_NET any (
+  msg:"[MITRE T1071.001] Possible HTTP C2 Beacon (periodic small POST)";
+  flow:established,to_server;
+  http.method;
+  content:"POST";
+  dsize:<200;
+  detection_filter:track by_src, count 6, seconds 120;
+  classtype:command-and-control;
+  sid:9000060; rev:1;
+  metadata:mitre_tactic "Command and Control", mitre_technique "T1071.001";
+)
+
+# ── T1133 — External Remote Services ─────────────────────────
+alert tcp any any -> $HOME_NET 3389 (
+  msg:"[MITRE T1133] RDP Connection Attempt from External";
+  flow:to_server;
+  flags:S;
+  classtype:policy-violation;
+  sid:9000070; rev:1;
+  metadata:mitre_tactic "Persistence", mitre_technique "T1133";
+)
