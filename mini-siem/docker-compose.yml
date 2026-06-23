@@ -146,6 +146,25 @@ services:
         ipv4_address: 172.20.0.10
     restart: unless-stopped
 
+  # ── Metricbeat (system + Docker metrics) ──────────────────────
+  metricbeat:
+    image: docker.elastic.co/beats/metricbeat:8.14.3
+    container_name: siem-metricbeat
+    user: root
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    volumes:
+      - ./config/metricbeat/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /proc:/hostfs/proc:ro
+      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
+      - /:/hostfs:ro
+    command: metricbeat -e -strict.perms=false --system.hostfs=/hostfs
+    networks:
+      - siem-net
+    restart: unless-stopped
+
 networks:
   siem-net:
     driver: bridge

@@ -4,8 +4,9 @@
 ![ELK Stack](https://img.shields.io/badge/ELK-8.14.3-005571?style=flat&logo=elastic)
 ![Suricata](https://img.shields.io/badge/Suricata-IDS%2FIPS-orange?style=flat)
 ![MITRE ATT&CK](https://img.shields.io/badge/MITRE%20ATT%26CK-v14-red?style=flat)
+![Sigma](https://img.shields.io/badge/Sigma-4%20rules-purple?style=flat)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker)
-![Rules](https://img.shields.io/badge/Detection%20Rules-10%20active-brightgreen?style=flat)
+![Rules](https://img.shields.io/badge/Detection%20Rules-13%20active-brightgreen?style=flat)
 ![Playbooks](https://img.shields.io/badge/IR%20Playbooks-3-blue?style=flat)
 
 > A fully-functional **blue team detection lab**: real attacks, real alerts, real MITRE ATT&CK coverage.  
@@ -26,6 +27,11 @@
 
 ### 4 — Timeline Investigation (MTTD: 9 min → MTTR: 1 min 38 sec)
 ![Timeline](screenshots/04-timeline-investigation.svg)
+
+### 5 — Threat Hunting: EQL Sequence Analysis
+> *Proactive hunt that found 2 successful logins the alert-only view missed*
+
+![Threat Hunting](screenshots/05-threat-hunting.svg)
 
 ---
 
@@ -188,6 +194,27 @@ Rules are in two formats, reflecting real SOC tooling:
 [MITRE T1133] RDP from External                    SID: 9000070
 ```
 
+### Sigma Rules (`rules/sigma/*.yml`) — Cross-SIEM Format
+
+4 rules in the [Sigma](https://github.com/SigmaHQ/sigma) open standard.
+**Write once, convert to any SIEM** (Splunk, Sentinel, QRadar, Chronicle):
+
+```bash
+# Convert to Elasticsearch KQL
+sigma convert -t elasticsearch -p ecs_linux rules/sigma/t1110-ssh-brute-force.yml
+
+# Convert to Splunk SPL
+sigma convert -t splunk rules/sigma/t1046-network-scan.yml
+
+# Convert to Microsoft Sentinel
+sigma convert -t microsoft365defender rules/sigma/t1190-web-exploit.yml
+
+# Convert all rules at once
+for r in rules/sigma/*.yml; do sigma convert -t elasticsearch -p ecs_linux "$r"; done
+```
+
+See [`rules/sigma/README.md`](rules/sigma/README.md) for full conversion guide.
+
 ### Elastic Security Rules (`rules/detection/*.toml`)
 
 4 detection rules in the [elastic/detection-rules](https://github.com/elastic/detection-rules) TOML format — the same format used in production Elastic Security deployments:
@@ -198,6 +225,36 @@ Rules are in two formats, reflecting real SOC tooling:
 | `t1046-network-scan.toml` | T1046 | query | signature match |
 | `t1190-web-exploit.toml` | T1190 + T1595.002 | query | signature match |
 | `t1021-lateral-movement.toml` | T1021.004 + T1133 | query | signature match |
+
+---
+
+## Full Attack Walkthrough
+
+[`docs/WALKTHROUGH.md`](docs/WALKTHROUGH.md) traces a **complete real attack scenario** from first packet to closed case:
+
+- **Phase 1** — Attacker perspective: reconnaissance → brute force → root access gained
+- **Phase 2** — SOC analyst perspective: alert fires, Kibana investigation, EQL pivot confirms successful login
+- **Phase 3** — Containment: IP block, session kill, fail2ban, TheHive case in < 2 min
+- **Phase 4** — Eradication: credential rotation, SSH hardening, persistence check
+- **Phase 5** — Post-incident: MTTD/MTTR metrics, what went wrong, detection rule improvements
+
+> MTTD: **9 min 10 sec** · MTTR: **1 min 38 sec** · Data exfiltrated: **none**
+
+---
+
+## Threat Hunting
+
+[`docs/hunting/eql-queries.md`](docs/hunting/eql-queries.md) — 7 ready-to-run EQL queries for proactive hunting:
+
+| Query | What it finds |
+|---|---|
+| Brute Force → Success | Attacker IPs that guessed correctly (T1110 → T1078) |
+| Recon → Exploit Chain | Port scan → scanner → SQLi in sequence (T1046 → T1595 → T1190) |
+| C2 Beacon | Periodic small POSTs suggesting C2 communication (T1071.001) |
+| Post-Login Pivot | Host that received external login then scanned internally (T1021) |
+| Rare Destination Ports | Non-standard ports = possible covert channels |
+| Single IP Across All Logs | Full 360° view of one attacker's activity |
+| Privileged Account Targeting | Failed logins specifically for root/admin/sa |
 
 ---
 
@@ -274,10 +331,13 @@ mini-siem/
 │   ├── load-dashboards.sh            ← Kibana dashboard import
 │   └── reset-lab.sh                  ← Full lab reset
 │
-├── docs/playbooks/                   ← IR Playbooks (NIST framework)
-│   ├── T1110-SSH-BruteForce.md
-│   ├── T1046-NetworkScan.md
-│   └── T1190-WebExploit.md
+├── docs/
+│   ├── WALKTHROUGH.md                ← Complete attack→detect→respond story
+│   ├── hunting/eql-queries.md        ← 7 EQL threat hunting queries
+│   └── playbooks/                    ← IR Playbooks (NIST framework)
+│       ├── T1110-SSH-BruteForce.md
+│       ├── T1046-NetworkScan.md
+│       └── T1190-WebExploit.md
 │
 ├── screenshots/                      ← Kibana dashboards (SVG)
 │   ├── 01-soc-dashboard.svg
@@ -285,8 +345,21 @@ mini-siem/
 │   ├── 03-mitre-matrix.svg
 │   └── 04-timeline-investigation.svg ← MTTD/MTTR measurement
 │
+├── rules/
+│   ├── detection/                    ← Elastic Security rules (TOML)
+│   │   ├── t1110-brute-force.toml
+│   │   ├── t1046-network-scan.toml
+│   │   ├── t1190-web-exploit.toml
+│   │   └── t1021-lateral-movement.toml
+│   └── sigma/                        ← Sigma rules (cross-SIEM)
+│       ├── t1110-ssh-brute-force.yml
+│       ├── t1046-network-scan.yml
+│       ├── t1190-web-exploit.yml
+│       ├── t1021-lateral-movement.yml
+│       └── README.md                 ← Conversion guide (pySigma)
+│
 └── .github/workflows/
-    └── validate-siem.yml             ← CI: YAML + TOML + Suricata validation
+    └── validate-siem.yml             ← CI: YAML + TOML + Suricata + smoke test
 ```
 
 ---
@@ -309,15 +382,18 @@ GitHub Actions runs on every push to `mini-siem/**`:
 
 | Skill | How |
 |---|---|
-| **SIEM Engineering** | ELK 8.x deployment, index lifecycle, Kibana dashboards |
-| **Intrusion Detection** | Suricata rule authoring with threshold detection |
-| **Log Analysis** | Logstash Grok patterns: EVE-JSON, syslog, auth.log |
-| **Threat Intelligence** | GeoIP enrichment, AbuseIPDB integration |
-| **MITRE ATT&CK** | 8 techniques mapped, tactic chain reconstruction |
-| **Incident Response** | NIST-based playbooks, MTTD/MTTR measurement |
-| **Detection Engineering** | Elastic Security TOML rules (production format) |
-| **DevSecOps** | CI/CD pipeline validating security configs |
-| **Docker / IaC** | Multi-container orchestration with health checks |
+| **SIEM Engineering** | ELK 8.x stack, Logstash pipelines, Metricbeat system metrics |
+| **Intrusion Detection** | 13 Suricata rules with threshold + signature detection |
+| **Log Analysis** | Grok parsing: Suricata EVE-JSON, auth.log, syslog |
+| **Detection Engineering** | Elastic Security TOML rules + Sigma universal format |
+| **Threat Hunting** | 7 EQL sequence queries, hypothesis-driven methodology |
+| **SOAR Automation** | Python TheHive bot: ES → case creation with observables |
+| **Threat Intelligence** | GeoIP enrichment, AbuseIPDB IOC correlation |
+| **MITRE ATT&CK** | 8 techniques detected, chain reconstruction, coverage matrix |
+| **Incident Response** | NIST-based playbooks, MTTD 9 min / MTTR 1 min 38 sec |
+| **DevSecOps / CI/CD** | GitHub Actions: YAML + TOML + Suricata + smoke test |
+| **Cross-SIEM** | Sigma rules convert to Splunk / Sentinel / QRadar |
+| **Docker / IaC** | 7-container orchestration with health checks and networking |
 
 ---
 

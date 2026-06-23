@@ -1,0 +1,61 @@
+title: SSH Brute Force Attack Detected
+id: a1b2c3d4-5678-9012-abcd-t1110sshbrute
+status: stable
+description: |
+  Detects a burst of failed SSH authentication attempts from a single source IP
+  within a short time window. This pattern is consistent with automated brute
+  force tools such as Hydra, Medusa, or custom password sprayers.
+  Threshold: 5+ failures from the same source IP within 60 seconds.
+references:
+  - https://attack.mitre.org/techniques/T1110/001/
+  - https://www.elastic.co/guide/en/security/current/prebuilt-rule-8-4-2-ssh-brute-force-login-attempts.html
+  - https://github.com/vanhauser-thc/thc-hydra
+author: Damiano Di Biase
+date: 2026/06/23
+modified: 2026/06/23
+tags:
+  - attack.credential_access
+  - attack.t1110
+  - attack.t1110.001
+  - detection.threshold
+logsource:
+  category: authentication
+  product: linux
+  service: sshd
+detection:
+  selection:
+    syslog.program: 'sshd'
+    auth.action|contains: 'Failed'
+  filter_local:
+    source.ip|cidr:
+      - '127.0.0.0/8'
+      - '::1/128'
+  condition: selection and not filter_local | count(source.ip) by source.ip > 5
+timeframe: 60s
+fields:
+  - source.ip
+  - auth.user
+  - auth.action
+  - source.port
+  - '@timestamp'
+falsepositives:
+  - System administrators who frequently mistype passwords
+  - Automated deployment tools using password auth without key-based fallback
+  - NAT devices where multiple users share one source IP
+level: high
+# ── Conversion examples (sigmac / pySigma) ────────────────────────────
+# Elasticsearch (KQL):
+#   syslog.program:"sshd" AND auth.action:*Failed*
+#   | stats count() by source.ip having count > 5
+#
+# Splunk SPL:
+#   index=linux source=/var/log/auth.log "Failed password"
+#   | stats count by src_ip | where count > 5
+#
+# Microsoft Sentinel (KQL):
+#   Syslog | where SyslogMessage has "Failed password"
+#   | summarize FailedAttempts=count() by Computer, HostIP
+#   | where FailedAttempts > 5
+#
+# Convert with pySigma:
+#   sigma convert -t elasticsearch -p ecs_windows -r t1110-ssh-brute-force.yml

@@ -1,0 +1,52 @@
+title: Network Service Scanning — TCP SYN Sweep
+id: b2c3d4e5-6789-0123-bcde-t1046portscan
+status: stable
+description: |
+  Detects rapid TCP SYN-based port scanning activity from a single source,
+  consistent with tools such as Nmap (SYN scan), Masscan, or Zmap.
+  A source sending SYN packets to 50+ distinct ports in under 10 seconds
+  is statistically anomalous for normal user traffic.
+references:
+  - https://attack.mitre.org/techniques/T1046/
+  - https://nmap.org/book/man-port-scanning-techniques.html
+author: Damiano Di Biase
+date: 2026/06/23
+modified: 2026/06/23
+tags:
+  - attack.discovery
+  - attack.t1046
+  - detection.network
+logsource:
+  product: suricata
+  category: alert
+detection:
+  selection:
+    suricata.event_type: 'alert'
+    suricata.alert.signature|contains:
+      - 'Port Scan'
+      - 'Nmap'
+      - 'T1046'
+  condition: selection
+fields:
+  - source.ip
+  - suricata.alert.signature
+  - suricata.alert.severity
+  - suricata.dest_port
+  - '@timestamp'
+falsepositives:
+  - Authorized penetration testing
+  - Network vulnerability scanners (Nessus, OpenVAS) with proper change ticket
+  - IT asset discovery tools during maintenance windows
+level: medium
+# ── Conversion examples ────────────────────────────────────────────────
+# Elasticsearch (KQL):
+#   suricata.event_type:"alert" AND suricata.alert.signature:*Port Scan*
+#
+# Splunk SPL:
+#   index=suricata event_type=alert signature="*Port Scan*"
+#   | stats count by src_ip | where count > 1
+#
+# QRadar AQL:
+#   SELECT sourceip, "suricata.alert.signature"
+#   FROM events WHERE "suricata.event_type" = 'alert'
+#   AND "suricata.alert.signature" ILIKE '%Port Scan%'

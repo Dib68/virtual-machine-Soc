@@ -1,0 +1,56 @@
+title: External Remote Services — SSH / RDP from Non-RFC1918 Source
+id: d4e5f6a7-8901-2345-defa-t1021latmov01
+status: stable
+description: |
+  Detects SSH (T1021.004) or RDP (T1133) connection attempts originating from
+  external (non-RFC1918) IP addresses targeting internal systems. External
+  remote access to administrative services is a common technique for initial
+  access and lateral movement, especially when credentials have been stolen
+  via brute force (T1110) or phishing (T1566).
+references:
+  - https://attack.mitre.org/techniques/T1021/004/
+  - https://attack.mitre.org/techniques/T1133/
+author: Damiano Di Biase
+date: 2026/06/23
+modified: 2026/06/23
+tags:
+  - attack.lateral_movement
+  - attack.t1021
+  - attack.t1021.004
+  - attack.persistence
+  - attack.t1133
+  - detection.network
+logsource:
+  product: suricata
+  category: alert
+detection:
+  selection:
+    suricata.event_type: 'alert'
+    suricata.alert.signature|contains:
+      - 'T1021'
+      - 'T1133'
+      - 'External'
+      - 'RDP'
+  filter_rfc1918:
+    source.ip|cidr:
+      - '10.0.0.0/8'
+      - '172.16.0.0/12'
+      - '192.168.0.0/16'
+  condition: selection and not filter_rfc1918
+fields:
+  - source.ip
+  - source.geo.country_code
+  - destination.ip
+  - destination.port
+  - suricata.alert.signature
+  - '@timestamp'
+falsepositives:
+  - Authorized remote administrators connecting from known jump hosts
+  - VPN gateway egress IPs used for internal access (add to allowlist)
+  - Cloud-hosted monitoring agents
+level: medium
+# ── Chain detection ───────────────────────────────────────────────────
+# This alert frequently follows T1046 (port scan) and T1110 (brute force).
+# If same source.ip appears in all three within 30 minutes → ESCALATE.
+# Recommended correlation search:
+#   source.ip: <IP> AND (T1046 OR T1110 OR T1021) | timechart
