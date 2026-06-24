@@ -1,0 +1,391 @@
+<svg viewBox="0 0 1200 820" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <linearGradient id="headerGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d6efd"/>
+      <stop offset="100%" stop-color="#00bfb3"/>
+    </linearGradient>
+    <linearGradient id="critGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ef444422"/>
+      <stop offset="100%" stop-color="#ef444400"/>
+    </linearGradient>
+    <linearGradient id="barGrad1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+    <linearGradient id="barGrad2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+    <linearGradient id="barGrad3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#00000040"/>
+    </filter>
+    <clipPath id="barClip"><rect x="0" y="0" width="1200" height="820"/></clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="820" fill="#0f1117"/>
+
+  <!-- ── Header ─────────────────────────────────────────────── -->
+  <rect width="1200" height="64" fill="url(#headerGrad)"/>
+  <!-- SIEM logo -->
+  <rect x="20" y="14" width="36" height="36" rx="6" fill="rgba(255,255,255,0.2)"/>
+  <text x="38" y="37" text-anchor="middle" fill="white" font-size="14" font-weight="700">ES</text>
+  <!-- Title -->
+  <text x="68" y="30" fill="white" font-size="15" font-weight="700">WEEKLY THREAT INTELLIGENCE REPORT</text>
+  <text x="68" y="48" fill="rgba(255,255,255,0.8)" font-size="11">Week 26 · 2026-06-24 · Mini-SIEM Lab (ELK 8.14 + Suricata)</text>
+  <!-- Analyst -->
+  <text x="1180" y="30" text-anchor="end" fill="rgba(255,255,255,0.9)" font-size="11">Analyst: Damiano Di Biase</text>
+  <text x="1180" y="46" text-anchor="end" fill="rgba(255,255,255,0.6)" font-size="10">Generated: 2026-06-24 08:00 UTC</text>
+
+  <!-- ── Risk Badge ────────────────────────────────────────── -->
+  <rect x="1050" y="74" width="130" height="44" rx="6" fill="#1a1c21" stroke="#343741"/>
+  <rect x="1058" y="82" width="8" height="28" rx="2" fill="#f97316"/>
+  <text x="1074" y="96" fill="#f97316" font-size="11" font-weight="700">RISK LEVEL</text>
+  <text x="1074" y="112" fill="white" font-size="14" font-weight="800">HIGH ⚠</text>
+
+  <!-- ── KPI Row ──────────────────────────────────────────────────── -->
+  <!-- Card 1: Total Events -->
+  <rect x="20" y="78" width="188" height="80" rx="8" fill="#1a1c21" stroke="#343741" filter="url(#shadow)"/>
+  <rect x="20" y="78" width="188" height="4" rx="2" fill="#3b82f6"/>
+  <text x="34" y="104" fill="#6b7280" font-size="10" font-weight="600" letter-spacing="0.05em">TOTAL EVENTS</text>
+  <text x="34" y="128" fill="white" font-size="26" font-weight="800">84,291</text>
+  <text x="140" y="128" fill="#22c55e" font-size="10">▲ 12%</text>
+  <text x="34" y="147" fill="#6b7280" font-size="9">vs. previous week</text>
+
+  <!-- Card 2: Security Alerts -->
+  <rect x="220" y="78" width="188" height="80" rx="8" fill="#1a1c21" stroke="#343741" filter="url(#shadow)"/>
+  <rect x="220" y="78" width="188" height="4" rx="2" fill="#f97316"/>
+  <text x="234" y="104" fill="#6b7280" font-size="10" font-weight="600" letter-spacing="0.05em">SECURITY ALERTS</text>
+  <text x="234" y="128" fill="white" font-size="26" font-weight="800">247</text>
+  <text x="294" y="128" fill="#ef4444" font-size="10">▲ 34%</text>
+  <text x="234" y="147" fill="#6b7280" font-size="9">184 last week</text>
+
+  <!-- Card 3: Critical -->
+  <rect x="420" y="78" width="188" height="80" rx="8" fill="#1a1c21" stroke="#ef444455" filter="url(#shadow)"/>
+  <rect x="420" y="78" width="188" height="4" rx="2" fill="#ef4444"/>
+  <rect x="420" y="82" width="188" height="76" rx="6" fill="url(#critGrad)"/>
+  <text x="434" y="104" fill="#6b7280" font-size="10" font-weight="600" letter-spacing="0.05em">CRITICAL ALERTS</text>
+  <text x="434" y="128" fill="#ef4444" font-size="26" font-weight="800">3</text>
+  <text x="466" y="113" fill="#ef4444" font-size="10">⚑ Requires</text>
+  <text x="466" y="127" fill="#ef4444" font-size="10">immediate review</text>
+  <text x="434" y="147" fill="#6b7280" font-size="9">0 last week</text>
+
+  <!-- Card 4: MTTR -->
+  <rect x="620" y="78" width="188" height="80" rx="8" fill="#1a1c21" stroke="#343741" filter="url(#shadow)"/>
+  <rect x="620" y="78" width="188" height="4" rx="2" fill="#00bfb3"/>
+  <text x="634" y="104" fill="#6b7280" font-size="10" font-weight="600" letter-spacing="0.05em">AVG MTTR</text>
+  <text x="634" y="128" fill="white" font-size="26" font-weight="800">1:38</text>
+  <text x="700" y="128" fill="#22c55e" font-size="10">▼ 22%</text>
+  <text x="634" y="147" fill="#6b7280" font-size="9">min:sec · target &lt;5:00</text>
+
+  <!-- Card 5: Unique Attackers -->
+  <rect x="820" y="78" width="188" height="80" rx="8" fill="#1a1c21" stroke="#343741" filter="url(#shadow)"/>
+  <rect x="820" y="78" width="188" height="4" rx="2" fill="#a78bfa"/>
+  <text x="834" y="104" fill="#6b7280" font-size="10" font-weight="600" letter-spacing="0.05em">UNIQUE ATTACKERS</text>
+  <text x="834" y="128" fill="white" font-size="26" font-weight="800">43</text>
+  <text x="876" y="128" fill="#ef4444" font-size="10">▲ 7</text>
+  <text x="834" y="147" fill="#6b7280" font-size="9">36 last week</text>
+
+  <!-- ── 7-day Alert Trend ────────────────────────────────── -->
+  <rect x="20" y="174" width="520" height="210" rx="8" fill="#1a1c21" stroke="#343741"/>
+  <text x="36" y="198" fill="white" font-size="12" font-weight="700">Alert Trend — Last 7 Days</text>
+  <text x="36" y="213" fill="#6b7280" font-size="9">Daily alert volume by severity</text>
+
+  <!-- Grid lines -->
+  <line x1="36" y1="350" x2="524" y2="350" stroke="#343741" stroke-width="1"/>
+  <line x1="36" y1="320" x2="524" y2="320" stroke="#343741" stroke-width="0.5" stroke-dasharray="2,4"/>
+  <line x1="36" y1="290" x2="524" y2="290" stroke="#343741" stroke-width="0.5" stroke-dasharray="2,4"/>
+  <line x1="36" y1="260" x2="524" y2="260" stroke="#343741" stroke-width="0.5" stroke-dasharray="2,4"/>
+  <line x1="36" y1="230" x2="524" y2="230" stroke="#343741" stroke-width="0.5" stroke-dasharray="2,4"/>
+
+  <!-- Y axis labels -->
+  <text x="30" y="353" text-anchor="end" fill="#6b7280" font-size="8">0</text>
+  <text x="30" y="323" text-anchor="end" fill="#6b7280" font-size="8">20</text>
+  <text x="30" y="293" text-anchor="end" fill="#6b7280" font-size="8">40</text>
+  <text x="30" y="263" text-anchor="end" fill="#6b7280" font-size="8">60</text>
+  <text x="30" y="233" text-anchor="end" fill="#6b7280" font-size="8">80</text>
+
+  <!-- Bars: Mon 18, Tue 24, Wed 22, Thu 35, Fri 58, Sat 29, Sun 61 -->
+  <!-- Bar width=48, gap=16, start x=46 -->
+  <!-- Mon -->
+  <rect x="46" y="296" width="48" height="54" rx="3" fill="#3b82f650"/>
+  <rect x="46" y="326" width="48" height="24" rx="2" fill="#3b82f6"/>
+  <text x="70" y="365" text-anchor="middle" fill="#6b7280" font-size="8">Mon 6/18</text>
+  <text x="70" y="293" text-anchor="middle" fill="#6b7280" font-size="8">18</text>
+  <!-- Tue -->
+  <rect x="110" y="278" width="48" height="72" rx="3" fill="#3b82f650"/>
+  <rect x="110" y="314" width="48" height="36" rx="2" fill="#3b82f6"/>
+  <text x="134" y="365" text-anchor="middle" fill="#6b7280" font-size="8">Tue 6/19</text>
+  <text x="134" y="275" text-anchor="middle" fill="#6b7280" font-size="8">24</text>
+  <!-- Wed -->
+  <rect x="174" y="284" width="48" height="66" rx="3" fill="#3b82f650"/>
+  <rect x="174" y="314" width="48" height="36" rx="2" fill="#3b82f6"/>
+  <text x="198" y="365" text-anchor="middle" fill="#6b7280" font-size="8">Wed 6/20</text>
+  <text x="198" y="281" text-anchor="middle" fill="#6b7280" font-size="8">22</text>
+  <!-- Thu -->
+  <rect x="238" y="245" width="48" height="105" rx="3" fill="#f9731650"/>
+  <rect x="238" y="298" width="48" height="52" rx="2" fill="#f97316"/>
+  <text x="262" y="365" text-anchor="middle" fill="#6b7280" font-size="8">Thu 6/21</text>
+  <text x="262" y="242" text-anchor="middle" fill="#f97316" font-size="8">35</text>
+  <!-- Fri -->
+  <rect x="302" y="176" width="48" height="174" rx="3" fill="#ef444450"/>
+  <rect x="302" y="256" width="48" height="94" rx="2" fill="#ef4444"/>
+  <text x="326" y="365" text-anchor="middle" fill="#6b7280" font-size="8">Fri 6/22</text>
+  <text x="326" y="173" text-anchor="middle" fill="#ef4444" font-size="8" font-weight="700">58 ⚑</text>
+  <!-- Sat -->
+  <rect x="366" y="263" width="48" height="87" rx="3" fill="#3b82f650"/>
+  <rect x="366" y="308" width="48" height="42" rx="2" fill="#3b82f6"/>
+  <text x="390" y="365" text-anchor="middle" fill="#6b7280" font-size="8">Sat 6/23</text>
+  <text x="390" y="260" text-anchor="middle" fill="#6b7280" font-size="8">29</text>
+  <!-- Sun -->
+  <rect x="430" y="167" width="48" height="183" rx="3" fill="#ef444450"/>
+  <rect x="430" y="257" width="48" height="93" rx="2" fill="#ef4444"/>
+  <text x="454" y="365" text-anchor="middle" fill="#6b7280" font-size="8">Sun 6/24</text>
+  <text x="454" y="164" text-anchor="middle" fill="#ef4444" font-size="8" font-weight="700">61 ⚑</text>
+
+  <!-- Legend -->
+  <rect x="440" y="188" width="8" height="8" rx="1" fill="#3b82f6"/>
+  <text x="452" y="196" fill="#6b7280" font-size="8">Normal</text>
+  <rect x="490" y="188" width="8" height="8" rx="1" fill="#ef4444"/>
+  <text x="502" y="196" fill="#6b7280" font-size="8">Elevated</text>
+
+  <!-- ── Top Threats Table ────────────────────────────────────── -->
+  <rect x="560" y="174" width="620" height="210" rx="8" fill="#1a1c21" stroke="#343741"/>
+  <text x="576" y="198" fill="white" font-size="12" font-weight="700">Top Threats This Week</text>
+  <text x="576" y="213" fill="#6b7280" font-size="9">Ranked by alert count · MITRE ATT&amp;CK mapped</text>
+
+  <!-- Table header -->
+  <rect x="560" y="218" width="620" height="22" fill="#141519" rx="4"/>
+  <text x="576" y="233" fill="#6b7280" font-size="9" font-weight="600">#</text>
+  <text x="600" y="233" fill="#6b7280" font-size="9" font-weight="600">THREAT / RULE</text>
+  <text x="870" y="233" fill="#6b7280" font-size="9" font-weight="600">TECHNIQUE</text>
+  <text x="970" y="233" fill="#6b7280" font-size="9" font-weight="600">COUNT</text>
+  <text x="1050" y="233" fill="#6b7280" font-size="9" font-weight="600">SEVERITY</text>
+  <text x="1130" y="233" fill="#6b7280" font-size="9" font-weight="600">TREND</text>
+
+  <!-- Row 1 -->
+  <rect x="560" y="240" width="620" height="28" fill="#1e2028"/>
+  <text x="576" y="258" fill="#6b7280" font-size="10">1</text>
+  <text x="600" y="258" fill="white" font-size="10">[MITRE T1110] SSH Brute Force — Multiple Failures</text>
+  <rect x="865" y="246" width="76" height="14" rx="3" fill="#3b82f620"/>
+  <text x="903" y="257" text-anchor="middle" fill="#60a5fa" font-size="9">T1110.001</text>
+  <text x="970" y="258" fill="white" font-size="11" font-weight="700">89</text>
+  <rect x="1045" y="246" width="50" height="14" rx="3" fill="#ef444430"/>
+  <text x="1070" y="257" text-anchor="middle" fill="#ef4444" font-size="9">CRITICAL</text>
+  <text x="1140" y="258" fill="#ef4444" font-size="10">▲ +52%</text>
+
+  <!-- Row 2 -->
+  <rect x="560" y="268" width="620" height="28" fill="#1a1c21"/>
+  <text x="576" y="286" fill="#6b7280" font-size="10">2</text>
+  <text x="600" y="286" fill="white" font-size="10">[MITRE T1046] Network Scan Detected (SYN flood)</text>
+  <rect x="865" y="274" width="70" height="14" rx="3" fill="#3b82f620"/>
+  <text x="900" y="285" text-anchor="middle" fill="#60a5fa" font-size="9">T1046</text>
+  <text x="970" y="286" fill="white" font-size="11" font-weight="700">62</text>
+  <rect x="1045" y="274" width="44" height="14" rx="3" fill="#f9731630"/>
+  <text x="1067" y="285" text-anchor="middle" fill="#f97316" font-size="9">HIGH</text>
+  <text x="1140" y="286" fill="#f97316" font-size="10">▲ +18%</text>
+
+  <!-- Row 3 -->
+  <rect x="560" y="296" width="620" height="28" fill="#1e2028"/>
+  <text x="576" y="314" fill="#6b7280" font-size="10">3</text>
+  <text x="600" y="314" fill="white" font-size="10">[MITRE T1595.002] Web Vulnerability Scan (Nikto)</text>
+  <rect x="865" y="302" width="76" height="14" rx="3" fill="#3b82f620"/>
+  <text x="903" y="313" text-anchor="middle" fill="#60a5fa" font-size="9">T1595.002</text>
+  <text x="970" y="314" fill="white" font-size="11" font-weight="700">41</text>
+  <rect x="1045" y="302" width="44" height="14" rx="3" fill="#f9731630"/>
+  <text x="1067" y="313" text-anchor="middle" fill="#f97316" font-size="9">HIGH</text>
+  <text x="1140" y="314" fill="#22c55e" font-size="10">▼ -5%</text>
+
+  <!-- Row 4 -->
+  <rect x="560" y="324" width="620" height="28" fill="#1a1c21"/>
+  <text x="576" y="342" fill="#6b7280" font-size="10">4</text>
+  <text x="600" y="342" fill="white" font-size="10">[MITRE T1190] SQL Injection Attempt</text>
+  <rect x="865" y="330" width="60" height="14" rx="3" fill="#3b82f620"/>
+  <text x="895" y="341" text-anchor="middle" fill="#60a5fa" font-size="9">T1190</text>
+  <text x="970" y="342" fill="white" font-size="11" font-weight="700">28</text>
+  <rect x="1045" y="330" width="50" height="14" rx="3" fill="#ef444430"/>
+  <text x="1070" y="341" text-anchor="middle" fill="#ef4444" font-size="9">CRITICAL</text>
+  <text x="1140" y="342" fill="#ef4444" font-size="10">NEW</text>
+
+  <!-- Row 5 -->
+  <rect x="560" y="352" width="620" height="28" fill="#1e2028"/>
+  <text x="576" y="370" fill="#6b7280" font-size="10">5</text>
+  <text x="600" y="370" fill="white" font-size="10">[MITRE T1048.003] DNS Exfiltration (long hostname)</text>
+  <rect x="865" y="358" width="76" height="14" rx="3" fill="#3b82f620"/>
+  <text x="903" y="369" text-anchor="middle" fill="#60a5fa" font-size="9">T1048.003</text>
+  <text x="970" y="370" fill="white" font-size="11" font-weight="700">14</text>
+  <rect x="1045" y="358" width="44" height="14" rx="3" fill="#eab30830"/>
+  <text x="1067" y="369" text-anchor="middle" fill="#eab308" font-size="9">MEDIUM</text>
+  <text x="1140" y="370" fill="#22c55e" font-size="10">▼ -12%</text>
+
+  <!-- ── Severity Donut ──────────────────────────────────────────── -->
+  <rect x="20" y="400" width="250" height="200" rx="8" fill="#1a1c21" stroke="#343741"/>
+  <text x="36" y="424" fill="white" font-size="12" font-weight="700">Severity Breakdown</text>
+
+  <!-- Donut arcs (SVG arc math) -->
+  <!-- Total 247: Critical=3(4%), High=52(21%), Medium=108(44%), Low=84(34%) -->
+  <!-- Donut center: 125, 510, r=64 -->
+
+  <!-- Low (34%) — teal — 0 to 122.4° -->
+  <path d="M 125 510 L 125 446 A 64 64 0 0 1 180 470 Z" fill="#00bfb3" opacity="0.9"/>
+  <!-- Medium (44%) — blue — 122.4° to 280.8° (158.4°) -->
+  <path d="M 125 510 L 180 470 A 64 64 0 1 1 91 456 Z" fill="#3b82f6" opacity="0.9"/>
+  <!-- High (21%) — orange — 280.8° to 356.4° (75.6°) -->
+  <path d="M 125 510 L 91 456 A 64 64 0 0 1 124 446 Z" fill="#f97316" opacity="0.9"/>
+  <!-- Critical (4%) — red — tiny slice -->
+  <path d="M 125 510 L 124 446 A 64 64 0 0 1 125 446 Z" fill="#ef4444" opacity="0.9"/>
+
+  <!-- Donut hole -->
+  <circle cx="125" cy="510" r="40" fill="#1a1c21"/>
+  <text x="125" y="505" text-anchor="middle" fill="white" font-size="18" font-weight="800">247</text>
+  <text x="125" y="521" text-anchor="middle" fill="#6b7280" font-size="9">total alerts</text>
+
+  <!-- Legend -->
+  <rect x="36" y="558" width="10" height="10" rx="2" fill="#ef4444"/>
+  <text x="52" y="567" fill="#d1d5db" font-size="9">Critical (3)</text>
+  <rect x="120" y="558" width="10" height="10" rx="2" fill="#f97316"/>
+  <text x="136" y="567" fill="#d1d5db" font-size="9">High (52)</text>
+  <rect x="36" y="578" width="10" height="10" rx="2" fill="#3b82f6"/>
+  <text x="52" y="587" fill="#d1d5db" font-size="9">Medium (108)</text>
+  <rect x="120" y="578" width="10" height="10" rx="2" fill="#00bfb3"/>
+  <text x="136" y="587" fill="#d1d5db" font-size="9">Low (84)</text>
+
+  <!-- ── MITRE ATT&CK Coverage Change ───────────────────────── -->
+  <rect x="286" y="400" width="460" height="200" rx="8" fill="#1a1c21" stroke="#343741"/>
+  <text x="302" y="424" fill="white" font-size="12" font-weight="700">MITRE ATT&amp;CK Activity This Week</text>
+  <text x="302" y="438" fill="#6b7280" font-size="9">Techniques observed in alerts — v14 framework</text>
+
+  <!-- Technique rows -->
+  <!-- T1110 -->
+  <text x="302" y="462" fill="#d1d5db" font-size="10">T1110 — Brute Force</text>
+  <rect x="430" y="452" width="280" height="12" rx="2" fill="#1e2028"/>
+  <rect x="430" y="452" width="202" height="12" rx="2" fill="#ef4444"/>
+  <text x="716" y="462" fill="#6b7280" font-size="9">89 alerts</text>
+  <!-- T1046 -->
+  <text x="302" y="484" fill="#d1d5db" font-size="10">T1046 — Network Scan</text>
+  <rect x="430" y="474" width="280" height="12" rx="2" fill="#1e2028"/>
+  <rect x="430" y="474" width="140" height="12" rx="2" fill="#f97316"/>
+  <text x="716" y="484" fill="#6b7280" font-size="9">62 alerts</text>
+  <!-- T1595 -->
+  <text x="302" y="506" fill="#d1d5db" font-size="10">T1595 — Active Scan</text>
+  <rect x="430" y="496" width="280" height="12" rx="2" fill="#1e2028"/>
+  <rect x="430" y="496" width="93" height="12" rx="2" fill="#f97316"/>
+  <text x="716" y="506" fill="#6b7280" font-size="9">41 alerts</text>
+  <!-- T1190 -->
+  <text x="302" y="528" fill="#d1d5db" font-size="10">T1190 — Exploit Public App</text>
+  <rect x="430" y="518" width="280" height="12" rx="2" fill="#1e2028"/>
+  <rect x="430" y="518" width="63" height="12" rx="2" fill="#ef4444"/>
+  <text x="716" y="528" fill="#6b7280" font-size="9">28 alerts</text>
+  <!-- T1021 -->
+  <text x="302" y="550" fill="#d1d5db" font-size="10">T1021 — Remote Services</text>
+  <rect x="430" y="540" width="280" height="12" rx="2" fill="#1e2028"/>
+  <rect x="430" y="540" width="32" height="12" rx="2" fill="#3b82f6"/>
+  <text x="716" y="550" fill="#6b7280" font-size="9">14 alerts</text>
+  <!-- T1048 -->
+  <text x="302" y="572" fill="#d1d5db" font-size="10">T1048 — Exfil Over Alt Protocol</text>
+  <rect x="430" y="562" width="280" height="12" rx="2" fill="#1e2028"/>
+  <rect x="430" y="562" width="14" height="12" rx="2" fill="#a78bfa"/>
+  <text x="716" y="572" fill="#6b7280" font-size="9">6 alerts</text>
+  <!-- T1071 -->
+  <text x="302" y="594" fill="#d1d5db" font-size="10">T1071 — App Layer Protocol</text>
+  <rect x="430" y="584" width="280" height="12" rx="2" fill="#1e2028"/>
+  <rect x="430" y="584" width="7" height="12" rx="2" fill="#a78bfa"/>
+  <text x="716" y="594" fill="#6b7280" font-size="9">3 alerts</text>
+
+  <!-- ── Actions Required ──────────────────────────────────── -->
+  <rect x="762" y="400" width="418" height="200" rx="8" fill="#1a1c21" stroke="#343741"/>
+  <text x="778" y="424" fill="white" font-size="12" font-weight="700">Actions Required</text>
+
+  <!-- Action 1: CRITICAL -->
+  <rect x="778" y="434" width="384" height="44" rx="6" fill="#ef444415" stroke="#ef444440"/>
+  <rect x="778" y="434" width="4" height="44" rx="2" fill="#ef4444"/>
+  <text x="792" y="451" fill="#ef4444" font-size="10" font-weight="700">🔴 CRITICAL — 3 critical alerts require immediate triage</text>
+  <text x="792" y="468" fill="#d1d5db" font-size="9">Kibana: Security → Alerts → Filter: severity:critical → Investigate source.ip</text>
+
+  <!-- Action 2: HIGH -->
+  <rect x="778" y="486" width="384" height="44" rx="6" fill="#f9731615" stroke="#f9731640"/>
+  <rect x="778" y="486" width="4" height="44" rx="2" fill="#f97316"/>
+  <text x="792" y="503" fill="#f97316" font-size="10" font-weight="700">⚠ HIGH — Brute force volume +52% vs last week</text>
+  <text x="792" y="520" fill="#d1d5db" font-size="9">Run EQL hunt H-001 · Verify fail2ban active · Check firewall rules</text>
+
+  <!-- Action 3: Tune -->
+  <rect x="778" y="538" width="384" height="44" rx="6" fill="#3b82f615" stroke="#3b82f640"/>
+  <rect x="778" y="538" width="4" height="44" rx="2" fill="#3b82f6"/>
+  <text x="792" y="555" fill="#3b82f6" font-size="10" font-weight="700">ℹ TUNING — SID 9000010 FP rate at 38% (target: &lt;5%)</text>
+  <text x="792" y="572" fill="#d1d5db" font-size="9">Add !$HOME_NET scope · Whitelist Docker gateway 172.20.0.1</text>
+
+  <!-- Action 4: Next -->
+  <rect x="778" y="590" width="384" height="44" rx="6" fill="#22c55e15" stroke="#22c55e40"/>
+  <rect x="778" y="590" width="4" height="44" rx="2" fill="#22c55e"/>
+  <text x="792" y="607" fill="#22c55e" font-size="10" font-weight="700">✓ SCHEDULED — Update threat intel feeds</text>
+  <text x="792" y="624" fill="#d1d5db" font-size="9">make threat-intel · Next run: 2026-06-25 06:00 UTC (automated)</text>
+
+  <!-- ── Infrastructure Status ──────────────────────────────── -->
+  <rect x="20" y="616" width="1160" height="56" rx="8" fill="#141519" stroke="#343741"/>
+  <text x="36" y="638" fill="#6b7280" font-size="10" font-weight="600" letter-spacing="0.05em">INFRASTRUCTURE STATUS</text>
+
+  <!-- ES -->
+  <circle cx="200" cy="645" r="5" fill="#22c55e"/>
+  <text x="212" y="649" fill="#d1d5db" font-size="10">Elasticsearch</text>
+  <text x="212" y="662" fill="#22c55e" font-size="9">HEALTHY · 1 node · 84k docs</text>
+
+  <!-- Logstash -->
+  <circle cx="380" cy="645" r="5" fill="#22c55e"/>
+  <text x="392" y="649" fill="#d1d5db" font-size="10">Logstash Pipeline</text>
+  <text x="392" y="662" fill="#22c55e" font-size="9">RUNNING · 3.2k events/min</text>
+
+  <!-- Kibana -->
+  <circle cx="560" cy="645" r="5" fill="#22c55e"/>
+  <text x="572" y="649" fill="#d1d5db" font-size="10">Kibana</text>
+  <text x="572" y="662" fill="#22c55e" font-size="9">AVAILABLE · http://localhost:5601</text>
+
+  <!-- Suricata -->
+  <circle cx="730" cy="645" r="5" fill="#22c55e"/>
+  <text x="742" y="649" fill="#d1d5db" font-size="10">Suricata IDS/IPS</text>
+  <text x="742" y="662" fill="#22c55e" font-size="9">ACTIVE · 17 rules loaded · 247 alerts</text>
+
+  <!-- TheHive -->
+  <circle cx="920" cy="645" r="5" fill="#eab308"/>
+  <text x="932" y="649" fill="#d1d5db" font-size="10">TheHive SOAR</text>
+  <text x="932" y="662" fill="#eab308" font-size="9">STANDBY · 0 open cases</text>
+
+  <!-- CI -->
+  <circle cx="1080" cy="645" r="5" fill="#22c55e"/>
+  <text x="1092" y="649" fill="#d1d5db" font-size="10">GitHub Actions CI</text>
+  <text x="1092" y="662" fill="#22c55e" font-size="9">PASSING · 5/5 checks</text>
+
+  <!-- ── Footer ──────────────────────────────────────────────── -->
+  <rect x="0" y="680" width="1200" height="140" fill="#0a0b0e"/>
+  <line x1="0" y1="680" x2="1200" y2="680" stroke="#343741"/>
+
+  <!-- Footer left: generator info -->
+  <text x="20" y="700" fill="#6b7280" font-size="10">Generated by: scripts/generate-report.py · Mini-SIEM Lab</text>
+  <text x="20" y="716" fill="#6b7280" font-size="9">Data source: Elasticsearch siem-* · Period: 2026-06-17 → 2026-06-24</text>
+  <text x="20" y="732" fill="#6b7280" font-size="9">Stack: Elasticsearch 8.14.3 · Logstash 8.14.3 · Kibana 8.14.3 · Suricata (latest)</text>
+
+  <!-- Footer center: signature block -->
+  <line x1="420" y1="688" x2="420" y2="748" stroke="#343741"/>
+  <text x="440" y="700" fill="#d1d5db" font-size="11" font-weight="600">Damiano Di Biase</text>
+  <text x="440" y="715" fill="#6b7280" font-size="9">SOC Analyst · Mini-SIEM Lab</text>
+  <text x="440" y="730" fill="#6b7280" font-size="9">ddibiase16@gmail.com</text>
+  <text x="440" y="745" fill="#6b7280" font-size="9">github.com/Dib68/virtual-machine-Soc</text>
+
+  <!-- Footer right: tlp badge -->
+  <line x1="720" y1="688" x2="720" y2="748" stroke="#343741"/>
+  <rect x="740" y="692" width="100" height="24" rx="4" fill="#ffffff20"/>
+  <text x="790" y="709" text-anchor="middle" fill="white" font-size="11" font-weight="700">TLP:WHITE</text>
+  <text x="740" y="732" fill="#6b7280" font-size="8">Unrestricted distribution</text>
+  <text x="740" y="745" fill="#6b7280" font-size="8">Internal lab use only</text>
+
+  <!-- Horizontal separator between main and appendix -->
+  <line x1="20" y1="758" x2="1180" y2="758" stroke="#343741" stroke-dasharray="4,6"/>
+  <text x="600" y="773" text-anchor="middle" fill="#343741" font-size="8" letter-spacing="0.15em">APPENDIX — Next scheduled report: 2026-07-01 08:00 UTC · Distribution: Security Team</text>
+
+  <!-- Report ID -->
+  <text x="1180" y="773" text-anchor="end" fill="#343741" font-size="8">RPT-2026-W26-001</text>
+  <text x="1180" y="786" text-anchor="end" fill="#343741" font-size="8">CONFIDENTIAL — INTERNAL USE</text>
+</svg>

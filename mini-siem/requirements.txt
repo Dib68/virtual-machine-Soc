@@ -1,0 +1,14 @@
+# Mini-SIEM Lab — Python dependencies
+# Install: pip install -r requirements.txt
+
+# HTTP client (ES queries, TheHive API, threat intel enrichment)
+requests>=2.31.0
+
+# Date/time parsing (used in generate-report.py and thehive-bot.py)
+python-dateutil>=2.9.0
+
+# YAML parsing (Sigma rule validation)
+PyYAML>=6.0.1
+
+# Rich terminal output (optional, used in thehive-bot.py status display)
+rich>=13.7.0

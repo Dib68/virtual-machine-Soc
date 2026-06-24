@@ -4,7 +4,8 @@
 # ============================================================
 
 .PHONY: help up down status attack-all attack-bruteforce attack-scan \
-        attack-web attack-lateral check reset clean logs
+        attack-web attack-lateral check reset clean logs \
+        threat-intel report soar-bot tuning-check sigma-convert
 
 COMPOSE = docker compose
 ES      = http://localhost:9200
@@ -127,3 +128,53 @@ validate: ## Valida le regole Suricata e i file di configurazione
 
 load-dashboards: ## Carica i dashboard Kibana via API
 	@bash scripts/load-dashboards.sh
+
+# ── Threat Intelligence ─────────────────────────────────────
+
+threat-intel: ## Scarica feed IOC (AbuseCH/ET/CINS) e genera regole Suricata
+	@echo "$(YELLOW)Sincronizzazione threat intelligence feeds...$(NC)"
+	@bash scripts/threat-intel-sync.sh
+	@echo "$(GREEN)Feed sincronizzati. Regole salvate in config/suricata/rules/threat-intel.rules$(NC)"
+
+threat-intel-dry: ## Preview delle regole generate (non salva, non ricarica)
+	@bash scripts/threat-intel-sync.sh --dry-run
+
+# ── Reporting ────────────────────────────────────────────────
+
+report: ## Genera il report settimanale HTML+Markdown (ultimi 7 giorni)
+	@echo "$(YELLOW)Generazione Weekly Threat Report...$(NC)"
+	@python3 scripts/generate-report.py --format both
+	@echo "$(GREEN)Report salvato in reports/$(NC)"
+
+report-30d: ## Report mensile (ultimi 30 giorni)
+	@python3 scripts/generate-report.py --days 30 --format both
+
+# ── SOAR Automation ──────────────────────────────────────────
+
+soar-bot: ## Avvia TheHive bot (polling ES → crea casi in TheHive)
+	@echo "$(YELLOW)Avvio TheHive SOAR bot...$(NC)"
+	@python3 scripts/thehive-bot.py --loop
+
+soar-bot-dry: ## Preview delle operazioni SOAR senza creare casi reali
+	@python3 scripts/thehive-bot.py --dry-run
+
+# ── Rule Quality ─────────────────────────────────────────────
+
+tuning-check: ## Mostra il volume degli alert per regola (ultime 24h)
+	@echo "$(YELLOW)False positive analysis — alert volume per SID:$(NC)"
+	@curl -s "$(ES)/siem-suricata-*/_search" \
+		-H 'Content-Type: application/json' \
+		-d '{"size":0,"query":{"bool":{"must":[{"term":{"suricata.event_type":"alert"}},{"range":{"@timestamp":{"gte":"now-24h"}}}]}},"aggs":{"by_sig":{"terms":{"field":"suricata.alert.signature_id","size":20}}}}' \
+		| python3 -c "import json,sys; d=json.load(sys.stdin); \
+		[print(f'  SID {b[\"key\"]:>10} | {b[\"doc_count\"]:>5} alerts/24h') \
+		for b in d.get('aggregations',{}).get('by_sig',{}).get('buckets',[])]"
+	@echo "$(YELLOW)Regole con > 50 alert/24h: candidati per tuning$(NC)"
+	@echo "$(BLUE)Guida: docs/tuning/false-positives.md$(NC)"
+
+sigma-convert: ## Converte le Sigma rules in ElasticSearch KQL (richiede pySigma)
+	@echo "$(YELLOW)Conversione Sigma → Elasticsearch KQL:$(NC)"
+	@for f in rules/sigma/*.yml; do \
+		echo "$(BLUE)$$f$(NC)"; \
+		sigma convert -t elasticsearch -p ecs_linux "$$f" 2>/dev/null || \
+		echo "  (installa pySigma: pip install sigma-cli pySigma-backend-elasticsearch)"; \
+	done

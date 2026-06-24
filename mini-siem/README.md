@@ -1,13 +1,14 @@
 # Mini-SIEM: Threat Detection Lab
 
-![CI](https://github.com/damiano-dibiase/mini-siem/actions/workflows/validate-siem.yml/badge.svg)
+![CI](https://github.com/Dib68/virtual-machine-Soc/actions/workflows/validate-siem.yml/badge.svg)
 ![ELK Stack](https://img.shields.io/badge/ELK-8.14.3-005571?style=flat&logo=elastic)
 ![Suricata](https://img.shields.io/badge/Suricata-IDS%2FIPS-orange?style=flat)
 ![MITRE ATT&CK](https://img.shields.io/badge/MITRE%20ATT%26CK-v14-red?style=flat)
 ![Sigma](https://img.shields.io/badge/Sigma-4%20rules-purple?style=flat)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker)
-![Rules](https://img.shields.io/badge/Detection%20Rules-13%20active-brightgreen?style=flat)
+![Rules](https://img.shields.io/badge/Detection%20Rules-13%20%2B%20live%20feeds-brightgreen?style=flat)
 ![Playbooks](https://img.shields.io/badge/IR%20Playbooks-3-blue?style=flat)
+![ThreatIntel](https://img.shields.io/badge/Threat%20Intel-AbuseCH%20·%20ET%20·%20CINS-blueviolet?style=flat)
 
 > A fully-functional **blue team detection lab**: real attacks, real alerts, real MITRE ATT&CK coverage.  
 > Built by a SOC Analyst candidate to demonstrate end-to-end threat detection skills.
@@ -32,6 +33,11 @@
 > *Proactive hunt that found 2 successful logins the alert-only view missed*
 
 ![Threat Hunting](screenshots/05-threat-hunting.svg)
+
+### 6 — Weekly Executive Threat Report
+> *Management-ready report generated automatically from ES data — shows the analyst communication side of SOC work*
+
+![Weekly Report](screenshots/06-weekly-report.svg)
 
 ---
 
@@ -166,6 +172,22 @@ make enrich-iocs       Enrich alert IPs with AbuseIPDB + GeoIP
 ── Maintenance ────────────────────────────────────────────
 make validate          Validate all configs + detection rules
 make load-dashboards   Import Kibana dashboards via API
+
+── Threat Intelligence ─────────────────────────────────
+make threat-intel      Download IOC feeds (AbuseCH/ET/CINS) → Suricata rules
+make threat-intel-dry  Preview generated rules (no save/reload)
+
+── Reporting ───────────────────────────────────────────
+make report            Generate weekly HTML + Markdown threat report
+make report-30d        Monthly report (last 30 days)
+
+── SOAR Automation ─────────────────────────────────────
+make soar-bot          Run TheHive bot (ES alerts → TheHive cases)
+make soar-bot-dry      Preview SOAR actions without creating cases
+
+── Rule Quality ────────────────────────────────────────
+make tuning-check      Alert volume per SID — identify high-FP rules
+make sigma-convert     Convert Sigma rules to ES KQL (requires pySigma)
 ```
 
 ---
@@ -225,6 +247,74 @@ See [`rules/sigma/README.md`](rules/sigma/README.md) for full conversion guide.
 | `t1046-network-scan.toml` | T1046 | query | signature match |
 | `t1190-web-exploit.toml` | T1190 + T1595.002 | query | signature match |
 | `t1021-lateral-movement.toml` | T1021.004 + T1133 | query | signature match |
+
+---
+
+## Threat Intelligence Feed Integration
+
+Live IOC feeds are downloaded and converted to Suricata rules automatically:
+
+```bash
+make threat-intel   # Downloads feeds + generates config/suricata/rules/threat-intel.rules
+```
+
+| Feed | Source | IOC Type | Volume |
+|---|---|---|---|
+| [AbuseCH Feodo Tracker](https://feodotracker.abuse.ch) | AbuseCH | Botnet C2 IPs | ~300 IPs |
+| [AbuseCH SSL Blacklist](https://sslbl.abuse.ch) | AbuseCH | Malicious TLS servers | ~500 IPs |
+| [Emerging Threats](https://rules.emergingthreats.net) | ProofPoint | Compromised hosts | ~500 IPs |
+| [CINS Army](http://cinsscore.com) | CINS Score | Scanners / brute force | ~8k IPs |
+
+Generated rules use SID range **8000001–8999999** (distinct from lab rules 9000001+).  
+No API key required — all feeds are free and public.
+
+Schedule daily sync with cron:
+```bash
+0 6 * * * cd /path/to/mini-siem && make threat-intel >> /var/log/threat-intel.log 2>&1
+```
+
+---
+
+## Weekly Threat Report Generator
+
+Queries Elasticsearch and generates a professional management report:
+
+```bash
+make report          # HTML + Markdown report in reports/
+make report-30d      # Monthly version
+```
+
+Report includes:
+- Executive KPIs (total events, alerts by severity, MTTR, unique attacker IPs)
+- 7-day alert trend chart with severity annotation
+- Top 5 threat actors (source IPs)
+- Top triggered detection rules ranked by volume
+- MITRE ATT&CK techniques observed this week
+- Risk level assessment (LOW → CRITICAL)
+- Automated action items based on data thresholds
+
+> See [`screenshots/06-weekly-report.svg`](screenshots/06-weekly-report.svg) for a preview of the report output.
+
+---
+
+## Rule Tuning & False Positive Management
+
+See [`docs/tuning/false-positives.md`](docs/tuning/false-positives.md) for the complete guide.
+
+The key insight most portfolios miss: **adding rules is easy, tuning them is the real skill**.
+
+```bash
+make tuning-check   # Shows alert volume per SID — identify noisy rules
+```
+
+Example suppressions for common lab false positives:
+```suricata
+# Docker health checks triggering SID 9000010 (port scan threshold)
+suppress gen_id 1, sig_id 9000010, track by_src, ip 172.20.0.1
+
+# Legitimate update servers triggering SID 9000060 (C2 beacon heuristic)
+suppress gen_id 1, sig_id 9000060, track by_dst, ip [8.8.8.8, 1.1.1.1]
+```
 
 ---
 
@@ -329,11 +419,14 @@ mini-siem/
 │   ├── check-alerts.sh               ← Alert summary via ES API
 │   ├── enrich-iocs.sh                ← AbuseIPDB + GeoIP enrichment
 │   ├── load-dashboards.sh            ← Kibana dashboard import
-│   └── reset-lab.sh                  ← Full lab reset
+│   ├── reset-lab.sh                  ← Full lab reset
+│   ├── threat-intel-sync.sh          ← Live IOC feeds → Suricata rules
+│   └── generate-report.py            ← Weekly HTML/Markdown threat report
 │
 ├── docs/
 │   ├── WALKTHROUGH.md                ← Complete attack→detect→respond story
 │   ├── hunting/eql-queries.md        ← 7 EQL threat hunting queries
+│   ├── tuning/false-positives.md     ← FP reduction guide, suppression examples
 │   └── playbooks/                    ← IR Playbooks (NIST framework)
 │       ├── T1110-SSH-BruteForce.md
 │       ├── T1046-NetworkScan.md
@@ -343,7 +436,9 @@ mini-siem/
 │   ├── 01-soc-dashboard.svg
 │   ├── 02-brute-force-alert.svg
 │   ├── 03-mitre-matrix.svg
-│   └── 04-timeline-investigation.svg ← MTTD/MTTR measurement
+│   ├── 04-timeline-investigation.svg ← MTTD/MTTR measurement
+│   ├── 05-threat-hunting.svg         ← EQL sequence hunt results
+│   └── 06-weekly-report.svg          ← Executive weekly threat report
 │
 ├── rules/
 │   ├── detection/                    ← Elastic Security rules (TOML)
@@ -383,12 +478,14 @@ GitHub Actions runs on every push to `mini-siem/**`:
 | Skill | How |
 |---|---|
 | **SIEM Engineering** | ELK 8.x stack, Logstash pipelines, Metricbeat system metrics |
-| **Intrusion Detection** | 13 Suricata rules with threshold + signature detection |
+| **Intrusion Detection** | 13 Suricata rules (+ live feed rules) with threshold + signature detection |
 | **Log Analysis** | Grok parsing: Suricata EVE-JSON, auth.log, syslog |
 | **Detection Engineering** | Elastic Security TOML rules + Sigma universal format |
 | **Threat Hunting** | 7 EQL sequence queries, hypothesis-driven methodology |
 | **SOAR Automation** | Python TheHive bot: ES → case creation with observables |
-| **Threat Intelligence** | GeoIP enrichment, AbuseIPDB IOC correlation |
+| **Threat Intelligence** | Live IOC feeds (AbuseCH/ET/CINS) auto-converted to Suricata rules |
+| **Rule Tuning** | FP reduction methodology, suppress directives, threshold calibration |
+| **SOC Reporting** | Python report generator: ES → executive HTML/Markdown weekly report |
 | **MITRE ATT&CK** | 8 techniques detected, chain reconstruction, coverage matrix |
 | **Incident Response** | NIST-based playbooks, MTTD 9 min / MTTR 1 min 38 sec |
 | **DevSecOps / CI/CD** | GitHub Actions: YAML + TOML + Suricata + smoke test |
