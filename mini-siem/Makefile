@@ -6,12 +6,12 @@
 .PHONY: help up down status attack-all attack-bruteforce attack-scan \
         attack-web attack-lateral check reset clean logs \
         threat-intel report soar-bot tuning-check sigma-convert \
-        ioc-lookup setup
+        ioc-lookup setup build-attacker demo integration-test
 
 COMPOSE = docker compose
 ES      = http://localhost:9200
 KIBANA  = http://localhost:5601
-TARGET ?= 192.168.56.10
+TARGET ?= 172.20.0.10
 
 # Colori
 RED    = \033[0;31m
@@ -70,19 +70,19 @@ attack-all: ## Lancia tutte le simulazioni in sequenza
 	@$(MAKE) attack-lateral
 	@echo "$(GREEN)Tutte le simulazioni completate. Controlla Kibana: $(KIBANA)$(NC)"
 
-attack-bruteforce: ## T1110.001 — SSH Brute Force
+attack-bruteforce: ## T1110.001 — SSH Brute Force (auto Docker fallback se hydra manca)
 	@echo "$(RED)[►] T1110.001 SSH Brute Force → $(TARGET)$(NC)"
 	@bash simulations/01-brute-force-ssh.sh $(TARGET)
 
-attack-scan: ## T1046 — Network Service Scanning (Nmap)
+attack-scan: ## T1046 — Network Service Scanning (auto Docker fallback se nmap manca)
 	@echo "$(RED)[►] T1046 Port Scan → $(TARGET)$(NC)"
 	@bash simulations/02-port-scan.sh $(TARGET)
 
-attack-web: ## T1190 + T1595.002 — Web Application Attacks
+attack-web: ## T1190 + T1595.002 — Web Application Attacks (curl-based, nikto opzionale)
 	@echo "$(RED)[►] T1190 Web Attack → $(TARGET):8080$(NC)"
 	@bash simulations/03-web-attack.sh $(TARGET) 8080
 
-attack-lateral: ## T1021.004 — Lateral Movement via SSH
+attack-lateral: ## T1021.004 — Lateral Movement via SSH (auto Docker fallback se nmap manca)
 	@echo "$(RED)[►] T1021.004 Lateral Movement → $(TARGET)$(NC)"
 	@bash simulations/04-lateral-movement.sh $(TARGET)
 
@@ -187,6 +187,34 @@ ioc-lookup: ## Multi-source IOC lookup — usage: make ioc-lookup IOC=1.2.3.4
 
 ioc-bulk: ## Bulk IOC lookup from file — usage: make ioc-bulk FILE=ips.txt
 	@cat $(FILE) | python3 scripts/ioc-lookup.py --bulk
+
+build-attacker: ## Build Docker attacker container (nmap + hydra + nikto — per simulazioni)
+	@echo "$(YELLOW)Build attacker container...$(NC)"
+	@docker build -t siem-attacker simulations/
+	@echo "$(GREEN)siem-attacker image pronta.$(NC)"
+
+integration-test: ## End-to-end test: verifica che la pipeline rilevi gli attacchi
+	@echo "$(YELLOW)Avvio integration test...$(NC)"
+	@bash scripts/integration-test.sh
+
+integration-test-quick: ## Integration test veloce (solo curl, senza nmap/hydra)
+	@bash scripts/integration-test.sh --quick
+
+demo: ## One-command demo: start → attack → check (richiede stack in esecuzione)
+	@echo "$(YELLOW)╔═══════════════════════════════════════════════╗$(NC)"
+	@echo "$(YELLOW)║  Mini-SIEM Demo — Attack → Detect → Report   ║$(NC)"
+	@echo "$(YELLOW)╚═══════════════════════════════════════════════╝$(NC)"
+	@echo ""
+	@echo "$(BLUE)[1/4] Verifica stack...$(NC)"
+	@$(MAKE) status
+	@echo "$(BLUE)[2/4] Lancio simulazioni MITRE ATT&CK...$(NC)"
+	@$(MAKE) attack-all
+	@echo "$(BLUE)[3/4] Integration test pipeline...$(NC)"
+	@$(MAKE) integration-test-quick
+	@echo "$(BLUE)[4/4] Generazione report...$(NC)"
+	@$(MAKE) report
+	@echo ""
+	@echo "$(GREEN)Demo completata! Kibana: $(KIBANA)$(NC)"
 
 sigma-convert: ## Converte le Sigma rules in ElasticSearch KQL (richiede pySigma)
 	@echo "$(YELLOW)Conversione Sigma → Elasticsearch KQL:$(NC)"

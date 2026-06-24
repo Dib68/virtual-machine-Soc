@@ -10,8 +10,8 @@
 # ============================================================
 set -euo pipefail
 
-ES="http://localhost:9200"
-LIMIT="${2:-10}"
+ES="${ES_URL:-http://localhost:9200}"
+LIMIT="${1:-10}"
 KEY="${ABUSEIPDB_KEY:-}"
 RED='\033[0;31m'; GRN='\033[0;32m'; YLW='\033[1;33m'; BLU='\033[0;34m'; NC='\033[0m'
 

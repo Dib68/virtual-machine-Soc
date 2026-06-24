@@ -6,7 +6,7 @@
 # ============================================================
 set -euo pipefail
 
-TARGET="${1:-192.168.56.10}"
+TARGET="${1:-172.20.0.10}"
 PORT="${2:-8080}"
 BASE="http://$TARGET:$PORT"
 YLW='\033[1;33m'; GRN='\033[0;32m'; BLU='\033[0;34m'; NC='\033[0m'
@@ -18,9 +18,19 @@ echo -e "${YLW}╔════════════════════�
 echo    "║  MITRE T1190 — Web Application Attacks       ║"
 echo -e "╚═══════════════════════════════════════════════╝${NC}"
 
-step "1/4 — Reconnaissance con Nikto"
+step "1/4 — Reconnaissance"
 info "User-Agent: Nikto → trigger SID 9000020"
-nikto -h "$BASE" -maxtime 30s -output /tmp/nikto-report.txt 2>/dev/null | tail -10
+if command -v nikto >/dev/null 2>&1; then
+  nikto -h "$BASE" -maxtime 30s -output /tmp/nikto-report.txt 2>/dev/null | tail -10
+else
+  # Curl fallback: scanner-style requests with Nikto UA trigger SID 9000020
+  echo -e "    ${YLW}nikto non trovato — uso curl con User-Agent nikto${NC}"
+  curl -sf -o /dev/null -A "Mozilla/5.0 (Nikto/2.1.6) (Evasions:None) (Test:Port Check)" \
+    "$BASE/" 2>/dev/null || true
+  for path in /admin /.env /config.php /backup.sql /phpinfo.php /server-status; do
+    curl -sf -o /dev/null -m 2 "$BASE$path" 2>/dev/null || true
+  done
+fi
 sleep 2
 
 step "2/4 — SQL Injection (payload classico)"

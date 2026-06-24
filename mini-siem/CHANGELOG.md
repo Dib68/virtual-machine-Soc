@@ -5,6 +5,29 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ---
 
+## [v6] — 2026-06-25
+
+### Added
+- `simulations/Dockerfile` — Kali Linux attacker container with nmap, hydra, nikto, curl, sshpass; simulation scripts auto-build and exec into it when tools are missing locally
+- `scripts/integration-test.sh` — End-to-end detection pipeline test: sends T1190 web payloads + T1110 SSH attempts → waits 45s → queries ES for alerts, MITRE enrichment, GeoIP fields; exits 0 only if all checks pass; `--quick` mode skips SSH
+- `LICENSE` — MIT license
+
+### Fixed
+- **Critical:** all 4 simulation scripts defaulted to `192.168.56.10` (Vagrant IP) — target container is at `172.20.0.10` in the Docker lab; `make attack-all` was attacking a non-existent host
+- **Critical:** `02-port-scan.sh` had no tool check — called nmap directly, crashing with pipefail if not installed
+- **Critical:** `03-web-attack.sh` called nikto as mandatory — with `set -euo pipefail` a missing nikto aborted the entire script; now nikto is optional with curl fallback
+- **Critical:** `04-lateral-movement.sh` hardcoded `192.168.56.0/24` subnet for nmap discovery — wrong network for Docker lab; now uses `SUBNET` env var (default `172.20.0.0/24`)
+- `enrich-iocs.sh` — `LIMIT="${2:-10}"` bug: should be `$1`; also respects `ES_URL` env var
+- SSH port in simulations updated from `22` to `2222` (actual Docker target port)
+
+### Improved
+- All simulation scripts now auto-detect missing tools (nmap/hydra/nikto) and fall back to Docker attacker container (`siem-attacker`) transparently; first run builds the image automatically
+- `make attack-all` now works on any machine with Docker, even without attack tools installed
+- Makefile: new targets `build-attacker`, `integration-test`, `integration-test-quick`, `demo`; `TARGET` default fixed from `192.168.56.10` → `172.20.0.10`
+- All 11 shell scripts verified with `bash -n` syntax check (0 errors)
+
+---
+
 ## [v5] — 2026-06-25
 
 ### Added
