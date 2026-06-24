@@ -153,6 +153,7 @@ app-layer:
 rule-files:
   - suricata.rules
   - /etc/suricata/rules/local.rules
+  - /etc/suricata/rules/threat-intel.rules
 
 classification-file: /etc/suricata/classification.config
 reference-config-file: /etc/suricata/reference.config

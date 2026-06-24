@@ -127,7 +127,7 @@ jobs:
 
   # ── 4. Validate shell scripts ─────────────────────────────────
   validate-scripts:
-    name: Lint Shell Scripts
+    name: Lint Shell Scripts (ShellCheck)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -136,12 +136,62 @@ jobs:
         run: sudo apt-get install -y shellcheck
 
       - name: ShellCheck simulations
-        run: shellcheck simulations/*.sh || true
+        run: shellcheck simulations/*.sh
 
       - name: ShellCheck scripts
-        run: shellcheck scripts/*.sh || true
+        run: shellcheck scripts/*.sh
 
-  # ── 5. Smoke test — Elasticsearch reachable ───────────────────
+      - name: ShellCheck setup.sh
+        run: shellcheck setup.sh
+
+  # ── 5. Validate Python scripts ────────────────────────────────
+  validate-python:
+    name: Validate Python Scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install ruff requests python-dateutil PyYAML
+
+      - name: Syntax check — all Python scripts
+        run: |
+          for f in scripts/*.py; do
+            python3 -m py_compile "$f" && echo "OK  $f" || (echo "FAIL $f"; exit 1)
+          done
+
+      - name: Ruff lint — style and errors
+        run: ruff check scripts/*.py --select E,F,W --ignore E501,W291
+
+      - name: Validate Sigma rules (YAML parse)
+        run: |
+          python3 - <<'EOF'
+          import yaml, glob, sys
+          errors = []
+          for path in glob.glob("rules/sigma/*.yml"):
+              try:
+                  with open(path) as f:
+                      data = yaml.safe_load(f)
+                  required = ["title", "status", "logsource", "detection"]
+                  missing = [k for k in required if k not in data]
+                  if missing:
+                      errors.append(f"{path}: missing fields {missing}")
+                  else:
+                      print(f"OK  {path}: '{data['title']}'")
+              except Exception as e:
+                  errors.append(f"{path}: {e}")
+          if errors:
+              for e in errors: print(f"FAIL {e}")
+              sys.exit(1)
+          print(f"\nAll {len(glob.glob('rules/sigma/*.yml'))} Sigma rules validated.")
+          EOF
+
+  # ── 6. Smoke test — Elasticsearch reachable ───────────────────
   smoke-test-elk:
     name: Smoke Test — ELK Stack Startup
     runs-on: ubuntu-latest
