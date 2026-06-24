@@ -13,6 +13,14 @@
 > A fully-functional **blue team detection lab**: real attacks, real alerts, real MITRE ATT&CK coverage.  
 > Built by a SOC Analyst candidate to demonstrate end-to-end threat detection skills.
 
+```bash
+git clone https://github.com/Dib68/virtual-machine-Soc.git
+cd "virtual-machine-Soc/mini-siem"
+chmod +x setup.sh && ./setup.sh     # one-command setup
+make attack-all                      # run all 4 attack simulations
+# → open http://localhost:5601
+```
+
 ---
 
 ## Screenshots
@@ -38,6 +46,11 @@
 > *Management-ready report generated automatically from ES data — shows the analyst communication side of SOC work*
 
 ![Weekly Report](screenshots/06-weekly-report.svg)
+
+### 7 — Network Architecture Diagram
+> *Full lab topology: attack paths, detection layers, data pipeline, response components*
+
+![Architecture](screenshots/07-architecture-diagram.svg)
 
 ---
 
@@ -250,6 +263,95 @@ See [`rules/sigma/README.md`](rules/sigma/README.md) for full conversion guide.
 
 ---
 
+## Quick Setup
+
+One command installs everything:
+
+```bash
+chmod +x setup.sh && ./setup.sh
+```
+
+`setup.sh` automatically:
+- Checks prerequisites (Docker ≥ 20, 4GB RAM, 10GB disk, vm.max_map_count)
+- Creates `.env` from `.env.example`
+- Installs Python dependencies
+- Starts the 7-container stack and waits for health
+- Syncs live threat intelligence feeds
+- Prints all service URLs and quick-start commands
+
+Options:
+```bash
+./setup.sh --skip-threat-intel    # faster startup, skip feed download
+./setup.sh --pull                 # pre-pull Docker images (saves time on slow connections)
+```
+
+---
+
+## IOC Lookup Tool
+
+Standalone multi-source threat intelligence lookup:
+
+```bash
+# Single IOC
+python3 scripts/ioc-lookup.py 203.0.113.42
+
+# File hash
+python3 scripts/ioc-lookup.py d41d8cd98f00b204e9800998ecf8427e
+
+# Bulk from file
+cat suspicious-ips.txt | python3 scripts/ioc-lookup.py --bulk
+
+# Save results
+python3 scripts/ioc-lookup.py 203.0.113.42 --save reports/ioc-203.0.113.42.json
+```
+
+| Source | Data | API Key |
+|---|---|---|
+| ip-api.com | GeoIP, ASN, proxy/hosting detection | None |
+| AbuseIPDB | Confidence score, report count, Tor exit | Free (1000/day) |
+| VirusTotal | Engine detections, tags, reputation | Free (500/day) |
+| Shodan | Open ports, CVEs, banners | Free tier |
+
+Outputs a consolidated **risk score (0–100)** and level (LOW / MEDIUM / HIGH / CRITICAL).
+
+---
+
+## Interview Preparation
+
+[`docs/interview-prep.md`](docs/interview-prep.md) — **20 SOC analyst interview questions with detailed answers** based on this exact lab.
+
+No other portfolio does this. Categories:
+- SIEM & ELK architecture (4 questions)
+- Detection engineering and rule writing (4 questions)
+- Threat hunting and EQL (2 questions)
+- Incident response and MTTD/MTTR (3 questions)
+- MITRE ATT&CK usage (2 questions)
+- Threat intelligence (2 questions)
+- Production scaling (1 question)
+- Alert triage methodology (2 questions)
+
+Each answer references specific files, configs, and scenarios from this lab — so you can point to real code during the interview.
+
+---
+
+## Post-Incident Hardening
+
+[`docs/hardening/post-incident-hardening.md`](docs/hardening/post-incident-hardening.md) — closes the full SOC cycle: detect → respond → **harden**.
+
+Covers the hardening applied after the brute force attack in the walkthrough:
+- SSH: disable root login, key-only auth, MaxAuthTries 3, banner
+- fail2ban: 3 failures → 24h ban, iptables integration
+- Firewall: restrict SSH to management network, permanent attacker IP block, rate limiting
+- Credential rotation and authorized_keys audit
+- Persistence checks: crontabs, systemd services, SUID binaries, network listeners
+- auditd for privileged operation logging
+- Post-hardening Suricata rule updates
+
+> Including this document demonstrates you understand that SOC work doesn't stop at detection —
+> you also know how to fix what you found.
+
+---
+
 ## Threat Intelligence Feed Integration
 
 Live IOC feeds are downloaded and converted to Suricata rules automatically:
@@ -421,12 +523,15 @@ mini-siem/
 │   ├── load-dashboards.sh            ← Kibana dashboard import
 │   ├── reset-lab.sh                  ← Full lab reset
 │   ├── threat-intel-sync.sh          ← Live IOC feeds → Suricata rules
-│   └── generate-report.py            ← Weekly HTML/Markdown threat report
+│   ├── generate-report.py            ← Weekly HTML/Markdown threat report
+│   └── ioc-lookup.py                 ← Multi-source IOC lookup (AbuseIPDB/VT/Shodan)
 │
 ├── docs/
 │   ├── WALKTHROUGH.md                ← Complete attack→detect→respond story
 │   ├── hunting/eql-queries.md        ← 7 EQL threat hunting queries
 │   ├── tuning/false-positives.md     ← FP reduction guide, suppression examples
+│   ├── hardening/post-incident-hardening.md  ← SSH + firewall + persistence hardening
+│   ├── interview-prep.md             ← 20 SOC interview Q&A based on this lab
 │   └── playbooks/                    ← IR Playbooks (NIST framework)
 │       ├── T1110-SSH-BruteForce.md
 │       ├── T1046-NetworkScan.md
@@ -438,7 +543,8 @@ mini-siem/
 │   ├── 03-mitre-matrix.svg
 │   ├── 04-timeline-investigation.svg ← MTTD/MTTR measurement
 │   ├── 05-threat-hunting.svg         ← EQL sequence hunt results
-│   └── 06-weekly-report.svg          ← Executive weekly threat report
+│   ├── 06-weekly-report.svg          ← Executive weekly threat report
+│   └── 07-architecture-diagram.svg   ← Full network topology + data flows
 │
 ├── rules/
 │   ├── detection/                    ← Elastic Security rules (TOML)
@@ -486,6 +592,8 @@ GitHub Actions runs on every push to `mini-siem/**`:
 | **Threat Intelligence** | Live IOC feeds (AbuseCH/ET/CINS) auto-converted to Suricata rules |
 | **Rule Tuning** | FP reduction methodology, suppress directives, threshold calibration |
 | **SOC Reporting** | Python report generator: ES → executive HTML/Markdown weekly report |
+| **Post-Incident Hardening** | SSH hardening, fail2ban, firewall, persistence checks, auditd |
+| **Interview Readiness** | 20 technical Q&A with code references in `docs/interview-prep.md` |
 | **MITRE ATT&CK** | 8 techniques detected, chain reconstruction, coverage matrix |
 | **Incident Response** | NIST-based playbooks, MTTD 9 min / MTTR 1 min 38 sec |
 | **DevSecOps / CI/CD** | GitHub Actions: YAML + TOML + Suricata + smoke test |

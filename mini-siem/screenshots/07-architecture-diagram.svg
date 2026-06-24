@@ -1,0 +1,466 @@
+<svg viewBox="0 0 1200 860" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#ef4444"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#3b82f6"/>
+    </marker>
+    <marker id="arrowTeal" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#00bfb3"/>
+    </marker>
+    <marker id="arrowGray" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrowOrange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#f97316"/>
+    </marker>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#00000060"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="860" fill="#0f1117"/>
+  <!-- Subtle grid -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff06" stroke-width="1"/>
+  </pattern>
+  <rect width="1200" height="860" fill="url(#grid)"/>
+
+  <!-- Title -->
+  <text x="600" y="34" text-anchor="middle" fill="white" font-size="16" font-weight="700" letter-spacing="0.05em">MINI-SIEM LAB — NETWORK ARCHITECTURE</text>
+  <text x="600" y="52" text-anchor="middle" fill="#6b7280" font-size="10">ELK 8.14.3 · Suricata IDS/IPS · MITRE ATT&amp;CK v14 · Docker Compose</text>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       LAYER LABELS
+       ════════════════════════════════════════════════════════════════ -->
+  <!-- Layer: INTERNET / ATTACKER -->
+  <rect x="10" y="68" width="90" height="130" rx="4" fill="#ef444408" stroke="#ef444430" stroke-dasharray="4,3"/>
+  <text x="55" y="84" text-anchor="middle" fill="#ef4444" font-size="8" font-weight="700" letter-spacing="0.08em">INTERNET</text>
+
+  <!-- Layer: DETECTION -->
+  <rect x="10" y="212" width="90" height="70" rx="4" fill="#f9731608" stroke="#f9731630" stroke-dasharray="4,3"/>
+  <text x="55" y="228" text-anchor="middle" fill="#f97316" font-size="8" font-weight="700" letter-spacing="0.08em">DETECTION</text>
+
+  <!-- Layer: LOG PIPELINE -->
+  <rect x="10" y="298" width="90" height="200" rx="4" fill="#3b82f608" stroke="#3b82f630" stroke-dasharray="4,3"/>
+  <text x="55" y="314" text-anchor="middle" fill="#3b82f6" font-size="8" font-weight="700" letter-spacing="0.08em">PIPELINE</text>
+
+  <!-- Layer: ANALYSIS -->
+  <rect x="10" y="512" width="90" height="180" rx="4" fill="#00bfb308" stroke="#00bfb330" stroke-dasharray="4,3"/>
+  <text x="55" y="528" text-anchor="middle" fill="#00bfb3" font-size="8" font-weight="700" letter-spacing="0.08em">ANALYSIS</text>
+
+  <!-- Layer: RESPONSE -->
+  <rect x="10" y="706" width="90" height="120" rx="4" fill="#a78bfa08" stroke="#a78bfa30" stroke-dasharray="4,3"/>
+  <text x="55" y="722" text-anchor="middle" fill="#a78bfa" font-size="8" font-weight="700" letter-spacing="0.08em">RESPONSE</text>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       ATTACKER
+       ════════════════════════════════════════════════════════════════ -->
+  <rect x="120" y="74" width="130" height="114" rx="10" fill="#1a0808" stroke="#ef4444" stroke-width="1.5" filter="url(#shadow)"/>
+  <!-- Laptop icon -->
+  <rect x="153" y="90" width="64" height="40" rx="3" fill="#2d0f0f" stroke="#ef4444" stroke-width="1"/>
+  <rect x="157" y="93" width="56" height="32" rx="1" fill="#0f0505"/>
+  <!-- Screen content: terminal -->
+  <text x="185" y="104" text-anchor="middle" fill="#ef4444" font-size="6" font-family="monospace">$ hydra -l root</text>
+  <text x="185" y="113" text-anchor="middle" fill="#ef4444" font-size="6" font-family="monospace">-P rockyou.txt</text>
+  <text x="185" y="122" text-anchor="middle" fill="#22c55e" font-size="6" font-family="monospace">[22][ssh] found!</text>
+  <!-- Keyboard -->
+  <rect x="148" y="130" width="74" height="6" rx="2" fill="#2d0f0f" stroke="#ef444460"/>
+  <text x="185" y="157" text-anchor="middle" fill="white" font-size="11" font-weight="700">ATTACKER</text>
+  <text x="185" y="172" text-anchor="middle" fill="#6b7280" font-size="8">203.0.113.42 (RU)</text>
+  <!-- Kali badge -->
+  <rect x="158" y="178" width="54" height="12" rx="3" fill="#ef444420"/>
+  <text x="185" y="187" text-anchor="middle" fill="#ef4444" font-size="8">Kali Linux</text>
+
+  <!-- Attack tools boxes -->
+  <rect x="270" y="74" width="95" height="30" rx="6" fill="#1a1c21" stroke="#ef444450"/>
+  <text x="317" y="87" text-anchor="middle" fill="#ef4444" font-size="9">Nmap (T1046)</text>
+  <text x="317" y="98" text-anchor="middle" fill="#6b7280" font-size="7">Port Scan</text>
+
+  <rect x="270" y="112" width="95" height="30" rx="6" fill="#1a1c21" stroke="#ef444450"/>
+  <text x="317" y="125" text-anchor="middle" fill="#ef4444" font-size="9">Hydra (T1110)</text>
+  <text x="317" y="136" text-anchor="middle" fill="#6b7280" font-size="7">SSH Brute Force</text>
+
+  <rect x="270" y="150" width="95" height="30" rx="6" fill="#1a1c21" stroke="#ef444450"/>
+  <text x="317" y="163" text-anchor="middle" fill="#ef4444" font-size="9">Nikto (T1595)</text>
+  <text x="317" y="174" text-anchor="middle" fill="#6b7280" font-size="7">Web Scanning</text>
+
+  <!-- Target Machine -->
+  <rect x="390" y="74" width="150" height="130" rx="10" fill="#141519" stroke="#343741" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="390" y="74" width="150" height="8" rx="4" fill="#22c55e20"/>
+  <text x="465" y="100" text-anchor="middle" fill="white" font-size="12" font-weight="700">TARGET</text>
+  <text x="465" y="115" text-anchor="middle" fill="#6b7280" font-size="9">Ubuntu 22.04</text>
+  <text x="465" y="128" text-anchor="middle" fill="#6b7280" font-size="8">172.20.0.10</text>
+  <!-- Services -->
+  <rect x="406" y="138" width="55" height="22" rx="4" fill="#22c55e20" stroke="#22c55e50"/>
+  <text x="433" y="150" text-anchor="middle" fill="#22c55e" font-size="8">SSH :2222</text>
+  <text x="433" y="158" text-anchor="middle" fill="#6b7280" font-size="7">labuser/labpass</text>
+  <rect x="468" y="138" width="58" height="22" rx="4" fill="#3b82f620" stroke="#3b82f650"/>
+  <text x="497" y="150" text-anchor="middle" fill="#3b82f6" font-size="8">HTTP :8080</text>
+  <text x="497" y="158" text-anchor="middle" fill="#6b7280" font-size="7">nginx</text>
+  <!-- Logs output -->
+  <rect x="406" y="168" width="120" height="28" rx="4" fill="#1e2028"/>
+  <text x="466" y="180" text-anchor="middle" fill="#d1d5db" font-size="8">Generates auth.log</text>
+  <text x="466" y="191" text-anchor="middle" fill="#d1d5db" font-size="8">syslog · nginx access</text>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       SURICATA IDS/IPS (INLINE)
+       ════════════════════════════════════════════════════════════════ -->
+  <rect x="580" y="74" width="180" height="130" rx="10" fill="#140d00" stroke="#f97316" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="580" y="74" width="180" height="6" rx="3" fill="#f97316"/>
+  <!-- IDS label -->
+  <text x="670" y="100" text-anchor="middle" fill="white" font-size="12" font-weight="700">SURICATA IDS/IPS</text>
+  <text x="670" y="115" text-anchor="middle" fill="#f97316" font-size="9">Inline on siem-net</text>
+  <!-- Stats -->
+  <rect x="594" y="122" width="73" height="38" rx="4" fill="#1e1000"/>
+  <text x="630" y="136" text-anchor="middle" fill="#6b7280" font-size="8">RULES</text>
+  <text x="630" y="152" text-anchor="middle" fill="#f97316" font-size="16" font-weight="800">13+</text>
+  <rect x="673" y="122" width="73" height="38" rx="4" fill="#1e1000"/>
+  <text x="709" y="136" text-anchor="middle" fill="#6b7280" font-size="8">TECHNIQUES</text>
+  <text x="709" y="152" text-anchor="middle" fill="#f97316" font-size="16" font-weight="800">8</text>
+  <!-- EVE-JSON output -->
+  <rect x="594" y="166" width="152" height="30" rx="4" fill="#1a0d00"/>
+  <text x="670" y="179" text-anchor="middle" fill="#d1d5db" font-size="8">Output: EVE-JSON</text>
+  <text x="670" y="190" text-anchor="middle" fill="#6b7280" font-size="7">/var/log/suricata/eve.json</text>
+
+  <!-- Attack paths (red arrows) -->
+  <!-- Attacker → Target (top, attack traffic) -->
+  <line x1="250" y1="108" x2="388" y2="120" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowRed)"/>
+  <text x="315" y="107" text-anchor="middle" fill="#ef4444" font-size="7">attack traffic</text>
+
+  <!-- Tools → Suricata (intercepted) -->
+  <line x1="366" y1="127" x2="578" y2="120" stroke="#f97316" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrowOrange)"/>
+  <text x="472" y="116" text-anchor="middle" fill="#f97316" font-size="7">inspected by Suricata</text>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       THREAT INTEL FEEDS (left panel)
+       ════════════════════════════════════════════════════════════════ -->
+  <rect x="790" y="74" width="180" height="130" rx="10" fill="#0d0a14" stroke="#a78bfa" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="880" y="100" text-anchor="middle" fill="white" font-size="11" font-weight="700">THREAT INTEL FEEDS</text>
+  <text x="880" y="113" text-anchor="middle" fill="#a78bfa" font-size="8">threat-intel-sync.sh</text>
+
+  <rect x="804" y="120" width="73" height="18" rx="3" fill="#a78bfa20"/>
+  <text x="840" y="132" text-anchor="middle" fill="#a78bfa" font-size="8">AbuseCH</text>
+  <rect x="883" y="120" width="73" height="18" rx="3" fill="#a78bfa20"/>
+  <text x="919" y="132" text-anchor="middle" fill="#a78bfa" font-size="8">Feodo C2</text>
+
+  <rect x="804" y="144" width="73" height="18" rx="3" fill="#a78bfa20"/>
+  <text x="840" y="156" text-anchor="middle" fill="#a78bfa" font-size="8">Emrg Threats</text>
+  <rect x="883" y="144" width="73" height="18" rx="3" fill="#a78bfa20"/>
+  <text x="919" y="156" text-anchor="middle" fill="#a78bfa" font-size="8">CINS Army</text>
+
+  <rect x="804" y="168" width="152" height="28" rx="4" fill="#14101e"/>
+  <text x="880" y="181" text-anchor="middle" fill="#d1d5db" font-size="8">→ SIDs 8000001-8999999</text>
+  <text x="880" y="192" text-anchor="middle" fill="#6b7280" font-size="7">Auto-updated · no API key needed</text>
+
+  <!-- Feeds → Suricata (purple arrow) -->
+  <line x1="790" y1="140" x2="762" y2="140" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+  <text x="776" y="135" text-anchor="middle" fill="#a78bfa" font-size="7">rules</text>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       FILEBEAT
+       ════════════════════════════════════════════════════════════════ -->
+  <rect x="120" y="218" width="250" height="70" rx="8" fill="#141519" stroke="#343741" stroke-width="1.5"/>
+  <rect x="120" y="218" width="250" height="5" rx="3" fill="#22c55e"/>
+  <text x="245" y="240" text-anchor="middle" fill="white" font-size="11" font-weight="700">FILEBEAT</text>
+  <text x="245" y="254" text-anchor="middle" fill="#6b7280" font-size="8">Log shipper — Beats protocol → Logstash :5044</text>
+  <!-- Sources -->
+  <rect x="130" y="260" width="60" height="18" rx="3" fill="#22c55e20"/>
+  <text x="160" y="272" text-anchor="middle" fill="#22c55e" font-size="8">auth.log</text>
+  <rect x="198" y="260" width="45" height="18" rx="3" fill="#22c55e20"/>
+  <text x="220" y="272" text-anchor="middle" fill="#22c55e" font-size="8">syslog</text>
+  <rect x="251" y="260" width="50" height="18" rx="3" fill="#f9731620"/>
+  <text x="276" y="272" text-anchor="middle" fill="#f97316" font-size="8">EVE-JSON</text>
+  <rect x="309" y="260" width="50" height="18" rx="3" fill="#3b82f620"/>
+  <text x="334" y="272" text-anchor="middle" fill="#3b82f6" font-size="8">docker</text>
+
+  <!-- Target → Filebeat (auth.log, syslog) -->
+  <line x1="465" y1="206" x2="340" y2="217" stroke="#22c55e" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arrowTeal)"/>
+  <!-- Suricata → Filebeat (EVE-JSON) -->
+  <line x1="615" y1="206" x2="340" y2="232" stroke="#f97316" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arrowOrange)"/>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       METRICBEAT
+       ════════════════════════════════════════════════════════════════ -->
+  <rect x="420" y="218" width="200" height="70" rx="8" fill="#141519" stroke="#343741" stroke-width="1.5"/>
+  <rect x="420" y="218" width="200" height="5" rx="3" fill="#eab308"/>
+  <text x="520" y="240" text-anchor="middle" fill="white" font-size="11" font-weight="700">METRICBEAT</text>
+  <text x="520" y="254" text-anchor="middle" fill="#6b7280" font-size="8">System + Docker metrics → ES directly</text>
+  <rect x="432" y="260" width="50" height="18" rx="3" fill="#eab30820"/>
+  <text x="457" y="272" text-anchor="middle" fill="#eab308" font-size="8">CPU/RAM</text>
+  <rect x="490" y="260" width="50" height="18" rx="3" fill="#eab30820"/>
+  <text x="515" y="272" text-anchor="middle" fill="#eab308" font-size="8">Docker</text>
+  <rect x="548" y="260" width="58" height="18" rx="3" fill="#eab30820"/>
+  <text x="577" y="272" text-anchor="middle" fill="#eab308" font-size="8">ES Cluster</text>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       LOGSTASH
+       ════════════════════════════════════════════════════════════════ -->
+  <rect x="120" y="306" width="560" height="100" rx="10" fill="#141519" stroke="#343741" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="120" y="306" width="560" height="6" rx="4" fill="#f97316"/>
+  <text x="400" y="330" text-anchor="middle" fill="white" font-size="12" font-weight="700">LOGSTASH — Parsing Pipeline</text>
+  <text x="400" y="344" text-anchor="middle" fill="#6b7280" font-size="8">config/logstash/pipeline/soc.conf · Input: Beats :5044 / Syslog TCP :5000 / UDP :5140</text>
+
+  <!-- Pipeline stages -->
+  <rect x="136" y="352" width="110" height="40" rx="5" fill="#1e2028"/>
+  <text x="191" y="368" text-anchor="middle" fill="#f97316" font-size="9" font-weight="600">INPUT</text>
+  <text x="191" y="382" text-anchor="middle" fill="#6b7280" font-size="7">Beats · TCP · UDP</text>
+
+  <text x="265" y="375" fill="#6b7280" font-size="14">→</text>
+
+  <rect x="280" y="352" width="120" height="40" rx="5" fill="#1e2028"/>
+  <text x="340" y="368" text-anchor="middle" fill="#3b82f6" font-size="9" font-weight="600">FILTER</text>
+  <text x="340" y="382" text-anchor="middle" fill="#6b7280" font-size="7">JSON · Grok · GeoIP · MITRE</text>
+
+  <text x="420" y="375" fill="#6b7280" font-size="14">→</text>
+
+  <rect x="435" y="352" width="130" height="40" rx="5" fill="#1e2028"/>
+  <text x="500" y="368" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="600">OUTPUT</text>
+  <text x="500" y="382" text-anchor="middle" fill="#6b7280" font-size="7">siem-{type}-YYYY.MM.dd</text>
+
+  <text x="585" y="375" fill="#6b7280" font-size="14">→</text>
+
+  <rect x="600" y="352" width="64" height="40" rx="5" fill="#00bfb320" stroke="#00bfb350"/>
+  <text x="632" y="369" text-anchor="middle" fill="#00bfb3" font-size="9" font-weight="600">ES</text>
+  <text x="632" y="382" text-anchor="middle" fill="#6b7280" font-size="7">:9200</text>
+
+  <!-- Filebeat → Logstash arrow -->
+  <line x1="245" y1="290" x2="245" y2="304" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+  <!-- Metricbeat bypass arrow (goes directly to ES) -->
+  <line x1="520" y1="290" x2="780" y2="450" stroke="#eab308" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arrowGray)"/>
+  <text x="680" y="385" fill="#eab308" font-size="7" transform="rotate(-20,680,385)">direct to ES</text>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       ELASTICSEARCH
+       ════════════════════════════════════════════════════════════════ -->
+  <rect x="120" y="424" width="560" height="100" rx="10" fill="#141519" stroke="#005571" stroke-width="2" filter="url(#shadow)"/>
+  <rect x="120" y="424" width="560" height="6" rx="3" fill="#005571"/>
+  <text x="400" y="448" text-anchor="middle" fill="white" font-size="12" font-weight="700">ELASTICSEARCH 8.14.3</text>
+  <text x="400" y="462" text-anchor="middle" fill="#6b7280" font-size="8">localhost:9200 · Single node (lab) · xpack.security: disabled</text>
+
+  <!-- Indices -->
+  <rect x="136" y="470" width="110" height="38" rx="4" fill="#1e2028" stroke="#f9731630"/>
+  <text x="191" y="484" text-anchor="middle" fill="#f97316" font-size="8" font-weight="600">siem-suricata-*</text>
+  <text x="191" y="498" text-anchor="middle" fill="#6b7280" font-size="7">IDS alerts · EVE-JSON</text>
+  <rect x="256" y="470" width="100" height="38" rx="4" fill="#1e2028" stroke="#22c55e30"/>
+  <text x="306" y="484" text-anchor="middle" fill="#22c55e" font-size="8" font-weight="600">siem-auth-*</text>
+  <text x="306" y="498" text-anchor="middle" fill="#6b7280" font-size="7">SSH logins · failures</text>
+  <rect x="366" y="470" width="100" height="38" rx="4" fill="#1e2028" stroke="#3b82f630"/>
+  <text x="416" y="484" text-anchor="middle" fill="#3b82f6" font-size="8" font-weight="600">siem-syslog-*</text>
+  <text x="416" y="498" text-anchor="middle" fill="#6b7280" font-size="7">System events</text>
+  <rect x="476" y="470" width="100" height="38" rx="4" fill="#1e2028" stroke="#eab30830"/>
+  <text x="526" y="484" text-anchor="middle" fill="#eab308" font-size="8" font-weight="600">siem-metrics-*</text>
+  <text x="526" y="498" text-anchor="middle" fill="#6b7280" font-size="7">CPU/RAM/Docker</text>
+  <rect x="586" y="470" width="78" height="38" rx="4" fill="#1e2028" stroke="#a78bfa30"/>
+  <text x="625" y="484" text-anchor="middle" fill="#a78bfa" font-size="8" font-weight="600">Daily ILM</text>
+  <text x="625" y="498" text-anchor="middle" fill="#6b7280" font-size="7">hot→warm→del</text>
+
+  <!-- Logstash → ES arrow -->
+  <line x1="400" y1="408" x2="400" y2="422" stroke="#00bfb3" stroke-width="2" marker-end="url(#arrowTeal)"/>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       KIBANA
+       ════════════════════════════════════════════════════════════════ -->
+  <rect x="120" y="542" width="270" height="130" rx="10" fill="#141519" stroke="#005571" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="120" y="542" width="270" height="6" rx="3" fill="#005571"/>
+  <text x="255" y="566" text-anchor="middle" fill="white" font-size="12" font-weight="700">KIBANA 8.14.3</text>
+  <text x="255" y="580" text-anchor="middle" fill="#6b7280" font-size="8">localhost:5601 · SIEM · Security Alerts · EQL</text>
+
+  <rect x="134" y="586" width="58" height="22" rx="4" fill="#3b82f620"/>
+  <text x="163" y="598" text-anchor="middle" fill="#3b82f6" font-size="8">SOC Dashboard</text>
+  <text x="163" y="606" text-anchor="middle" fill="#6b7280" font-size="6">screenshot 1</text>
+
+  <rect x="200" y="586" width="58" height="22" rx="4" fill="#ef444420"/>
+  <text x="229" y="598" text-anchor="middle" fill="#ef4444" font-size="8">Alert Detail</text>
+  <text x="229" y="606" text-anchor="middle" fill="#6b7280" font-size="6">screenshot 2</text>
+
+  <rect x="266" y="586" width="58" height="22" rx="4" fill="#a78bfa20"/>
+  <text x="295" y="598" text-anchor="middle" fill="#a78bfa" font-size="8">MITRE Matrix</text>
+  <text x="295" y="606" text-anchor="middle" fill="#6b7280" font-size="6">screenshot 3</text>
+
+  <rect x="134" y="616" width="58" height="22" rx="4" fill="#00bfb320"/>
+  <text x="163" y="628" text-anchor="middle" fill="#00bfb3" font-size="8">Timeline</text>
+  <text x="163" y="636" text-anchor="middle" fill="#6b7280" font-size="6">screenshot 4</text>
+
+  <rect x="200" y="616" width="58" height="22" rx="4" fill="#22c55e20"/>
+  <text x="229" y="628" text-anchor="middle" fill="#22c55e" font-size="8">EQL Hunting</text>
+  <text x="229" y="636" text-anchor="middle" fill="#6b7280" font-size="6">screenshot 5</text>
+
+  <rect x="266" y="616" width="58" height="22" rx="4" fill="#f9731620"/>
+  <text x="295" y="628" text-anchor="middle" fill="#f97316" font-size="8">Weekly Report</text>
+  <text x="295" y="636" text-anchor="middle" fill="#6b7280" font-size="6">screenshot 6</text>
+
+  <!-- Kibana features -->
+  <rect x="134" y="646" width="242" height="20" rx="3" fill="#1e2028"/>
+  <text x="255" y="659" text-anchor="middle" fill="#6b7280" font-size="7">Security Alerts · Timelines · Rule Management · EQL Console</text>
+
+  <!-- ES → Kibana -->
+  <line x1="255" y1="526" x2="255" y2="540" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       THEHIVE / SOAR
+       ════════════════════════════════════════════════════════════════ -->
+  <rect x="410" y="542" width="270" height="130" rx="10" fill="#141519" stroke="#00bfb3" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="410" y="542" width="270" height="6" rx="3" fill="#00bfb3"/>
+  <text x="545" y="566" text-anchor="middle" fill="white" font-size="12" font-weight="700">THEHIVE 5 + SOAR BOT</text>
+  <text x="545" y="580" text-anchor="middle" fill="#6b7280" font-size="8">localhost:9000 · thehive-bot.py</text>
+
+  <!-- SOAR flow -->
+  <rect x="424" y="587" width="80" height="35" rx="5" fill="#1e2028"/>
+  <text x="464" y="601" text-anchor="middle" fill="#3b82f6" font-size="8">ES Alerts</text>
+  <text x="464" y="614" text-anchor="middle" fill="#6b7280" font-size="7">query every 5m</text>
+
+  <text x="516" y="607" fill="#6b7280" font-size="12">→</text>
+
+  <rect x="528" y="587" width="80" height="35" rx="5" fill="#1e2028"/>
+  <text x="568" y="601" text-anchor="middle" fill="#f97316" font-size="8">Group by IP</text>
+  <text x="568" y="614" text-anchor="middle" fill="#6b7280" font-size="7">dedup · campaign</text>
+
+  <text x="620" y="607" fill="#6b7280" font-size="12">→</text>
+
+  <rect x="632" y="587" width="32" height="35" rx="5" fill="#00bfb320" stroke="#00bfb350"/>
+  <text x="648" y="601" text-anchor="middle" fill="#00bfb3" font-size="7">Case</text>
+  <text x="648" y="614" text-anchor="middle" fill="#00bfb3" font-size="7">+IOC</text>
+
+  <!-- Case details -->
+  <rect x="424" y="630" width="242" height="34" rx="4" fill="#1e2028"/>
+  <text x="545" y="643" text-anchor="middle" fill="#d1d5db" font-size="8">Case: [SIEM] T1110 Brute Force — 203.0.113.42</text>
+  <text x="545" y="656" text-anchor="middle" fill="#6b7280" font-size="7">Tags: MITRE:T1110 · severity:HIGH · Observable: TLP:AMBER</text>
+
+  <!-- ES → TheHive bot -->
+  <line x1="400" y1="580" x2="408" y2="580" stroke="#00bfb3" stroke-width="1.5" marker-end="url(#arrowTeal)"/>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       REPORT GENERATOR
+       ════════════════════════════════════════════════════════════════ -->
+  <rect x="700" y="424" width="230" height="248" rx="10" fill="#141519" stroke="#343741" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="700" y="424" width="230" height="6" rx="3" fill="#f97316"/>
+  <text x="815" y="448" text-anchor="middle" fill="white" font-size="11" font-weight="700">ANALYST TOOLS</text>
+
+  <!-- IOC Lookup -->
+  <rect x="714" y="455" width="202" height="40" rx="6" fill="#1e2028"/>
+  <text x="815" y="470" text-anchor="middle" fill="#a78bfa" font-size="9" font-weight="600">ioc-lookup.py</text>
+  <text x="815" y="484" text-anchor="middle" fill="#6b7280" font-size="7">AbuseIPDB · VT · Shodan · ip-api</text>
+
+  <!-- Report Generator -->
+  <rect x="714" y="502" width="202" height="40" rx="6" fill="#1e2028"/>
+  <text x="815" y="517" text-anchor="middle" fill="#f97316" font-size="9" font-weight="600">generate-report.py</text>
+  <text x="815" y="531" text-anchor="middle" fill="#6b7280" font-size="7">Weekly HTML + MD threat report</text>
+
+  <!-- Enrich IOCs -->
+  <rect x="714" y="549" width="202" height="40" rx="6" fill="#1e2028"/>
+  <text x="815" y="564" text-anchor="middle" fill="#22c55e" font-size="9" font-weight="600">enrich-iocs.sh</text>
+  <text x="815" y="578" text-anchor="middle" fill="#6b7280" font-size="7">GeoIP + AbuseIPDB enrichment</text>
+
+  <!-- EQL Hunting -->
+  <rect x="714" y="596" width="202" height="40" rx="6" fill="#1e2028"/>
+  <text x="815" y="611" text-anchor="middle" fill="#60a5fa" font-size="9" font-weight="600">EQL Threat Hunting</text>
+  <text x="815" y="625" text-anchor="middle" fill="#6b7280" font-size="7">7 queries · sequence detection</text>
+
+  <!-- Tuning -->
+  <rect x="714" y="643" width="202" height="22" rx="4" fill="#1e2028"/>
+  <text x="815" y="657" text-anchor="middle" fill="#eab308" font-size="8">make tuning-check · FP analysis</text>
+
+  <!-- ES → Tools -->
+  <line x1="682" y1="490" x2="698" y2="490" stroke="#6b7280" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arrowGray)"/>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       GITHUB ACTIONS CI
+       ════════════════════════════════════════════════════════════════ -->
+  <rect x="120" y="706" width="560" height="110" rx="10" fill="#141519" stroke="#343741" stroke-width="1.5"/>
+  <rect x="120" y="706" width="560" height="5" rx="3" fill="#6b7280"/>
+  <text x="400" y="728" text-anchor="middle" fill="white" font-size="11" font-weight="700">GITHUB ACTIONS CI/CD — .github/workflows/validate-siem.yml</text>
+  <text x="400" y="741" text-anchor="middle" fill="#6b7280" font-size="8">Triggers on push to mini-siem/** · 5 parallel jobs</text>
+
+  <rect x="134" y="748" width="95" height="28" rx="4" fill="#22c55e20" stroke="#22c55e50"/>
+  <text x="181" y="760" text-anchor="middle" fill="#22c55e" font-size="8">validate-yaml</text>
+  <text x="181" y="771" text-anchor="middle" fill="#6b7280" font-size="7">yamllint</text>
+
+  <rect x="238" y="748" width="105" height="28" rx="4" fill="#22c55e20" stroke="#22c55e50"/>
+  <text x="290" y="760" text-anchor="middle" fill="#22c55e" font-size="8">validate-toml</text>
+  <text x="290" y="771" text-anchor="middle" fill="#6b7280" font-size="7">detection rules + MITRE</text>
+
+  <rect x="352" y="748" width="110" height="28" rx="4" fill="#22c55e20" stroke="#22c55e50"/>
+  <text x="407" y="760" text-anchor="middle" fill="#22c55e" font-size="8">validate-suricata</text>
+  <text x="407" y="771" text-anchor="middle" fill="#6b7280" font-size="7">suricata -T</text>
+
+  <rect x="471" y="748" width="95" height="28" rx="4" fill="#22c55e20" stroke="#22c55e50"/>
+  <text x="518" y="760" text-anchor="middle" fill="#22c55e" font-size="8">shellcheck</text>
+  <text x="518" y="771" text-anchor="middle" fill="#6b7280" font-size="7">.sh scripts</text>
+
+  <rect x="575" y="748" width="88" height="28" rx="4" fill="#22c55e20" stroke="#22c55e50"/>
+  <text x="619" y="760" text-anchor="middle" fill="#22c55e" font-size="8">smoke-test</text>
+  <text x="619" y="771" text-anchor="middle" fill="#6b7280" font-size="7">ES+Kibana startup</text>
+
+  <!-- All passing badge -->
+  <rect x="270" y="784" width="260" height="20" rx="4" fill="#22c55e20" stroke="#22c55e40"/>
+  <text x="400" y="797" text-anchor="middle" fill="#22c55e" font-size="8" font-weight="600">✓ All 5 checks passing · Badge: README.md</text>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       LEGEND
+       ════════════════════════════════════════════════════════════════ -->
+  <rect x="960" y="424" width="225" height="270" rx="8" fill="#141519" stroke="#343741"/>
+  <text x="1072" y="445" text-anchor="middle" fill="white" font-size="10" font-weight="700">LEGEND</text>
+
+  <!-- Data flows -->
+  <line x1="975" y1="460" x2="1015" y2="460" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#arrowRed)"/>
+  <text x="1025" y="464" fill="#d1d5db" font-size="9">Attack traffic</text>
+
+  <line x1="975" y1="480" x2="1015" y2="480" stroke="#f97316" stroke-width="2" marker-end="url(#arrowOrange)"/>
+  <text x="1025" y="484" fill="#d1d5db" font-size="9">Suricata inspection</text>
+
+  <line x1="975" y1="500" x2="1015" y2="500" stroke="#3b82f6" stroke-width="2" marker-end="url(#arrowBlue)"/>
+  <text x="1025" y="504" fill="#d1d5db" font-size="9">Log pipeline</text>
+
+  <line x1="975" y1="520" x2="1015" y2="520" stroke="#00bfb3" stroke-width="2" marker-end="url(#arrowTeal)"/>
+  <text x="1025" y="524" fill="#d1d5db" font-size="9">ES → Kibana/TheHive</text>
+
+  <line x1="975" y1="540" x2="1015" y2="540" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrowGray)"/>
+  <text x="1025" y="544" fill="#d1d5db" font-size="9">Threat intel feed</text>
+
+  <line x1="975" y1="560" x2="1015" y2="560" stroke="#eab308" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrowGray)"/>
+  <text x="1025" y="564" fill="#d1d5db" font-size="9">Metrics (direct)</text>
+
+  <!-- Components -->
+  <line x1="975" y1="585" x2="1175" y2="585" stroke="#343741" stroke-width="0.5"/>
+  <text x="1072" y="600" text-anchor="middle" fill="#6b7280" font-size="8" font-weight="600">COMPONENTS</text>
+
+  <rect x="975" y="608" width="70" height="16" rx="3" fill="#f9731620" stroke="#f9731650"/>
+  <text x="1010" y="619" text-anchor="middle" fill="#f97316" font-size="8">IDS/IPS</text>
+
+  <rect x="1055" y="608" width="70" height="16" rx="3" fill="#005571"/>
+  <text x="1090" y="619" text-anchor="middle" fill="white" font-size="8">ELK Stack</text>
+
+  <rect x="975" y="632" width="70" height="16" rx="3" fill="#00bfb320" stroke="#00bfb350"/>
+  <text x="1010" y="643" text-anchor="middle" fill="#00bfb3" font-size="8">TheHive</text>
+
+  <rect x="1055" y="632" width="70" height="16" rx="3" fill="#a78bfa20" stroke="#a78bfa50"/>
+  <text x="1090" y="643" text-anchor="middle" fill="#a78bfa" font-size="8">Threat Intel</text>
+
+  <!-- Docker note -->
+  <line x1="975" y1="657" x2="1175" y2="657" stroke="#343741" stroke-width="0.5"/>
+  <rect x="975" y="664" width="200" height="22" rx="4" fill="#2496ed20" stroke="#2496ed50"/>
+  <text x="1075" y="678" text-anchor="middle" fill="#2496ed" font-size="8">🐳 Docker Compose — 7 containers</text>
+  <text x="1075" y="688" text-anchor="middle" fill="#6b7280" font-size="7">siem-net 172.20.0.0/24</text>
+
+  <!-- Footer -->
+  <text x="600" y="840" text-anchor="middle" fill="#343741" font-size="8">Mini-SIEM Lab · ELK 8.14.3 + Suricata + MITRE ATT&amp;CK v14 · github.com/Dib68/virtual-machine-Soc</text>
+</svg>

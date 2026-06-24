@@ -5,7 +5,8 @@
 
 .PHONY: help up down status attack-all attack-bruteforce attack-scan \
         attack-web attack-lateral check reset clean logs \
-        threat-intel report soar-bot tuning-check sigma-convert
+        threat-intel report soar-bot tuning-check sigma-convert \
+        ioc-lookup setup
 
 COMPOSE = docker compose
 ES      = http://localhost:9200
@@ -170,6 +171,22 @@ tuning-check: ## Mostra il volume degli alert per regola (ultime 24h)
 		for b in d.get('aggregations',{}).get('by_sig',{}).get('buckets',[])]"
 	@echo "$(YELLOW)Regole con > 50 alert/24h: candidati per tuning$(NC)"
 	@echo "$(BLUE)Guida: docs/tuning/false-positives.md$(NC)"
+
+# ── Setup ────────────────────────────────────────────────────
+
+setup: ## One-command lab setup (prerequisites check + start + threat intel)
+	@bash setup.sh
+
+setup-fast: ## Fast setup without threat intel feed download
+	@bash setup.sh --skip-threat-intel
+
+# ── IOC Lookup ───────────────────────────────────────────────
+
+ioc-lookup: ## Multi-source IOC lookup — usage: make ioc-lookup IOC=1.2.3.4
+	@python3 scripts/ioc-lookup.py $(IOC)
+
+ioc-bulk: ## Bulk IOC lookup from file — usage: make ioc-bulk FILE=ips.txt
+	@cat $(FILE) | python3 scripts/ioc-lookup.py --bulk
 
 sigma-convert: ## Converte le Sigma rules in ElasticSearch KQL (richiede pySigma)
 	@echo "$(YELLOW)Conversione Sigma → Elasticsearch KQL:$(NC)"
