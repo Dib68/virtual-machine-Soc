@@ -5,6 +5,22 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ---
 
+## [v7] — 2026-06-25
+
+### Fixed
+- **Critical:** `config/logstash/pipeline/soc.conf` — Suricata EVE-JSON stores IPs as `src_ip`/`dest_ip` but the pipeline never copied them to ECS `source.ip`/`destination.ip`; this meant GeoIP enrichment was silently skipped for ALL Suricata alerts, and every ES query on `source.ip` in `siem-suricata-*` returned zero results
+- GeoIP filter: added private IP guard (RFC1918 + loopback regex) so the filter doesn't run on internal IPs and never writes a literal `%{...}` on lookup failure; added `tag_on_failure: ["_geoip_lookup_failure"]` for debuggability
+- GeoIP now also enriches `destination.ip` (not just source)
+- Added ECS copies from Suricata alert metadata: `rule.name`, `rule.id`, `rule.category`, `event.severity`, `mitre.tactic_id`, `mitre.technique_id`
+
+### Added
+- `docs/detection-gaps.md` — gap analysis: MITRE coverage matrix (43% of tactics), blind spots by domain (endpoint 0%, encrypted traffic, AD identity), risk prioritization matrix, 3-phase roadmap to close gaps; includes interview talking points
+- `scripts/alert-triage.py` — alert prioritization: queries ES, groups by source IP, scores by severity + volume + multi-technique correlation + AbuseIPDB confidence; outputs color-coded triage table with recommended actions (BLOCK+ESCALATE / INVESTIGATE / MONITOR / REVIEW); `--json` and `--save` for TheHive integration
+- `config/elasticsearch/ilm-policy.json` — ILM lifecycle: hot 7d (rollover 10GB/10M docs) → warm 7d (readonly + shrink 1 shard) → cold 30d → delete 90d
+- Makefile: `triage`, `triage-48h`, `triage-high`, `triage-report`, `ilm-setup` targets
+
+---
+
 ## [v6] — 2026-06-25
 
 ### Added

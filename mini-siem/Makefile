@@ -216,6 +216,28 @@ demo: ## One-command demo: start → attack → check (richiede stack in esecuzi
 	@echo ""
 	@echo "$(GREEN)Demo completata! Kibana: $(KIBANA)$(NC)"
 
+triage: ## Prioritizza gli alert delle ultime 24h per source IP (score + action)
+	@python3 scripts/alert-triage.py
+
+triage-48h: ## Triage esteso (ultime 48h)
+	@python3 scripts/alert-triage.py --hours 48
+
+triage-high: ## Mostra solo alert HIGH/CRITICAL
+	@python3 scripts/alert-triage.py --min-severity HIGH
+
+triage-report: ## Salva triage JSON in reports/triage-$(date).json
+	@mkdir -p reports
+	@python3 scripts/alert-triage.py --json \
+		--save reports/triage-$(shell date +%Y%m%d-%H%M).json
+	@echo "$(GREEN)Report salvato in reports/$(NC)"
+
+ilm-setup: ## Applica ILM policy a Elasticsearch (hot 7d → warm 30d → delete 90d)
+	@echo "$(YELLOW)Configurazione ILM policy siem-logs...$(NC)"
+	@curl -sf -X PUT "$(ES)/_ilm/policy/siem-logs-policy" \
+		-H 'Content-Type: application/json' \
+		-d @config/elasticsearch/ilm-policy.json | python3 -m json.tool
+	@echo "$(GREEN)ILM policy applicata.$(NC)"
+
 sigma-convert: ## Converte le Sigma rules in ElasticSearch KQL (richiede pySigma)
 	@echo "$(YELLOW)Conversione Sigma → Elasticsearch KQL:$(NC)"
 	@for f in rules/sigma/*.yml; do \
