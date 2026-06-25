@@ -81,9 +81,12 @@ def detect_ioc_type(ioc: str) -> str:
     except ValueError:
         pass
     # MD5 / SHA1 / SHA256 hash
-    if re.match(r'^[0-9a-fA-F]{32}$', ioc): return "md5"
-    if re.match(r'^[0-9a-fA-F]{40}$', ioc): return "sha1"
-    if re.match(r'^[0-9a-fA-F]{64}$', ioc): return "sha256"
+    if re.match(r'^[0-9a-fA-F]{32}$', ioc):
+        return "md5"
+    if re.match(r'^[0-9a-fA-F]{40}$', ioc):
+        return "sha1"
+    if re.match(r'^[0-9a-fA-F]{64}$', ioc):
+        return "sha256"
     # Domain
     if re.match(r'^(?:[a-z0-9](?:[a-z0-9\-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$', ioc, re.I):
         return "domain"
@@ -253,8 +256,10 @@ def calculate_risk(results: dict) -> tuple[int, str, str]:
     abuse = results.get("abuseipdb", {})
     if not abuse.get("error"):
         score += min(abuse.get("confidence_score", 0), 60)
-        if abuse.get("is_tor"): score += 20
-        if abuse.get("total_reports", 0) > 100: score += 10
+        if abuse.get("is_tor"):
+            score += 20
+        if abuse.get("total_reports", 0) > 100:
+            score += 10
 
     vt = results.get("virustotal", {})
     if not vt.get("error"):
@@ -263,18 +268,24 @@ def calculate_risk(results: dict) -> tuple[int, str, str]:
 
     geo = results.get("geo", {})
     if not geo.get("error"):
-        if geo.get("is_proxy"): score += 10
-        if geo.get("is_hosting"): score += 5
+        if geo.get("is_proxy"):
+            score += 10
+        if geo.get("is_hosting"):
+            score += 5
 
     shodan = results.get("shodan", {})
     if not shodan.get("error"):
-        if shodan.get("vulns"): score += 15
+        if shodan.get("vulns"):
+            score += 15
 
     score = min(score, 100)
 
-    if score >= 75:   return score, "CRITICAL", "red"
-    if score >= 50:   return score, "HIGH",     "orange"
-    if score >= 25:   return score, "MEDIUM",   "yellow"
+    if score >= 75:
+        return score, "CRITICAL", "red"
+    if score >= 50:
+        return score, "HIGH", "orange"
+    if score >= 25:
+        return score, "MEDIUM", "yellow"
     return score, "LOW", "green"
 
 

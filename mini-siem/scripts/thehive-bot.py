@@ -17,14 +17,13 @@ Elastic:  http://localhost:9200
 """
 
 import argparse
-import json
 import sys
 import time
 from datetime import datetime, timezone
 from typing import Optional
 
 import requests
-from requests.exceptions import ConnectionError, Timeout
+from requests.exceptions import ConnectionError
 
 # ── Configuration ──────────────────────────────────────────────────────
 ES_URL        = "http://localhost:9200"
@@ -215,7 +214,7 @@ def create_case(source_ip: str, alerts: list[dict], dry_run: bool) -> Optional[s
     country = alerts[0].get("source.geo.country_code", "??")
 
     if dry_run:
-        print(f"\n  [DRY-RUN] Would create case:")
+        print("\n  [DRY-RUN] Would create case:")
         print(f"    Title    : {payload['title']}")
         print(f"    Severity : {payload['severity']}")
         print(f"    Tags     : {', '.join(payload['tags'][:5])}...")
@@ -244,7 +243,7 @@ def create_case(source_ip: str, alerts: list[dict], dry_run: bool) -> Optional[s
 
     except ConnectionError:
         print(f"  [WARN] TheHive not reachable at {THEHIVE_URL}.")
-        print(f"         Run: soclab thehive up")
+        print("         Run: soclab thehive up")
         return None
     except Exception as e:
         print(f"  [ERROR] Failed to create case: {e}")
@@ -271,14 +270,14 @@ def main() -> None:
 
     def run_once() -> None:
         print(f"\n{'='*60}")
-        print(f"  Mini-SIEM → TheHive Bot")
+        print("  Mini-SIEM → TheHive Bot")
         print(f"  {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} UTC")
         print(f"  Since: last {args.since} · Min severity: {args.min_severity}")
         if args.dry_run:
-            print(f"  Mode: DRY RUN (no cases will be created)")
+            print("  Mode: DRY RUN (no cases will be created)")
         print(f"{'='*60}")
 
-        print(f"\n[1/3] Querying Elasticsearch for alerts...")
+        print("\n[1/3] Querying Elasticsearch for alerts...")
         alerts = fetch_alerts(args.since, args.min_severity)
 
         if not alerts:
@@ -287,11 +286,11 @@ def main() -> None:
 
         print(f"  → Found {len(alerts)} alerts")
 
-        print(f"\n[2/3] Grouping by source IP...")
+        print("\n[2/3] Grouping by source IP...")
         campaigns = group_by_campaign(alerts)
         print(f"  → {len(campaigns)} unique source IPs")
 
-        print(f"\n[3/3] Creating TheHive cases...")
+        print("\n[3/3] Creating TheHive cases...")
         created = skipped = 0
 
         for source_ip, ip_alerts in sorted(
@@ -313,13 +312,13 @@ def main() -> None:
         print(f"\n{'─'*60}")
         print(f"  Cases created: {created}  |  Skipped (existing): {skipped}")
         print(f"  TheHive: {THEHIVE_URL}")
-        print(f"  Kibana:  http://localhost:5601")
+        print("  Kibana:  http://localhost:5601")
 
     if args.loop:
         print("Running in continuous mode (Ctrl+C to stop)...")
         while True:
             run_once()
-            print(f"\nNext run in 5 minutes...")
+            print("\nNext run in 5 minutes...")
             time.sleep(300)
     else:
         run_once()

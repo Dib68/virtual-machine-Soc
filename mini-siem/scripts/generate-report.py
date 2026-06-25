@@ -19,11 +19,10 @@ Requirements:
 """
 
 import argparse
-import json
 import os
 import subprocess
 import sys
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -433,7 +432,7 @@ def main() -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"\n{'='*60}")
-    print(f"  Weekly Threat Report Generator — Mini-SIEM Lab")
+    print("  Weekly Threat Report Generator — Mini-SIEM Lab")
     print(f"  Period: last {args.days} days | Date: {report_date}")
     print(f"{'='*60}\n")
 

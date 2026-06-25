@@ -5,6 +5,23 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ---
 
+## [v8] — 2026-06-25
+
+### Fixed
+- **CI-breaking:** ruff found 30 errors across 4 Python scripts; all fixed:
+  - `alert-triage.py`: removed unused `Console/Table/box` rich imports (F401); fixed f-strings without placeholders (F541)
+  - `generate-report.py`: removed unused `json`, `timedelta` imports (F401); fixed f-string (F541)
+  - `ioc-lookup.py`: expanded 11 single-line `if: return` statements to multi-line (E701)
+  - `thehive-bot.py`: removed unused `json`, `Timeout` imports (F401); fixed 9 f-strings (F541)
+- **Logstash MITRE field names wrong:** pipeline extracted `mitre_tactic_id`/`mitre_technique_id` but `local.rules` uses `mitre_tactic`/`mitre_technique` — MITRE fields were never populated in ES; fixed field name references
+- Verified: `ruff check` passes with 0 errors; `bash -n` passes on `daily-digest.sh`; all 4 Python scripts pass `py_compile`
+
+### Added
+- `scripts/daily-digest.sh` — shift-start briefing: cluster health, KPI table (total/critical/high alerts, SSH failures/successes), top 5 source IPs, top 5 rules, MITRE technique breakdown, ES index sizes, recommended actions with color-coded urgency
+- Makefile: `digest` target
+
+---
+
 ## [v7] — 2026-06-25
 
 ### Fixed

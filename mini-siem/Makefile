@@ -216,6 +216,9 @@ demo: ## One-command demo: start → attack → check (richiede stack in esecuzi
 	@echo ""
 	@echo "$(GREEN)Demo completata! Kibana: $(KIBANA)$(NC)"
 
+digest: ## Daily SOC digest: KPI 24h, top attaccanti, MITRE breakdown, azioni
+	@bash scripts/daily-digest.sh
+
 triage: ## Prioritizza gli alert delle ultime 24h per source IP (score + action)
 	@python3 scripts/alert-triage.py
 

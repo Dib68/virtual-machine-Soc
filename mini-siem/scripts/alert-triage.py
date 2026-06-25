@@ -23,13 +23,12 @@ from datetime import datetime, timezone
 
 import requests
 
+RICH = False
 try:
-    from rich.console import Console
-    from rich.table import Table
-    from rich import box
+    import rich  # noqa: F401
     RICH = True
 except ImportError:
-    RICH = False
+    pass
 
 
 ES_URL = os.getenv("ES_URL", "http://localhost:9200")
@@ -354,13 +353,13 @@ def print_table(results, hours):
             if abuse:
                 print(f"    AbuseIPDB: confidence {abuse.get('confidence',0)}% — {abuse.get('total_reports',0)} reports")
                 if abuse.get("is_tor"):
-                    print(f"    ⚠ Tor exit node")
+                    print("    ⚠ Tor exit node")
             if r["rule_names"]:
                 print(f"    Rules    : {'; '.join(r['rule_names'])}")
             print(f"    Action   : {r['action']}")
 
     print()
-    print(f"  ES index: siem-suricata-*  |  Kibana: http://localhost:5601")
+    print("  ES index: siem-suricata-*  |  Kibana: http://localhost:5601")
     print()
 
 
